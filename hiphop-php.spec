@@ -1,12 +1,33 @@
 Summary:	HipHop for PHP transforms PHP source code into highly optimized C++
 Name:		hiphop-php
-Version:	_
+Version:	0.1
 Release:	0.1
-License:	- (enter GPL/GPL v2/GPL v3/LGPL/BSD/BSD-like/other license name here)
+License:	PHP 3.01
 Group:		Development/Languages/PHP
+# git clone git://github.com/facebook/hiphop-php.git
 Source0:	%{name}-%{version}.tar.gz
 # Source0-md5:	-
-URL:		http://developers.facebook.com/hiphop-php/
+URL:		http://wiki.github.com/facebook/hiphop-php/
+BuildRequires:	binutils-devel
+BuildRequires:	bison
+BuildRequires:	boost-devel >= 1.37
+BuildRequires:	cmake >= 2.6.4
+BuildRequires:	expat-devel
+BuildRequires:	flex
+BuildRequires:	gd-devel
+BuildRequires:	libcap-devel
+BuildRequires:	libicu >= 4.2
+BuildRequires:	libmbfl
+BuildRequires:	libmcrypt
+BuildRequires:	libstdc++-devel >= 6:4.1
+BuildRequires:	libxml2
+BuildRequires:	mysql-devel
+BuildRequires:	oniguruma
+BuildRequires:	openssl-devel
+BuildRequires:	pcre-devel
+BuildRequires:	re2c >= 0.13.0
+BuildRequires:	tbb >= 2.2
+BuildRequires:	zlib-devel
 BuildArch:	noarch
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
