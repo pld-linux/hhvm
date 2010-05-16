@@ -9,7 +9,7 @@ Group:		Development/Languages
 # git clone git://github.com/facebook/hiphop-php.git
 # tar -cjf hiphop-php.tar.bz2 hiphop-php
 Source0:	%{name}.tar.bz2
-# Source0-md5:	675d6bb36d1c5a8ec51346635f19498c
+# Source0-md5:	fbeaba0785d6ae3a6f513576867fb5a6
 URL:		http://wiki.github.com/facebook/hiphop-php/
 BuildRequires:	binutils-devel
 BuildRequires:	bison
