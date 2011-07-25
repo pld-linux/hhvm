@@ -1,11 +1,20 @@
---- hiphop-php/src/CMakeLists.txt~	2010-05-16 16:46:42.000000000 +0300
-+++ hiphop-php/src/CMakeLists.txt	2010-05-16 16:47:02.396715257 +0300
-@@ -87,8 +87,6 @@
- auto_sources(TIMELIB_SOURCES "*.c" "RECURSE" "${CMAKE_CURRENT_SOURCE_DIR}/third_party/timelib")
- add_library(timelib STATIC ${TIMELIB_SOURCES})
+--- hiphop-php/CMake/HPHPFindLibs.cmake~	2011-07-25 19:48:08.000000000 +0300
++++ hiphop-php/CMake/HPHPFindLibs.cmake	2011-07-25 19:48:41.840861431 +0300
+@@ -102,7 +102,6 @@
+ # SQLite3 + timelib are bundled in HPHP sources
+ include_directories("${HPHP_HOME}/src/third_party/libsqlite3")
+ include_directories("${HPHP_HOME}/src/third_party/timelib")
+-include_directories("${HPHP_HOME}/src/third_party/libafdt/src")
+ include_directories("${HPHP_HOME}/src/third_party/libmbfl")
+ include_directories("${HPHP_HOME}/src/third_party/libmbfl/mbfl")
+ include_directories("${HPHP_HOME}/src/third_party/libmbfl/filter")
+--- hiphop-php/src/CMakeLists.txt~	2011-07-25 19:22:02.000000000 +0300
++++ hiphop-php/src/CMakeLists.txt	2011-07-25 20:21:34.195874236 +0300
+@@ -88,7 +88,6 @@
+ 	add_subdirectory(third_party/xhp/xhp)
+ endif()
  
 -add_subdirectory(third_party/libafdt)
--
- foreach (CXX_FILE ${CXX_SOURCES})
- 	if(${CXX_FILE} MATCHES ".no.cpp$")
- 		SET_SOURCE_FILES_PROPERTIES(
+ add_subdirectory(third_party/libmbfl)
+ add_subdirectory(third_party/libsqlite3)
+ add_subdirectory(third_party/timelib)

@@ -1,10 +1,12 @@
---- hiphop-php/CMake/HPHPFindLibs.cmake~	2010-05-16 00:08:26.000000000 +0300
-+++ hiphop-php/CMake/HPHPFindLibs.cmake	2010-05-16 15:54:09.769893945 +0300
-@@ -209,4 +209,7 @@
- 	target_link_libraries(${target} xhp)
+--- hiphop-php/CMake/HPHPFindLibs.cmake~	2011-07-25 19:22:01.000000000 +0300
++++ hiphop-php/CMake/HPHPFindLibs.cmake	2011-07-25 19:40:07.515376789 +0300
+@@ -389,6 +389,9 @@
+ 
  	target_link_libraries(${target} afdt)
  	target_link_libraries(${target} mbfl)
 +	target_link_libraries(${target} crypt)
 +	target_link_libraries(${target} rt)
 +	target_link_libraries(${target} resolv)
- endmacro()
+ 
+ 	target_link_libraries(${target} ${READLINE_LIBRARY})
+ 	target_link_libraries(${target} ${NCURSES_LIBRARY})

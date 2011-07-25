@@ -1,22 +1,10 @@
---- hiphop-php/CMakeLists.txt~	2010-05-16 00:08:26.000000000 +0300
-+++ hiphop-php/CMakeLists.txt	2010-05-16 14:22:40.731255486 +0300
-@@ -18,9 +18,5 @@
- include("${HPHP_HOME}/CMake/HPHPFunctions.cmake")
- include(CheckFunctionExists)
+--- hiphop-php/src/CMakeLists.txt~	2011-07-25 20:21:34.000000000 +0300
++++ hiphop-php/src/CMakeLists.txt	2011-07-25 20:22:10.107423133 +0300
+@@ -88,7 +88,6 @@
+ 	add_subdirectory(third_party/xhp/xhp)
+ endif()
  
--IF(NOT EXISTS "src/third_party/libmbfl/mbfl/mbfilter.h")
--	message(FATAL_ERROR "Please setup the git submodule to pull dependencies")
--ENDIF()
--
- add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/src)
- 
---- hiphop-php/src/CMakeLists.txt~	2010-05-16 00:08:27.000000000 +0300
-+++ hiphop-php/src/CMakeLists.txt	2010-05-16 14:23:25.480428003 +0300
-@@ -89,7 +89,6 @@
- 
- add_subdirectory(third_party/xhp/xhp)
- add_subdirectory(third_party/libafdt)
 -add_subdirectory(third_party/libmbfl)
+ add_subdirectory(third_party/libsqlite3)
+ add_subdirectory(third_party/timelib)
  
- foreach (CXX_FILE ${CXX_SOURCES})
- 	if(${CXX_FILE} MATCHES ".no.cpp$")
