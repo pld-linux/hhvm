@@ -1,0 +1,21 @@
+--- hiphop-php/src/CMakeLists.txt~	2010-05-16 16:45:46.000000000 +0300
++++ hiphop-php/src/CMakeLists.txt	2010-05-16 16:46:42.343110092 +0300
+@@ -87,7 +87,6 @@
+ auto_sources(TIMELIB_SOURCES "*.c" "RECURSE" "${CMAKE_CURRENT_SOURCE_DIR}/third_party/timelib")
+ add_library(timelib STATIC ${TIMELIB_SOURCES})
+ 
+-add_subdirectory(third_party/xhp/xhp)
+ add_subdirectory(third_party/libafdt)
+ 
+ foreach (CXX_FILE ${CXX_SOURCES})
+--- hiphop-php/CMake/HPHPFindLibs.cmake~	2010-05-16 16:48:02.000000000 +0300
++++ hiphop-php/CMake/HPHPFindLibs.cmake	2010-05-16 16:58:28.939498852 +0300
+@@ -94,7 +94,7 @@
+ # SQLite3 + timelib are bundled in HPHP sources
+ include_directories("${HPHP_HOME}/src/third_party/libsqlite3")
+ include_directories("${HPHP_HOME}/src/third_party/timelib")
+-include_directories("${HPHP_HOME}/src/third_party/xhp/xhp")
++include_directories("~/tmp/php-xhp-1.3.8-root-glen/usr/include/php/xhp")
+ include_directories("${HPHP_HOME}/src/third_party/libafdt/src")
+ include_directories("${HPHP_HOME}/src/third_party/libmbfl")
+ include_directories("${HPHP_HOME}/src/third_party/libmbfl/mbfl")

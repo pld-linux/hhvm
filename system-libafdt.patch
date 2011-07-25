@@ -1,0 +1,11 @@
+--- hiphop-php/src/CMakeLists.txt~	2010-05-16 16:46:42.000000000 +0300
++++ hiphop-php/src/CMakeLists.txt	2010-05-16 16:47:02.396715257 +0300
+@@ -87,8 +87,6 @@
+ auto_sources(TIMELIB_SOURCES "*.c" "RECURSE" "${CMAKE_CURRENT_SOURCE_DIR}/third_party/timelib")
+ add_library(timelib STATIC ${TIMELIB_SOURCES})
+ 
+-add_subdirectory(third_party/libafdt)
+-
+ foreach (CXX_FILE ${CXX_SOURCES})
+ 	if(${CXX_FILE} MATCHES ".no.cpp$")
+ 		SET_SOURCE_FILES_PROPERTIES(
