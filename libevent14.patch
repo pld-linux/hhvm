@@ -1,0 +1,13 @@
+--- hiphop-php-1.000_cf9b612/CMake/FindLibEvent.cmake~	2011-12-12 22:32:34.000000000 +0200
++++ hiphop-php-1.000_cf9b612/CMake/FindLibEvent.cmake	2011-12-12 22:32:36.674152072 +0200
+@@ -10,8 +10,8 @@
+ 	list(APPEND LibEvent_LIB_PATHS "${prefix}/lib")
+ endforeach()
+ 
+-find_path(LIBEVENT_INCLUDE_DIR event.h PATHS ${LibEvent_INCLUDE_PATHS})
+-find_library(LIBEVENT_LIB NAMES event PATHS ${LibEvent_LIB_PATHS})
++find_path(LIBEVENT_INCLUDE_DIR event.h PATHS ${LibEvent_INCLUDE_PATHS} NO_DEFAULT_PATH)
++find_library(LIBEVENT_LIB NAMES event PATHS ${LibEvent_LIB_PATHS} NO_DEFAULT_PATH)
+  
+ if (LIBEVENT_LIB AND LIBEVENT_INCLUDE_DIR)
+   set(LibEvent_FOUND TRUE)
