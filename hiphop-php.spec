@@ -105,7 +105,6 @@ if [ ! -d libevent/.libs ]; then
 	cd ..
 fi
 
-export USE_HHVM=1
 export HPHP_HOME=$(pwd)
 export HPHP_LIB=$HPHP_HOME/bin
 
