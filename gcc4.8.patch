@@ -4,7 +4,7 @@
    uint64_t m_bits;
  };
  
-+#if 1
++#if defined(__GNUC__) && (__GNUC__ == 4 && __GNUC_MINOR__ >= 8)
 +static_assert(std::is_trivially_destructible<RegSet>::value,
 +              "RegSet must have a trivial destructor");
 +#else
