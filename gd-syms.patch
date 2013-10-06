@@ -1,0 +1,29 @@
+--- hiphop-php-HPHP-2.1.0/hphp/runtime/ext/ext_image.cpp~	2013-07-12 18:00:55.000000000 +0000
++++ hiphop-php-HPHP-2.1.0/hphp/runtime/ext/ext_image.cpp	2013-10-06 12:44:00.105141356 +0000
+@@ -4188,7 +4188,7 @@
+   return false;
+ }
+ 
+-// gdImageConvolution does not exist in our libgd.a, copied from
++// hphp_gdImageConvolution does not exist in our libgd.a, copied from
+ // php's libgd/gd.c
+ 
+ /* Filters function added on 2003/12
+@@ -4200,7 +4200,7 @@
+   (src->trueColor?gdImageGetTrueColorPixel:gdImageGetPixel)
+ #endif
+ 
+-static int gdImageConvolution(gdImagePtr src, float filter[3][3],
++static int hphp_gdImageConvolution(gdImagePtr src, float filter[3][3],
+                               float filter_div, float offset) {
+   int x, y, i, j, new_a;
+   float new_r, new_g, new_b;
+@@ -4290,7 +4290,7 @@
+       }
+     }
+   }
+-  if (gdImageConvolution(im_src, mtx, div, offset)) {
++  if (hphp_gdImageConvolution(im_src, mtx, div, offset)) {
+     return true;
+   } else {
+     return false;
