@@ -132,6 +132,7 @@ cd build
 CPPFLAGS="%{rpmcppflags} -fno-permissive"
 %cmake \
 	-DLIBEVENT_LIB=$HPHP_HOME/libevent/lib/libevent.so \
+	-DLIBEVENT_INCLUDE_DIR=$HPHP_HOME/libevent \
 	-DCMAKE_PREFIX_PATH=%{_prefix} \
 	-DSKIP_BUNDLED_XHP=ON \
 	-DUSE_JEMALLOC=OFF \
