@@ -1,17 +1,8 @@
 # TODO
 # - system libevent2: https://github.com/facebook/hiphop-php/pull/421
-# - build with newer libmemcached than 1.0.7, https://github.com/facebook/hiphop-php/issues/560
 # - system libmbfl, system xhp, sqlite3
-# - there should be a bit more packaged into files
-# - linking segfaults
-#   using bfd and gcc-6:4.6.2-2.x86_64 binutils-3:2.22.51.0.1-1.x86_64
-#   cd /home/users/glen/rpm/packages/BUILD.x86_64-linux/hiphop-php-1.000_cf9b612/src/hphpi && /home/users/glen/rpm/BUILD.x86_64-linux/hiphop-php-1.000_cf9b612/build/src/hphp/hphp -t cpp -f exe --input-dir . -i hphpi.php -o gen -vEnableEval=2 --log=1
-#   Segmentation fault
-#   make[2]: *** [src/hphp/hphp] Error 139
-#   relinking succeeds, but resulting binary segfaults as well:
-#   0x0000000000b9cc0b in HPHP::Extension::LoadModules(HPHP::Hdf) ()
 %define		githash	78394ee
-%define		rel		0.2
+%define		rel		0.4
 Summary:	Virtual Machine, Runtime, and JIT for PHP
 Name:		hiphop-php
 Version:	2.1.0
