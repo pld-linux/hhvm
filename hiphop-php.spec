@@ -36,7 +36,7 @@ BuildRequires:	flex >= 2.5.35
 BuildRequires:	gd-devel
 BuildRequires:	glog-devel >= 0.3.2
 BuildRequires:	imap-devel >= 1:2007
-BuildRequires:	jemalloc-devel
+#BuildRequires:	jemalloc-devel
 BuildRequires:	libafdt-devel >= 0.1.0
 BuildRequires:	libcap-devel
 BuildRequires:	libdwarf-devel
@@ -127,7 +127,7 @@ CPPFLAGS="%{rpmcppflags} -fno-permissive"
 	-DLIBEVENT_LIB=$HPHP_HOME/libevent/lib/libevent.so \
 	-DCMAKE_PREFIX_PATH=%{_prefix} \
 	-DSKIP_BUNDLED_XHP=ON \
-	-DUSE_JEMALLOC=ON \
+	-DUSE_JEMALLOC=OFF \
 	-DUSE_TCMALLOC=OFF \
 	./
 %{__make}
