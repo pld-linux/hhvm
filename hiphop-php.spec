@@ -26,6 +26,7 @@ Patch3:		system-xhp.patch
 Patch4:		system-libafdt.patch
 Patch5:		system-folly.patch
 Patch6:		boost-system-category.patch
+Patch7:		gcc4.8.patch
 URL:		http://wiki.github.com/facebook/hiphop-php/
 BuildRequires:	binutils-devel
 BuildRequires:	bison >= 2.3
@@ -77,6 +78,7 @@ Apache and mod_php.
 %setup -q -n %{name}-HPHP-%{version} -a1
 %patch5 -p1
 %patch6 -p1
+%patch7 -p1
 
 ln -s libevent-1.4.*-stable libevent
 %{__patch} -d libevent -p1 < hphp/third_party/libevent-1.4.14.fb-changes.diff
