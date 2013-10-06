@@ -1,4 +1,5 @@
 # TODO
+# - system libevent2: https://github.com/facebook/hiphop-php/pull/421
 # - system libmbfl, system xhp, sqlite3
 # - there should be a bit more packaged into files
 # - linking segfaults
