@@ -58,10 +58,6 @@ BuildRequires:	zlib-devel
 ExclusiveArch:	%{x8664}
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
-# strip would remove systemlib.php copied into binary
-# see CMake/HPHPFunctions.cmake embed_systemlib function
-%define		_noautostrip	.*%{_bindir}/hhvm
-
 %description
 HipHop VM (HHVM) is a new open-source virtual machine designed for
 executing programs written in PHP. HHVM uses a just-in-time
