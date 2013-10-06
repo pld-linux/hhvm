@@ -55,6 +55,7 @@ BuildRequires:	readline-devel
 BuildRequires:	rpmbuild(macros) >= 1.600
 BuildRequires:	tbb-devel >= 4.0.6000
 BuildRequires:	zlib-devel
+ExclusiveArch:	%{x8664}
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 # strip would remove systemlib.php copied into binary
