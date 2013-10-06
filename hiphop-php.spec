@@ -150,6 +150,9 @@ rm -rf $RPM_BUILD_ROOT
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT
 
+install -d $RPM_BUILD_ROOT%{_datadir}/%{name}/hdf
+cp -p %{SOURCE3} $RPM_BUILD_ROOT%{_datadir}/%{name}/hdf/static.mime-types.hdf
+
 # install our libevent for now
 install -d $RPM_BUILD_ROOT%{_libdir}
 libtool --mode=install install -p libevent/libevent.la $RPM_BUILD_ROOT%{_libdir}
@@ -167,3 +170,7 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_bindir}/hhvm
 %attr(755,root,root) %{_libdir}/libevent-1.4.so.*.*.*
 %ghost %{_libdir}/libevent-1.4.so.2
+
+%dir %{_datadir}/%{name}
+%dir %{_datadir}/%{name}/hdf
+%{_datadir}/%{name}/hdf/static.mime-types.hdf
