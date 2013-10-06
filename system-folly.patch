@@ -1,0 +1,21 @@
+--- hiphop-php-HPHP-2.1.0/CMake/HPHPFindLibs.cmake	2013-10-05 23:48:42.004063624 +0300
++++ hiphop-php-HPHP-2.1.0/CMake/HPHPFindLibs.cmake	2013-10-05 23:53:12.886618141 +0300
+@@ -136,7 +136,7 @@
+ include_directories("${HPHP_HOME}/hphp/third_party/libmbfl/filter")
+ include_directories("${HPHP_HOME}/hphp/third_party/lz4")
+ include_directories("${HPHP_HOME}/hphp/third_party/double-conversion/src")
+-include_directories("${HPHP_HOME}/hphp/third_party/folly")
++include_directories("/usr/include/folly")
+ 
+ # ICU
+ find_package(ICU REQUIRED)
+--- hiphop-php-HPHP-2.1.0/./hphp/CMakeLists.txt~	2013-07-12 21:00:55.000000000 +0300
++++ hiphop-php-HPHP-2.1.0/./hphp/CMakeLists.txt	2013-10-05 23:49:20.482513660 +0300
+@@ -59,7 +59,6 @@
+ add_subdirectory(third_party/timelib)
+ add_subdirectory(third_party/lz4)
+ add_subdirectory(third_party/double-conversion)
+-add_subdirectory(third_party/folly)
+ 
+ foreach (CXX_FILE ${CXX_SOURCES})
+ 	if(${CXX_FILE} MATCHES ".no.cpp$")

@@ -24,6 +24,7 @@ Patch0:		cmake-missing-library.patch
 Patch1:		libevent14.patch
 Patch3:		system-xhp.patch
 Patch4:		system-libafdt.patch
+Patch5:		system-folly.patch
 URL:		http://wiki.github.com/facebook/hiphop-php/
 BuildRequires:	binutils-devel
 BuildRequires:	bison >= 2.3
@@ -73,6 +74,7 @@ Apache and mod_php.
 
 %prep
 %setup -q -n %{name}-HPHP-%{version} -a1
+%patch5 -p1
 
 ln -s libevent-1.4.*-stable libevent
 %{__patch} -d libevent -p1 < hphp/third_party/libevent-1.4.14.fb-changes.diff
