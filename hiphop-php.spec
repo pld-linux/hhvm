@@ -11,7 +11,7 @@
 #   relinking succeeds, but resulting binary segfaults as well:
 #   0x0000000000b9cc0b in HPHP::Extension::LoadModules(HPHP::Hdf) ()
 %define		githash	78394ee
-%define		rel		0.1
+%define		rel		0.2
 Summary:	Virtual Machine, Runtime, and JIT for PHP
 Name:		hiphop-php
 Version:	2.1.0
@@ -66,6 +66,10 @@ BuildRequires:	rpmbuild(macros) >= 1.600
 BuildRequires:	tbb-devel >= 4.0.6000
 BuildRequires:	zlib-devel
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
+
+# strip would remove systemlib.php copied into binary
+# see CMake/HPHPFunctions.cmake embed_systemlib function
+%define		_noautostrip	.*%{_bindir}/hhvm
 
 %description
 HipHop VM (HHVM) is a new open-source virtual machine designed for
