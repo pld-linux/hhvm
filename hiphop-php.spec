@@ -24,8 +24,6 @@ Source0:	https://github.com/facebook/hiphop-php/archive/%{githash}/HPHP-%{versio
 Source1:	http://www.monkey.org/~provos/libevent-1.4.14b-stable.tar.gz
 # Source1-md5:	a00e037e4d3f9e4fe9893e8a2d27918c
 Source2:	get-source.sh
-Source3:	http://ftp.oregonstate.edu/pub/hiphop/resources/hdf/static.mime-types.hdf
-# Source3-md5:	1cf0a28bc27c3b407ab062b146f4e27e
 Patch0:		cmake-missing-library.patch
 Patch1:		libevent14.patch
 Patch3:		system-xhp.patch
@@ -151,7 +149,7 @@ rm -rf $RPM_BUILD_ROOT
 	DESTDIR=$RPM_BUILD_ROOT
 
 install -d $RPM_BUILD_ROOT%{_datadir}/%{name}/hdf
-cp -p %{SOURCE3} $RPM_BUILD_ROOT%{_datadir}/%{name}/hdf/static.mime-types.hdf
+cp -p hphp/doc/mime.hdf $RPM_BUILD_ROOT%{_datadir}/%{name}/hdf/static.mime-types.hdf
 
 # install our libevent for now
 install -d $RPM_BUILD_ROOT%{_libdir}
