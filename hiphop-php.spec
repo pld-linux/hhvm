@@ -44,7 +44,7 @@ BuildRequires:	libdwarf-devel
 BuildRequires:	libicu-devel >= 4.2
 #BuildRequires:	libmbfl-devel
 BuildRequires:	libmcrypt-devel
-BuildRequires:	libmemcached-devel >= 1.0.9
+BuildRequires:	libmemcached-devel >= 1.0.4
 BuildRequires:	libstdc++-devel >= 6:4.3
 BuildRequires:	libunwind-devel
 BuildRequires:	libxml2-devel
@@ -116,8 +116,12 @@ export LIBEVENT_PREFIX=$HPHP_HOME/libevent
 	-DLibEvent_LIB_PATHS=$HPHP_HOME/libevent/.libs \
 %endif
 
+%if 0
+# out of dir build broken (can't find it's tools)
 install -d build
 cd build
+%endif
+
 CPPFLAGS="%{rpmcppflags} -fno-permissive"
 %cmake \
 	-DLIBEVENT_LIB=$HPHP_HOME/libevent/lib/libevent.so \
@@ -125,7 +129,7 @@ CPPFLAGS="%{rpmcppflags} -fno-permissive"
 	-DSKIP_BUNDLED_XHP=ON \
 	-DUSE_JEMALLOC=ON \
 	-DUSE_TCMALLOC=OFF \
-	../
+	./
 %{__make}
 
 %install
