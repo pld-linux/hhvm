@@ -50,7 +50,6 @@ BuildRequires:	libdwarf-devel
 BuildRequires:	libicu-devel >= 4.2
 #BuildRequires:	libmbfl-devel
 BuildRequires:	libmcrypt-devel
-BuildRequires:	libmemcached-devel < 1.0.8
 BuildRequires:	libmemcached-devel >= 1.0.4
 BuildRequires:	libstdc++-devel >= 6:4.3
 BuildRequires:	libunwind-devel
