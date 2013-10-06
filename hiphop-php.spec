@@ -10,14 +10,16 @@
 #   make[2]: *** [src/hphp/hphp] Error 139
 #   relinking succeeds, but resulting binary segfaults as well:
 #   0x0000000000b9cc0b in HPHP::Extension::LoadModules(HPHP::Hdf) ()
+%define		githash	78394ee
+%define		rel		0.1
 Summary:	Virtual Machine, Runtime, and JIT for PHP
 Name:		hiphop-php
 Version:	2.1.0
-Release:	0.1
+Release:	0.%{githash}.%{rel}
 License:	PHP 3.01
 Group:		Development/Languages
-Source0:	https://github.com/facebook/hiphop-php/archive/HPHP-%{version}.tar.gz
-# Source0-md5:	edd3d8b4371d38286c7c5f0c2582f5e1
+Source0:	https://github.com/facebook/hiphop-php/archive/%{githash}/HPHP-%{version}.%{githash}.tar.gz
+# Source0-md5:	81742a0535a6bab906208d3756b206d1
 # need fb.changes.patch, which is available for 1.4 only
 Source1:	http://www.monkey.org/~provos/libevent-1.4.14b-stable.tar.gz
 # Source1-md5:	a00e037e4d3f9e4fe9893e8a2d27918c
@@ -28,8 +30,6 @@ Patch3:		system-xhp.patch
 Patch4:		system-libafdt.patch
 Patch5:		system-folly.patch
 Patch6:		boost-system-category.patch
-Patch7:		gcc4.8.patch
-Patch8:		gd-syms.patch
 URL:		http://wiki.github.com/facebook/hiphop-php/
 BuildRequires:	binutils-devel
 BuildRequires:	bison >= 2.3
@@ -79,11 +79,10 @@ HipHop is most commonly run as a standalone server, replacing both
 Apache and mod_php.
 
 %prep
-%setup -q -n %{name}-HPHP-%{version} -a1
+%setup -qc -a1
+mv %{name}-%{githash}*/* .
 %patch5 -p1
 %patch6 -p1
-%patch7 -p1
-%patch8 -p1
 
 ln -s libevent-1.4.*-stable libevent
 %{__patch} -d libevent -p1 < hphp/third_party/libevent-1.4.14.fb-changes.diff
@@ -162,6 +161,7 @@ rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(644,root,root,755)
+%doc README.md hphp/NEWS
 %attr(755,root,root) %{_bindir}/hhvm
 %attr(755,root,root) %{_libdir}/libevent-1.4.so.*.*.*
 %ghost %{_libdir}/libevent-1.4.so.2
