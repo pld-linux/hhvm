@@ -146,12 +146,22 @@ CPPFLAGS="%{rpmcppflags} -fno-permissive"
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT%{_bindir}
-install -p build/src/hphp/hphp $RPM_BUILD_ROOT%{_bindir}
+%{__make} install \
+	DESTDIR=$RPM_BUILD_ROOT
+
+# install our libevent for now
+install -d $RPM_BUILD_ROOT%{_libdir}
+libtool --mode=install install -p libevent/libevent.la $RPM_BUILD_ROOT%{_libdir}
+%{__rm} $RPM_BUILD_ROOT%{_libdir}/libevent.{a,la,so}
 
 %clean
 rm -rf $RPM_BUILD_ROOT
 
+%post	-p /sbin/ldconfig
+%postun	-p /sbin/ldconfig
+
 %files
 %defattr(644,root,root,755)
-%attr(755,root,root) %{_bindir}/hphp
+%attr(755,root,root) %{_bindir}/hhvm
+%attr(755,root,root) %{_libdir}/libevent-1.4.so.*.*.*
+%ghost %{_libdir}/libevent-1.4.so.2
