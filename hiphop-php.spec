@@ -1,5 +1,6 @@
 # TODO
 # - system libevent2: https://github.com/facebook/hiphop-php/pull/421
+# - build with newer libmemcached than 1.0.7, https://github.com/facebook/hiphop-php/issues/560
 # - system libmbfl, system xhp, sqlite3
 # - there should be a bit more packaged into files
 # - linking segfaults
@@ -48,6 +49,7 @@ BuildRequires:	libdwarf-devel
 BuildRequires:	libicu-devel >= 4.2
 #BuildRequires:	libmbfl-devel
 BuildRequires:	libmcrypt-devel
+BuildRequires:	libmemcached-devel < 1.0.8
 BuildRequires:	libmemcached-devel >= 1.0.4
 BuildRequires:	libstdc++-devel >= 6:4.3
 BuildRequires:	libunwind-devel
