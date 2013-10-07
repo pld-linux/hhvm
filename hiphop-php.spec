@@ -32,6 +32,7 @@ BuildRequires:	curl-devel >= 7.29.0
 BuildRequires:	elfutils-devel
 BuildRequires:	expat-devel
 BuildRequires:	flex >= 2.5.35
+BuildRequires:	gcc >= 6:4.6.0
 BuildRequires:	gd-devel
 BuildRequires:	glog-devel >= 0.3.2
 BuildRequires:	imap-devel >= 1:2007
