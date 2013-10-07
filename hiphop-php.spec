@@ -1,8 +1,10 @@
+# NOTES:
+# - hphp/runtime/base/runtime-option.cpp evalJitDefault enables jit if /.hhvm-jit exists (yes, in filesystem root)
 # TODO
 # - system libevent2: https://github.com/facebook/hiphop-php/pull/421
 # - system libmbfl, system xhp, sqlite3
 %define		githash	78394ee
-%define		rel		0.4
+%define		rel		0.7
 Summary:	Virtual Machine, Runtime, and JIT for PHP
 Name:		hiphop-php
 Version:	2.1.0
@@ -52,7 +54,7 @@ BuildRequires:	pcre-devel
 #BuildRequires:	php-xhp-devel >= 1.3.9-6
 BuildRequires:	re2c >= 0.13.0
 BuildRequires:	readline-devel
-BuildRequires:	rpmbuild(macros) >= 1.600
+BuildRequires:	rpmbuild(macros) >= 1.675
 BuildRequires:	tbb-devel >= 4.0.6000
 BuildRequires:	zlib-devel
 ExclusiveArch:	%{x8664}
@@ -109,6 +111,16 @@ fi
 
 export HPHP_HOME=$(pwd)
 export HPHP_LIB=$HPHP_HOME/bin
+
+# asm linking breaks on $CC containing spaces
+if [[ "%{__cc}" = *ccache* ]]; then
+	cat <<-'EOF' > $HPHP_LIB/gcc
+	#!/bin/sh
+	exec %{__cc} "$@"
+	EOF
+	chmod +x $HPHP_LIB/gcc
+	CC=$HPHP_LIB/gcc
+fi
 
 %if 0
 export LIBEVENT_PREFIX=$HPHP_HOME/libevent
