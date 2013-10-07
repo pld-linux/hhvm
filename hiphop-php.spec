@@ -4,7 +4,7 @@
 # - system libevent2: https://github.com/facebook/hiphop-php/pull/421
 # - system libmbfl, system xhp, sqlite3
 %define		githash	78394ee
-%define		rel		0.7
+%define		rel		0.8
 Summary:	Virtual Machine, Runtime, and JIT for PHP
 Name:		hiphop-php
 Version:	2.1.0
@@ -136,7 +136,6 @@ install -d build
 cd build
 %endif
 
-CPPFLAGS="%{rpmcppflags} -fno-permissive"
 %cmake \
 	-DLIBEVENT_LIB=$HPHP_HOME/libevent/lib/libevent.so \
 	-DLIBEVENT_INCLUDE_DIR=$HPHP_HOME/libevent \
