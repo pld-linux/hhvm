@@ -72,7 +72,8 @@ Apache and mod_php.
 %prep
 %setup -qc -a1
 mv %{name}-%{githash}*/* .
-%patch5 -p1
+
+#%patch5 -p1
 %patch6 -p1
 
 ln -s libevent-1.4.*-stable libevent
