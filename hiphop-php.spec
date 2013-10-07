@@ -132,6 +132,13 @@ CPPFLAGS="%{rpmcppflags} -fno-permissive"
 	-DUSE_JEMALLOC=OFF \
 	-DUSE_TCMALLOC=OFF \
 	./
+
+# setup COMPILER_ID/HHVM_REPO_SCHEMA so it doesn't look it up from our package git repo
+# see hphp/util/generate-buildinfo.sh
+sha=$(echo %{name}-%{githash}*)
+export COMPILER_ID=HPHP-%{version}-%{release}-${sha#%{name}-}
+export HHVM_REPO_SCHEMA=$(date +%N_%s)
+
 %{__make}
 
 %install
