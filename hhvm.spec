@@ -7,7 +7,7 @@
 Summary:	Virtual Machine, Runtime, and JIT for PHP
 Name:		hhvm
 Version:	2.3.2
-Release:	0.1
+Release:	0.2
 License:	PHP 3.01
 Group:		Development/Languages
 Source0:	https://github.com/facebook/hhvm/archive/HHVM-%{version}.tar.gz
@@ -15,18 +15,18 @@ Source0:	https://github.com/facebook/hhvm/archive/HHVM-%{version}.tar.gz
 # need fb.changes.patch, which is available for 1.4 only
 Source1:	http://www.monkey.org/~provos/libevent-1.4.14b-stable.tar.gz
 # Source1-md5:	a00e037e4d3f9e4fe9893e8a2d27918c
-Source2:	get-source.sh
+Source2:	https://github.com/facebook/folly/archive/4d6d659/folly-%{version}-4d6d659.tar.gz
+Source100:	get-source.sh
 Patch0:		cmake-missing-library.patch
 Patch1:		libevent14.patch
 Patch3:		system-xhp.patch
 Patch4:		system-libafdt.patch
 Patch5:		system-folly.patch
-Patch6:		boost-system-category.patch
 URL:		http://wiki.github.com/facebook/hiphop-php/
 BuildRequires:	binutils-devel
 BuildRequires:	bison >= 2.3
 BuildRequires:	boost-devel >= 1.50
-BuildRequires:	cmake >= 2.8.5
+BuildRequires:	cmake >= 2.8.7
 BuildRequires:	curl-devel >= 7.29.0
 BuildRequires:	elfutils-devel
 BuildRequires:	expat-devel
@@ -35,7 +35,7 @@ BuildRequires:	gcc >= 6:4.6.0
 BuildRequires:	gd-devel
 BuildRequires:	glog-devel >= 0.3.2
 BuildRequires:	imap-devel >= 1:2007
-#BuildRequires:	jemalloc-devel
+#BuildRequires:	jemalloc-devel >= 3.0.0
 BuildRequires:	libafdt-devel >= 0.1.0
 BuildRequires:	libcap-devel
 BuildRequires:	libdwarf-devel
@@ -59,17 +59,20 @@ BuildRequires:	tbb-devel >= 4.0.6000
 BuildRequires:	zlib-devel
 Provides:	php(apc)
 Provides:	php(bcmath)
+Provides:	php(bz2)
 Provides:	php(ctype)
 Provides:	php(curl)
 Provides:	php(date)
 Provides:	php(dom)
 Provides:	php(exif)
 Provides:	php(fb)
+Provides:	php(fileinfo)
 Provides:	php(filter)
 Provides:	php(gd)
 Provides:	php(hash)
 Provides:	php(hotprofiler)
 Provides:	php(iconv)
+Provides:	php(icu_num_fmt)
 Provides:	php(icu_ucsdet)
 Provides:	php(icu_uspoof)
 Provides:	php(idn)
@@ -107,8 +110,9 @@ Provides:	php(xhprof)
 Provides:	php(xml)
 Provides:	php(xmlreader)
 Provides:	php(xmlwriter)
+Provides:	php(zip)
 Provides:	php(zlib)
-Obsoletes:	hiphop-php < 2.3.2
+Obsoletes:	hiphop-php < 2.3.2-0.2
 ExclusiveArch:	%{x8664}
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
@@ -128,10 +132,11 @@ with a FastCGI-based webserver, and work is in progress to make HHVM
 work smoothly with Apache.
 
 %prep
-%setup -q -a1 -n %{name}-HHVM-%{version}
+%setup -q -a1 -a2 -n %{name}-HHVM-%{version}
+
+mv folly-*/* hphp/submodules/folly
 
 #%patch5 -p1
-%patch6 -p1
 
 ln -s libevent-1.4.*-stable libevent
 %{__patch} -d libevent -p1 < hphp/third_party/libevent-1.4.14.fb-changes.diff
@@ -166,6 +171,7 @@ fi
 
 export HPHP_HOME=$(pwd)
 export HPHP_LIB=$HPHP_HOME/bin
+install -d $HPHP_LIB
 
 # asm linking breaks on $CC containing spaces
 if [[ "%{__cc}" = *ccache* ]]; then
@@ -202,7 +208,7 @@ cd build
 
 # setup COMPILER_ID/HHVM_REPO_SCHEMA so it doesn't look it up from our package git repo
 # see hphp/util/generate-buildinfo.sh
-export COMPILER_ID=HPHP-%{version}-%{release}-%{githash}}
+export COMPILER_ID=HPHP-%{version}-%{release}-%{githash}
 export HHVM_REPO_SCHEMA=$(date +%N_%s)
 
 %{__make}
