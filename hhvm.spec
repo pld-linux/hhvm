@@ -133,6 +133,19 @@ webserver and the "mod_php" extension). HHVM can also be used together
 with a FastCGI-based webserver, and work is in progress to make HHVM
 work smoothly with Apache.
 
+%package program
+Summary:	/usr/bin/php symlink
+Summary(pl.UTF-8):	Dowiązanie symboliczne /usr/bin/php
+Group:		Development/Languages/PHP
+Requires:	%{name} = %{version}-%{release}
+Obsoletes:	/usr/bin/php
+
+%description program
+Package providing /usr/bin/php symlink to PHP CLI.
+
+%description program -l pl.UTF-8
+Pakiet dostarczający dowiązanie symboliczne /usr/bin/php do PHP CLI.
+
 %prep
 %setup -q -a1 -a2 -n %{name}-HHVM-%{version}
 
@@ -224,6 +237,9 @@ rm -rf $RPM_BUILD_ROOT
 	HPHP_HOME=$(pwd) \
 	DESTDIR=$RPM_BUILD_ROOT
 
+ln -s hhvm $RPM_BUILD_ROOT%{_bindir}/php
+ln -s hhvm $RPM_BUILD_ROOT%{_bindir}/hphp
+
 install -d $RPM_BUILD_ROOT%{_datadir}/%{name}/hdf
 cp -p hphp/doc/mime.hdf $RPM_BUILD_ROOT%{_datadir}/%{name}/hdf/static.mime-types.hdf
 
@@ -242,9 +258,14 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(644,root,root,755)
 %doc README.md hphp/NEWS
 %attr(755,root,root) %{_bindir}/hhvm
+%attr(755,root,root) %{_bindir}/hphp
 %attr(755,root,root) %{_libdir}/libevent-1.4.so.*.*.*
 %ghost %{_libdir}/libevent-1.4.so.2
 
 %dir %{_datadir}/%{name}
 %dir %{_datadir}/%{name}/hdf
 %{_datadir}/%{name}/hdf/static.mime-types.hdf
+
+%files program
+%defattr(644,root,root,755)
+%attr(755,root,root) %{_bindir}/php
