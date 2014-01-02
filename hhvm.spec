@@ -7,7 +7,7 @@
 Summary:	Virtual Machine, Runtime, and JIT for PHP
 Name:		hhvm
 Version:	2.3.2
-Release:	0.2
+Release:	0.7
 License:	PHP 3.01
 Group:		Development/Languages
 Source0:	https://github.com/facebook/hhvm/archive/HHVM-%{version}.tar.gz
@@ -24,6 +24,7 @@ Patch4:		system-libafdt.patch
 Patch5:		system-folly.patch
 Patch6:		checksum.patch
 Patch7:		imap-gss.patch
+Patch8:		hphpize.patch
 URL:		http://wiki.github.com/facebook/hiphop-php/
 BuildRequires:	binutils-devel
 BuildRequires:	bison >= 2.3
@@ -146,6 +147,17 @@ Package providing /usr/bin/php symlink to PHP CLI.
 %description program -l pl.UTF-8
 Pakiet dostarczający dowiązanie symboliczne /usr/bin/php do PHP CLI.
 
+%package devel
+Summary:	Files for HHVM modules development
+Group:		Development/Languages/PHP
+URL:		https://github.com/facebook/hhvm/wiki/Extension-API
+Requires:	cmake >= 2.8.5
+
+%description devel
+HHVM provides a set of APIs for adding built-in functionality to the
+runtime either by way of pure PHP code, or a combination of PHP and
+C++.
+
 %prep
 %setup -q -a1 -a2 -n %{name}-HHVM-%{version}
 
@@ -153,8 +165,13 @@ mv folly-*/* hphp/submodules/folly
 
 %patch6 -p1
 %patch7 -p1
-
+%patch8 -p1
 #%patch5 -p1
+
+# prefer ones from system
+rm CMake/Modules/FindBISON.cmake
+rm CMake/Modules/FindBoost.cmake
+rm CMake/Modules/FindFLEX.cmake
 
 ln -s libevent-1.4.*-stable libevent
 %{__patch} -d libevent -p1 < hphp/third_party/libevent-1.4.14.fb-changes.diff
@@ -248,6 +265,29 @@ install -d $RPM_BUILD_ROOT%{_libdir}
 libtool --mode=install install -p libevent/libevent.la $RPM_BUILD_ROOT%{_libdir}
 %{__rm} $RPM_BUILD_ROOT%{_libdir}/libevent.{a,la,so}
 
+# setup -devel
+install -d $RPM_BUILD_ROOT%{_datadir}/cmake/Modules
+cp -a CMake/* $RPM_BUILD_ROOT%{_datadir}/cmake/Modules
+
+HPHP_HOME=$(pwd)
+sed -e "
+	/HHVM_INCLUDE_DIRS/ s,$HPHP_HOME,%{_includedir},g
+" hphp/tools/hphpize/hphpize.cmake > $RPM_BUILD_ROOT%{_datadir}/cmake/Modules/hphpize.cmake
+
+oIFS=$IFS
+IFS=";"
+set -- $(sed -ne 's/set(HHVM_INCLUDE_DIRS "\(.*\)")/\1/p' hphp/tools/hphpize/hphpize.cmake)
+for dir in "$@"; do
+	case "$dir" in
+	$HPHP_HOME/?*)
+		find $dir -name '*.h' | while read file; do
+			install -Dp $file $RPM_BUILD_ROOT%{_includedir}${file#$HPHP_HOME}
+		done
+	;;
+	esac
+done
+IFS=$oIFS
+
 %clean
 rm -rf $RPM_BUILD_ROOT
 
@@ -269,3 +309,42 @@ rm -rf $RPM_BUILD_ROOT
 %files program
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_bindir}/php
+
+%files devel
+%defattr(644,root,root,755)
+%attr(755,root,root) %{_bindir}/hphpize
+%{_includedir}/hphp
+%{_datadir}/cmake/Modules/hphpize.cmake
+%{_datadir}/cmake/Modules/FindCClient.cmake
+%{_datadir}/cmake/Modules/FindEditline.cmake
+%{_datadir}/cmake/Modules/FindGD.cmake
+%{_datadir}/cmake/Modules/FindGlog.cmake
+%{_datadir}/cmake/Modules/FindICU.cmake
+%{_datadir}/cmake/Modules/FindLdap.cmake
+%{_datadir}/cmake/Modules/FindLibAfdt.cmake
+%{_datadir}/cmake/Modules/FindLibCh.cmake
+%{_datadir}/cmake/Modules/FindLibDL.cmake
+%{_datadir}/cmake/Modules/FindLibDwarf.cmake
+%{_datadir}/cmake/Modules/FindLibElf.cmake
+%{_datadir}/cmake/Modules/FindLibEvent.cmake
+%{_datadir}/cmake/Modules/FindLibEvent.cmake.bak
+%{_datadir}/cmake/Modules/FindLibNuma.cmake
+%{_datadir}/cmake/Modules/FindLibXed.cmake
+%{_datadir}/cmake/Modules/FindLibiconv.cmake
+%{_datadir}/cmake/Modules/FindLibinotify.cmake
+%{_datadir}/cmake/Modules/FindLibmemcached.cmake
+%{_datadir}/cmake/Modules/FindLibpam.cmake
+%{_datadir}/cmake/Modules/FindMcrypt.cmake
+%{_datadir}/cmake/Modules/FindMySQL.cmake
+%{_datadir}/cmake/Modules/FindNcurses.cmake
+%{_datadir}/cmake/Modules/FindONIGURUMA.cmake
+%{_datadir}/cmake/Modules/FindPCRE.cmake
+%{_datadir}/cmake/Modules/FindPThread.cmake
+%{_datadir}/cmake/Modules/FindReadline.cmake
+%{_datadir}/cmake/Modules/FindTBB.cmake
+%{_datadir}/cmake/Modules/FollySetup.cmake
+%{_datadir}/cmake/Modules/HPHPCompiler.cmake
+%{_datadir}/cmake/Modules/HPHPFindLibs.cmake
+%{_datadir}/cmake/Modules/HPHPFunctions.cmake
+%{_datadir}/cmake/Modules/HPHPSetup.cmake
+%{_datadir}/cmake/Modules/Options.cmake

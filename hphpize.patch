@@ -1,0 +1,21 @@
+--- hhvm-HHVM-2.3.2/hphp/tools/hphpize/hphpize~	2013-12-23 22:51:42.000000000 +0200
++++ hhvm-HHVM-2.3.2/hphp/tools/hphpize/hphpize	2014-01-02 19:35:36.178508621 +0200
+@@ -5,6 +5,6 @@
+   exit 1
+ fi
+ 
+-cp ${HPHP_HOME}/hphp/tools/hphpize/hphpize.cmake CMakeLists.txt
++cp /usr/share/cmake/Modules/hphpize.cmake CMakeLists.txt
+ 
+ echo "** hphpize complete, now run \`cmake . && make\` to build"
+--- hhvm-HHVM-2.3.2/hphp/tools/hphpize/hphpize.cmake.in~	2013-12-23 22:51:42.000000000 +0200
++++ hhvm-HHVM-2.3.2/hphp/tools/hphpize/hphpize.cmake.in	2014-01-02 19:39:10.208421292 +0200
+@@ -1,7 +1,7 @@
+ CMAKE_MINIMUM_REQUIRED(VERSION 2.8.5 FATAL_ERROR)
+ PROJECT(hphp C CXX ASM)
+ 
+-set(HPHP_HOME "@HPHP_HOME@")
++set(HPHP_HOME "/usr/include/hphp")
+ set(CMAKE_MODULE_PATH
+     "${HPHP_HOME}/CMake"
+     ${CMAKE_CURRENT_SOURCE_DIR}
