@@ -7,7 +7,7 @@
 Summary:	Virtual Machine, Runtime, and JIT for PHP
 Name:		hhvm
 Version:	2.3.2
-Release:	0.7
+Release:	0.8
 License:	PHP 3.01
 Group:		Development/Languages
 Source0:	https://github.com/facebook/hhvm/archive/HHVM-%{version}.tar.gz
@@ -169,9 +169,9 @@ mv folly-*/* hphp/submodules/folly
 #%patch5 -p1
 
 # prefer ones from system
-rm CMake/Modules/FindBISON.cmake
-rm CMake/Modules/FindBoost.cmake
-rm CMake/Modules/FindFLEX.cmake
+rm CMake/FindBISON.cmake
+rm CMake/FindBoost.cmake
+rm CMake/FindFLEX.cmake
 
 ln -s libevent-1.4.*-stable libevent
 %{__patch} -d libevent -p1 < hphp/third_party/libevent-1.4.14.fb-changes.diff
