@@ -151,8 +151,12 @@ Pakiet dostarczający dowiązanie symboliczne /usr/bin/php do PHP CLI.
 Summary:	Files for HHVM modules development
 Group:		Development/Languages/PHP
 URL:		https://github.com/facebook/hhvm/wiki/Extension-API
+Requires:	boost-devel >= 1.50
 Requires:	cmake >= 2.8.5
+Requires:	glog-devel >= 0.3.2
 Requires:	libstdc++-devel >= 6:4.3
+Requires:	tbb-devel >= 4.0.6000
+Requires:	zlib-devel
 
 %description devel
 HHVM provides a set of APIs for adding built-in functionality to the
@@ -288,6 +292,9 @@ for dir in "$@"; do
 	esac
 done
 IFS=$oIFS
+
+# fixup, broken due symlink
+mv $RPM_BUILD_ROOT%{_includedir}/hphp/{submodules/folly/folly,third_party}
 
 %clean
 rm -rf $RPM_BUILD_ROOT
