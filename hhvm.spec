@@ -22,6 +22,8 @@ Patch1:		libevent14.patch
 Patch3:		system-xhp.patch
 Patch4:		system-libafdt.patch
 Patch5:		system-folly.patch
+Patch6:		checksum.patch
+Patch7:		imap-gss.patch
 URL:		http://wiki.github.com/facebook/hiphop-php/
 BuildRequires:	binutils-devel
 BuildRequires:	bison >= 2.3
@@ -135,6 +137,9 @@ work smoothly with Apache.
 %setup -q -a1 -a2 -n %{name}-HHVM-%{version}
 
 mv folly-*/* hphp/submodules/folly
+
+%patch6 -p1
+%patch7 -p1
 
 #%patch5 -p1
 

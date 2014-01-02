@@ -1,0 +1,24 @@
+disable crc32c_hw because it's compile fails:
+
+HHVM-2.3.2/hphp/third_party/folly/folly/Checksum.cpp: In function ‘uint32_t folly::detail::crc32c_hw(const uint8_t*, size_t, uint32_t)’:
+HHVM-2.3.2/hphp/third_party/folly/folly/Checksum.cpp:43:63: error: ‘__builtin_ia32_crc32qi’ was not declared in this scope
+       sum = (uint32_t)__builtin_ia32_crc32qi(sum, data[offset]);
+                                                               ^
+HHVM-2.3.2/hphp/third_party/folly/folly/Checksum.cpp:51:43: error: ‘__builtin_ia32_crc32di’ was not declared in this scope
+     sum = __builtin_ia32_crc32di(sum, *src);
+                                           ^
+HHVM-2.3.2/hphp/third_party/folly/folly/Checksum.cpp:57:61: error: ‘__builtin_ia32_crc32qi’ was not declared in this scope
+     sum = (uint32_t)__builtin_ia32_crc32qi(sum, data[offset]);
+
+
+--- hhvm-HHVM-2.3.2/hphp/third_party/folly/folly/Checksum.cpp~	2014-01-01 23:57:39.000000000 +0200
++++ hhvm-HHVM-2.3.2/hphp/third_party/folly/folly/Checksum.cpp	2014-01-01 23:57:45.449293562 +0200
+@@ -25,7 +25,7 @@
+ 
+ namespace detail {
+ 
+-#if defined(__x86_64__) && defined (__GNUC__)
++#if defined(__x86_64__) && defined (__GNUC__) && 0
+ 
+ // Fast SIMD implementation of CRC-32C for x86 with SSE 4.2
+ uint32_t crc32c_hw(const uint8_t *data, size_t nbytes,

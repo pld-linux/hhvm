@@ -1,0 +1,17 @@
+always disable imap gss
+see: https://github.com/facebook/hhvm/pull/1181#issuecomment-27153815
+--- hhvm-HHVM-2.3.2/CMake/HPHPFindLibs.cmake~	2013-12-23 22:51:42.000000000 +0200
++++ hhvm-HHVM-2.3.2/CMake/HPHPFindLibs.cmake	2014-01-02 00:52:37.828252903 +0200
+@@ -308,10 +308,10 @@
+ find_package(Libpam)
+ if (PAM_INCLUDE_PATH)
+ 	include_directories(${PAM_INCLUDE_PATH})
+-else()
+-	add_definitions(-DSKIP_IMAP_GSS=1)
+ endif()
+ 
++add_definitions(-DSKIP_IMAP_GSS=1)
++
+ if (EXISTS "${CCLIENT_INCLUDE_PATH}/linkage.c")
+ 	CONTAINS_STRING("${CCLIENT_INCLUDE_PATH}/linkage.c" ssl_onceonlyinit CCLIENT_HAS_SSL)
+ endif()
