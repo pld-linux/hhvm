@@ -152,6 +152,7 @@ Summary:	Files for HHVM modules development
 Group:		Development/Languages/PHP
 URL:		https://github.com/facebook/hhvm/wiki/Extension-API
 Requires:	cmake >= 2.8.5
+Requires:	libstdc++-devel >= 6:4.3
 
 %description devel
 HHVM provides a set of APIs for adding built-in functionality to the
