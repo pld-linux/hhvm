@@ -3,16 +3,15 @@
 # TODO
 # - system libevent2: https://github.com/facebook/hiphop-php/pull/421
 # - system libmbfl, system xhp, sqlite3
-%define		githash	78394ee
-%define		rel		3
+%define		githash	f951cb8d8812c59344d5322454853b584b668636
 Summary:	Virtual Machine, Runtime, and JIT for PHP
-Name:		hiphop-php
-Version:	2.1.0
-Release:	0.%{githash}.%{rel}
+Name:		hhvm
+Version:	2.3.2
+Release:	0.1
 License:	PHP 3.01
 Group:		Development/Languages
-Source0:	https://github.com/facebook/hiphop-php/archive/%{githash}/HPHP-%{version}.%{githash}.tar.gz
-# Source0-md5:	81742a0535a6bab906208d3756b206d1
+Source0:	https://github.com/facebook/hhvm/archive/HHVM-%{version}.tar.gz
+# Source0-md5:	471961d38ba52c66b7038c556b2b7bd8
 # need fb.changes.patch, which is available for 1.4 only
 Source1:	http://www.monkey.org/~provos/libevent-1.4.14b-stable.tar.gz
 # Source1-md5:	a00e037e4d3f9e4fe9893e8a2d27918c
@@ -109,23 +108,27 @@ Provides:	php(xml)
 Provides:	php(xmlreader)
 Provides:	php(xmlwriter)
 Provides:	php(zlib)
+Obsoletes:	hiphop-php < 2.3.2
 ExclusiveArch:	%{x8664}
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
-HipHop VM (HHVM) is a new open-source virtual machine designed for
-executing programs written in PHP. HHVM uses a just-in-time
-compilation approach to achieve superior performance while maintaining
-the flexibility that PHP developers are accustomed to. HipHop VM (and
-before it HPHPc) has realized > 5x increase in throughput for Facebook
-compared with Zend PHP 5.2.
+HHVM (aka the HipHop Virtual Machine) is a new open-source virtual
+machine designed for executing programs written in PHP. HHVM uses a
+just-in-time compilation approach to achieve superior performance
+while maintaining the flexibility that PHP developers are accustomed
+to. To date, HHVM (and its predecessor HPHPc before it) has realized
+over a 9x increase in web request throughput and over a 5x reduction
+in memory consumption for Facebook compared with the Zend PHP 5.2
+engine + APC.
 
-HipHop is most commonly run as a standalone server, replacing both
-Apache and mod_php.
+HHVM can be run as a standalone webserver (i.e. without the Apache
+webserver and the "mod_php" extension). HHVM can also be used together
+with a FastCGI-based webserver, and work is in progress to make HHVM
+work smoothly with Apache.
 
 %prep
-%setup -qc -a1
-mv %{name}-%{githash}*/* .
+%setup -q -a1 -n %{name}-HHVM-%{version}
 
 #%patch5 -p1
 %patch6 -p1
@@ -199,8 +202,7 @@ cd build
 
 # setup COMPILER_ID/HHVM_REPO_SCHEMA so it doesn't look it up from our package git repo
 # see hphp/util/generate-buildinfo.sh
-sha=$(echo %{name}-%{githash}*)
-export COMPILER_ID=HPHP-%{version}-%{release}-${sha#%{name}-}
+export COMPILER_ID=HPHP-%{version}-%{release}-%{githash}}
 export HHVM_REPO_SCHEMA=$(date +%N_%s)
 
 %{__make}
