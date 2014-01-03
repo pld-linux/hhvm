@@ -282,19 +282,29 @@ sed -e "
 oIFS=$IFS
 IFS=";"
 set -- $(sed -ne 's/set(HHVM_INCLUDE_DIRS "\(.*\)")/\1/p' hphp/tools/hphpize/hphpize.cmake)
-for dir in "$@"; do
-	case "$dir" in
-	$HPHP_HOME/?*)
-		find $dir -name '*.h' | while read file; do
-			install -Dp $file $RPM_BUILD_ROOT%{_includedir}${file#$HPHP_HOME}
-		done
-	;;
-	esac
-done
 IFS=$oIFS
+set -- $(
+	for dir in "$@"; do
+		[[ "$dir" = $HPHP_HOME/hphp/* ]] && echo $dir
+	done
+)
 
-# fixup, broken due symlink
-mv $RPM_BUILD_ROOT%{_includedir}/hphp/{submodules/folly/folly,third_party}
+set +x
+for dir in "$@" \
+	$HPHP_HOME/hphp/runtime \
+	$HPHP_HOME/hphp/util \
+	$HPHP_HOME/hphp/neo \
+	$HPHP_HOME/hphp/system \
+	$HPHP_HOME/hphp/parser \
+; do
+	echo "D %{_includedir}${dir#$HPHP_HOME}"
+	find $dir -name '*.h' | while read path; do
+		file=%{_includedir}${path#$HPHP_HOME}
+		echo "F $file"
+		install -Dp $path $RPM_BUILD_ROOT$file
+	done
+done
+set -x
 
 %clean
 rm -rf $RPM_BUILD_ROOT
