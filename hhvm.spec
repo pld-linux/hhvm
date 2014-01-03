@@ -167,6 +167,8 @@ C++.
 %setup -q -a1 -a2 -n %{name}-HHVM-%{version}
 
 mv folly-*/* hphp/submodules/folly
+# https://github.com/facebook/folly/pull/44
+sed -i -e '21 d' hphp/third_party/folly/folly/detail/Malloc.h
 
 %patch6 -p1
 %patch7 -p1
