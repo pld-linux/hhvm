@@ -7,7 +7,7 @@
 Summary:	Virtual Machine, Runtime, and JIT for PHP
 Name:		hhvm
 Version:	2.3.2
-Release:	0.19
+Release:	0.21
 License:	PHP 3.01
 Group:		Development/Languages
 Source0:	https://github.com/facebook/hhvm/archive/HHVM-%{version}.tar.gz
@@ -28,6 +28,7 @@ Patch5:		system-folly.patch
 Patch6:		checksum.patch
 Patch7:		imap-gss.patch
 Patch8:		hphpize.patch
+Patch9:		notest.patch
 URL:		http://wiki.github.com/facebook/hiphop-php/
 BuildRequires:	apr-devel
 BuildRequires:	autoconf
@@ -190,6 +191,7 @@ sed -i -e '21 d' hphp/third_party/folly/folly/detail/Malloc.h
 %patch6 -p1
 %patch7 -p1
 %patch8 -p1
+%patch9 -p1
 #%patch5 -p1
 
 # prefer ones from system
@@ -253,6 +255,7 @@ cd build
 	-DCMAKE_PREFIX_PATH=%{_prefix} \
 	-DUSE_JEMALLOC=OFF \
 	-DUSE_TCMALLOC=OFF \
+	-DHPHP_NOTEST=ON \
 	./
 
 # setup COMPILER_ID/HHVM_REPO_SCHEMA so it doesn't look it up from our package git repo
