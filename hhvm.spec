@@ -193,7 +193,6 @@ ln -s libevent-1.4.*-stable libevent
 #%patch3 -p1
 %patch4 -p1
 
-
 #rm -rf src/third_party/libmbfl
 #sed -i -e '/add_subdirectory(third_party\/libmbfl)/d' src/CMakeLists.txt
 
@@ -230,14 +229,6 @@ if [[ "%{__cc}" = *ccache* ]]; then
 fi
 
 %if 0
-export LIBEVENT_PREFIX=$HPHP_HOME/libevent
-
-	-DLibEvent_LIB=$HPHP_HOME/libevent/libevent.so \
-	-DLibEvent_INCLUDE_PATHS=$HPHP_HOME/libevent \
-	-DLibEvent_LIB_PATHS=$HPHP_HOME/libevent/.libs \
-%endif
-
-%if 0
 # out of dir build broken (can't find it's tools)
 install -d build
 cd build
@@ -247,7 +238,6 @@ cd build
 	-DLIBEVENT_LIB=$HPHP_HOME/libevent/lib/libevent.so \
 	-DLIBEVENT_INCLUDE_DIR=$HPHP_HOME/libevent \
 	-DCMAKE_PREFIX_PATH=%{_prefix} \
-	-DSKIP_BUNDLED_XHP=ON \
 	-DUSE_JEMALLOC=OFF \
 	-DUSE_TCMALLOC=OFF \
 	./
