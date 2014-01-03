@@ -26,6 +26,8 @@ Patch6:		checksum.patch
 Patch7:		imap-gss.patch
 Patch8:		hphpize.patch
 URL:		http://wiki.github.com/facebook/hiphop-php/
+BuildRequires:	apr-devel
+BuildRequires:	autoconf
 BuildRequires:	binutils-devel
 BuildRequires:	bison >= 2.3
 BuildRequires:	boost-devel >= 1.50
