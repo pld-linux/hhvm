@@ -30,19 +30,16 @@ URL:		http://wiki.github.com/facebook/hiphop-php/
 BuildRequires:	apr-devel
 BuildRequires:	autoconf
 BuildRequires:	binutils-devel
-BuildRequires:	bison >= 2.3
 BuildRequires:	boost-devel >= 1.50
 BuildRequires:	cmake >= 2.8.7
 BuildRequires:	curl-devel >= 7.29.0
 BuildRequires:	elfutils-devel
 BuildRequires:	expat-devel
-BuildRequires:	flex >= 2.5.35
 BuildRequires:	gcc >= 6:4.6.0
 BuildRequires:	gd-devel
 BuildRequires:	glog-devel >= 0.3.2
 BuildRequires:	imap-devel >= 1:2007
 #BuildRequires:	jemalloc-devel >= 3.0.0
-BuildRequires:	libafdt-devel >= 0.1.0
 BuildRequires:	libcap-devel
 BuildRequires:	libdwarf-devel
 #BuildRequires:	libevent-devel >= 1.4.14
@@ -58,11 +55,15 @@ BuildRequires:	oniguruma-devel
 BuildRequires:	openssl-devel
 BuildRequires:	pcre-devel
 #BuildRequires:	php-xhp-devel >= 1.3.9-6
-BuildRequires:	re2c >= 0.13.0
 BuildRequires:	readline-devel
 BuildRequires:	rpmbuild(macros) >= 1.675
 BuildRequires:	tbb-devel >= 4.0.6000
 BuildRequires:	zlib-devel
+# check later, seem unused
+#BuildRequires:	bison >= 2.3
+#BuildRequires:	flex >= 2.5.35
+#BuildRequires:	libafdt-devel >= 0.1.0
+#BuildRequires:	re2c >= 0.13.0
 Provides:	php(apc)
 Provides:	php(bcmath)
 Provides:	php(bz2)
