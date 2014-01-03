@@ -267,6 +267,7 @@ export HHVM_REPO_SCHEMA=$(date +%N_%s)
 
 %install
 rm -rf $RPM_BUILD_ROOT
+install -d $RPM_BUILD_ROOT/etc/%{name}
 %{__make} install \
 	HPHP_HOME=$(pwd) \
 	DESTDIR=$RPM_BUILD_ROOT
@@ -342,6 +343,7 @@ fi
 %files
 %defattr(644,root,root,755)
 %doc README.md hphp/NEWS
+%dir /etc/%{name}
 %attr(755,root,root) %{_bindir}/hhvm
 %attr(755,root,root) %{_bindir}/hphp
 %attr(755,root,root) %{_libdir}/libevent-1.4.so.*.*.*
