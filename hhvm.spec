@@ -7,7 +7,7 @@
 Summary:	Virtual Machine, Runtime, and JIT for PHP
 Name:		hhvm
 Version:	2.3.2
-Release:	0.8
+Release:	0.19
 License:	PHP 3.01
 Group:		Development/Languages
 Source0:	https://github.com/facebook/hhvm/archive/HHVM-%{version}.tar.gz
@@ -17,6 +17,8 @@ Source1:	http://www.monkey.org/~provos/libevent-1.4.14b-stable.tar.gz
 # Source1-md5:	a00e037e4d3f9e4fe9893e8a2d27918c
 Source2:	https://github.com/facebook/folly/archive/4d6d659/folly-0.1-4d6d659.tar.gz
 # Source2-md5:	2e7c941f737c8e0a449b8116e7615656
+Source3:	%{name}-fcgi.init
+Source4:	%{name}-fcgi.sysconfig
 Source100:	get-source.sh
 Patch0:		cmake-missing-library.patch
 Patch1:		libevent14.patch
@@ -137,6 +139,17 @@ HHVM can be run as a standalone webserver (i.e. without the Apache
 webserver and the "mod_php" extension). HHVM can also be used together
 with a FastCGI-based webserver, and work is in progress to make HHVM
 work smoothly with Apache.
+
+%package fcgi
+Summary:	Init script to start HHVM as FastCGI daemon
+Group:		Development/Languages/PHP
+Requires:	%{name} = %{version}-%{release}
+Provides:	php(fcgi)
+Requires(post,preun):	/sbin/chkconfig
+Requires:	rc-scripts
+
+%description fcgi
+Init script to start HHVM as FastCGI daemon
 
 %package program
 Summary:	/usr/bin/php symlink
@@ -261,6 +274,11 @@ ln -s hhvm $RPM_BUILD_ROOT%{_bindir}/hphp
 install -d $RPM_BUILD_ROOT%{_datadir}/%{name}/hdf
 cp -p hphp/doc/mime.hdf $RPM_BUILD_ROOT%{_datadir}/%{name}/hdf/static.mime-types.hdf
 
+# install fastcgi initscript
+install -d $RPM_BUILD_ROOT/etc/{sysconfig,rc.d/init.d}
+cp -p %{SOURCE3} $RPM_BUILD_ROOT/etc/rc.d/init.d/%{name}-fcgi
+cp -p %{SOURCE4} $RPM_BUILD_ROOT/etc/sysconfig/%{name}-fcgi
+
 # install our libevent for now
 install -d $RPM_BUILD_ROOT%{_libdir}
 libtool --mode=install install -p libevent/libevent.la $RPM_BUILD_ROOT%{_libdir}
@@ -308,6 +326,16 @@ rm -rf $RPM_BUILD_ROOT
 %post	-p /sbin/ldconfig
 %postun	-p /sbin/ldconfig
 
+%post fcgi
+/sbin/chkconfig --add %{name}-fcgi
+%service %{name}-fcgi restart
+
+%preun fcgi
+if [ "$1" = "0" ]; then
+	%service -q %{name}-fcgi stop
+	/sbin/chkconfig --del %{name}-fcgi
+fi
+
 %files
 %defattr(644,root,root,755)
 %doc README.md hphp/NEWS
@@ -319,6 +347,11 @@ rm -rf $RPM_BUILD_ROOT
 %dir %{_datadir}/%{name}
 %dir %{_datadir}/%{name}/hdf
 %{_datadir}/%{name}/hdf/static.mime-types.hdf
+
+%files fcgi
+%defattr(644,root,root,755)
+%attr(754,root,root) /etc/rc.d/init.d/%{name}-fcgi
+%config(noreplace) %verify(not md5 mtime size) /etc/sysconfig/%{name}-fcgi
 
 %files program
 %defattr(644,root,root,755)
