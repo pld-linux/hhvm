@@ -15,7 +15,8 @@ Source0:	https://github.com/facebook/hhvm/archive/HHVM-%{version}.tar.gz
 # need fb.changes.patch, which is available for 1.4 only
 Source1:	http://www.monkey.org/~provos/libevent-1.4.14b-stable.tar.gz
 # Source1-md5:	a00e037e4d3f9e4fe9893e8a2d27918c
-Source2:	https://github.com/facebook/folly/archive/4d6d659/folly-%{version}-4d6d659.tar.gz
+Source2:	https://github.com/facebook/folly/archive/4d6d659/folly-0.1-4d6d659.tar.gz
+# Source2-md5:	2e7c941f737c8e0a449b8116e7615656
 Source100:	get-source.sh
 Patch0:		cmake-missing-library.patch
 Patch1:		libevent14.patch
