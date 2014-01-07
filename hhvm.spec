@@ -7,7 +7,7 @@
 Summary:	Virtual Machine, Runtime, and JIT for PHP
 Name:		hhvm
 Version:	2.3.2
-Release:	0.22
+Release:	0.24
 License:	PHP 3.01
 Group:		Development/Languages
 Source0:	https://github.com/facebook/hhvm/archive/HHVM-%{version}.tar.gz
@@ -29,6 +29,7 @@ Patch6:		checksum.patch
 Patch7:		imap-gss.patch
 Patch8:		hphpize.patch
 Patch9:		notest.patch
+Patch10:	no-debug.patch
 URL:		http://wiki.github.com/facebook/hiphop-php/
 BuildRequires:	apr-devel
 BuildRequires:	autoconf
@@ -190,6 +191,7 @@ mv folly-*/* hphp/submodules/folly
 %patch7 -p1
 %patch8 -p1
 %patch9 -p1
+%patch10 -p1
 #%patch5 -p1
 
 # prefer ones from system

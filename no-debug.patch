@@ -1,0 +1,17 @@
+as pld sets CMAKE_BUILD_TYPE to PLD, conditions like this fail:
+
+if (${CMAKE_BUILD_TYPE} MATCHES "Release")
+
+mabe PLDRelease would do better?
+
+--- hhvm/CMake/HPHPSetup.cmake~	2014-01-07 22:15:26.600836165 +0200
++++ hhvm/CMake/HPHPSetup.cmake	2014-01-07 22:46:26.036361039 +0200
+@@ -69,7 +69,7 @@
+ 	add_definitions(-D_GNU_SOURCE)
+ endif()
+ 
+-if(${CMAKE_BUILD_TYPE} MATCHES "Release")
++if(NOT ${CMAKE_BUILD_TYPE} MATCHES "Debug")
+ 	add_definitions(-DRELEASE=1)
+ 	add_definitions(-DNDEBUG)
+ 	message("Generating Release build")
