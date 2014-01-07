@@ -7,7 +7,7 @@
 Summary:	Virtual Machine, Runtime, and JIT for PHP
 Name:		hhvm
 Version:	2.3.2
-Release:	0.21
+Release:	0.22
 License:	PHP 3.01
 Group:		Development/Languages
 Source0:	https://github.com/facebook/hhvm/archive/HHVM-%{version}.tar.gz
@@ -15,8 +15,8 @@ Source0:	https://github.com/facebook/hhvm/archive/HHVM-%{version}.tar.gz
 # need fb.changes.patch, which is available for 1.4 only
 Source1:	http://www.monkey.org/~provos/libevent-1.4.14b-stable.tar.gz
 # Source1-md5:	a00e037e4d3f9e4fe9893e8a2d27918c
-Source2:	https://github.com/facebook/folly/archive/4d6d659/folly-0.1-4d6d659.tar.gz
-# Source2-md5:	2e7c941f737c8e0a449b8116e7615656
+Source2:	https://github.com/facebook/folly/archive/311c98e/folly-0.1-311c98e.tar.gz
+# Source2-md5:	338c206bccfa1a19eeb45396cd6adac6
 Source3:	%{name}-fcgi.init
 Source4:	%{name}-fcgi.sysconfig
 Source100:	get-source.sh
@@ -185,8 +185,6 @@ C++.
 %setup -q -a1 -a2 -n %{name}-HHVM-%{version}
 
 mv folly-*/* hphp/submodules/folly
-# https://github.com/facebook/folly/pull/44
-sed -i -e '21 d' hphp/third_party/folly/folly/detail/Malloc.h
 
 %patch6 -p1
 %patch7 -p1
@@ -267,7 +265,7 @@ export HHVM_REPO_SCHEMA=$(date +%N_%s)
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT/etc/%{name}
+install -d $RPM_BUILD_ROOT%{_sysconfdir}/%{name}
 %{__make} install \
 	HPHP_HOME=$(pwd) \
 	DESTDIR=$RPM_BUILD_ROOT
@@ -343,7 +341,7 @@ fi
 %files
 %defattr(644,root,root,755)
 %doc README.md hphp/NEWS
-%dir /etc/%{name}
+%dir %{_sysconfdir}/%{name}
 %attr(755,root,root) %{_bindir}/hhvm
 %attr(755,root,root) %{_bindir}/hphp
 %attr(755,root,root) %{_libdir}/libevent-1.4.so.*.*.*
