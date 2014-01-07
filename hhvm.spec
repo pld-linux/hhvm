@@ -260,7 +260,7 @@ cd build
 
 # setup COMPILER_ID/HHVM_REPO_SCHEMA so it doesn't look it up from our package git repo
 # see hphp/util/generate-buildinfo.sh
-export COMPILER_ID=HPHP-%{version}-%{release}-%{githash}
+export COMPILER_ID=HHVM-%{version}-%{release}-%{githash}
 export HHVM_REPO_SCHEMA=$(date +%N_%s)
 
 %{__make}
