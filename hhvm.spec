@@ -7,7 +7,7 @@
 Summary:	Virtual Machine, Runtime, and JIT for PHP
 Name:		hhvm
 Version:	2.3.2
-Release:	1
+Release:	2
 License:	PHP 3.01
 Group:		Development/Languages
 Source0:	https://github.com/facebook/hhvm/archive/HHVM-%{version}.tar.gz
