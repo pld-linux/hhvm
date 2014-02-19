@@ -4,7 +4,8 @@
 # - system libevent2: https://github.com/facebook/hiphop-php/pull/421
 # - system libmbfl, system xhp, sqlite3
 # - libdwarf>20120410 issue: https://github.com/facebook/hhvm/issues/1337
-%define		githash	f951cb8d8812c59344d5322454853b584b668636
+# git show HHVM-2.4.1
+%define		githash	072ec429a4c42b481aabaa8bca0210b288a8d55e
 %define		folly	18bedc2
 Summary:	Virtual Machine, Runtime, and JIT for PHP
 Name:		hhvm
