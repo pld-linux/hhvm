@@ -3,20 +3,22 @@
 # TODO
 # - system libevent2: https://github.com/facebook/hiphop-php/pull/421
 # - system libmbfl, system xhp, sqlite3
+# - libdwarf>20120410 issue: https://github.com/facebook/hhvm/issues/1337
 %define		githash	f951cb8d8812c59344d5322454853b584b668636
+%define		folly	18bedc2
 Summary:	Virtual Machine, Runtime, and JIT for PHP
 Name:		hhvm
-Version:	2.3.2
-Release:	4
+Version:	2.4.1
+Release:	0.1
 License:	PHP 3.01
 Group:		Development/Languages
 Source0:	https://github.com/facebook/hhvm/archive/HHVM-%{version}.tar.gz
-# Source0-md5:	471961d38ba52c66b7038c556b2b7bd8
+# Source0-md5:	a18dde8a30f8293963e6641ee8cb04c8
 # need fb.changes.patch, which is available for 1.4 only
 Source1:	http://www.monkey.org/~provos/libevent-1.4.14b-stable.tar.gz
 # Source1-md5:	a00e037e4d3f9e4fe9893e8a2d27918c
-Source2:	https://github.com/facebook/folly/archive/311c98e/folly-0.1-311c98e.tar.gz
-# Source2-md5:	338c206bccfa1a19eeb45396cd6adac6
+Source2:	https://github.com/facebook/folly/archive/%{folly}/folly-0.1-%{folly}.tar.gz
+# Source2-md5:	5de02fa81641c66a93c2f57094c7aa72
 Source3:	%{name}-fcgi.init
 Source4:	%{name}-fcgi.sysconfig
 Source100:	get-source.sh
@@ -25,8 +27,6 @@ Patch1:		libevent14.patch
 Patch3:		system-xhp.patch
 Patch4:		system-libafdt.patch
 Patch5:		system-folly.patch
-Patch6:		checksum.patch
-Patch7:		imap-gss.patch
 Patch8:		hphpize.patch
 Patch9:		notest.patch
 Patch10:	no-debug.patch
@@ -45,7 +45,7 @@ BuildRequires:	glog-devel >= 0.3.2
 BuildRequires:	imap-devel >= 1:2007
 #BuildRequires:	jemalloc-devel >= 3.0.0
 BuildRequires:	libcap-devel
-BuildRequires:	libdwarf-devel
+BuildRequires:	libdwarf-devel <= 20120410
 #BuildRequires:	libevent-devel >= 1.4.14
 BuildRequires:	libicu-devel >= 4.2
 #BuildRequires:	libmbfl-devel
@@ -187,8 +187,6 @@ C++.
 
 mv folly-*/* hphp/submodules/folly
 
-%patch6 -p1
-%patch7 -p1
 %patch8 -p1
 %patch9 -p1
 %patch10 -p1
@@ -366,10 +364,10 @@ fi
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_bindir}/hphpize
 %{_includedir}/hphp
-%{_datadir}/cmake/Modules/hphpize.cmake
+%{_datadir}/cmake/Modules/ExtZendCompat.cmake
 %{_datadir}/cmake/Modules/FindCClient.cmake
 %{_datadir}/cmake/Modules/FindEditline.cmake
-%{_datadir}/cmake/Modules/FindGD.cmake
+%{_datadir}/cmake/Modules/FindFreetype.cmake
 %{_datadir}/cmake/Modules/FindGlog.cmake
 %{_datadir}/cmake/Modules/FindICU.cmake
 %{_datadir}/cmake/Modules/FindLdap.cmake
@@ -380,8 +378,13 @@ fi
 %{_datadir}/cmake/Modules/FindLibElf.cmake
 %{_datadir}/cmake/Modules/FindLibEvent.cmake
 %{_datadir}/cmake/Modules/FindLibEvent.cmake.bak
+%{_datadir}/cmake/Modules/FindLibJpeg.cmake
 %{_datadir}/cmake/Modules/FindLibNuma.cmake
+%{_datadir}/cmake/Modules/FindLibPng.cmake
+%{_datadir}/cmake/Modules/FindLibUODBC.cmake
+%{_datadir}/cmake/Modules/FindLibVpx.cmake
 %{_datadir}/cmake/Modules/FindLibXed.cmake
+%{_datadir}/cmake/Modules/FindLibYaml.cmake
 %{_datadir}/cmake/Modules/FindLibiconv.cmake
 %{_datadir}/cmake/Modules/FindLibinotify.cmake
 %{_datadir}/cmake/Modules/FindLibmemcached.cmake
@@ -400,3 +403,4 @@ fi
 %{_datadir}/cmake/Modules/HPHPFunctions.cmake
 %{_datadir}/cmake/Modules/HPHPSetup.cmake
 %{_datadir}/cmake/Modules/Options.cmake
+%{_datadir}/cmake/Modules/hphpize.cmake
