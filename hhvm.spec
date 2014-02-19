@@ -196,6 +196,7 @@ mv folly-*/* hphp/submodules/folly
 rm CMake/FindBISON.cmake
 rm CMake/FindBoost.cmake
 rm CMake/FindFLEX.cmake
+rm CMake/FindFreetype.cmake
 
 ln -s libevent-1.4.*-stable libevent
 %{__patch} -d libevent -p1 < hphp/third_party/libevent-1.4.14.fb-changes.diff
@@ -367,7 +368,6 @@ fi
 %{_datadir}/cmake/Modules/ExtZendCompat.cmake
 %{_datadir}/cmake/Modules/FindCClient.cmake
 %{_datadir}/cmake/Modules/FindEditline.cmake
-%{_datadir}/cmake/Modules/FindFreetype.cmake
 %{_datadir}/cmake/Modules/FindGlog.cmake
 %{_datadir}/cmake/Modules/FindICU.cmake
 %{_datadir}/cmake/Modules/FindLdap.cmake
