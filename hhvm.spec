@@ -2,18 +2,17 @@
 # - hphp/runtime/base/runtime-option.cpp evalJitDefault enables jit if /.hhvm-jit exists (yes, in filesystem root)
 # TODO
 # - system libmbfl, system xhp, sqlite3
-# - libdwarf>20120410 issue: https://github.com/facebook/hhvm/issues/1337
-# git show HHVM-3.0.0
-%define		githash	59a8db46e4ebf5cfd205fadc12e27a9903fb7aae
+# git show HHVM-3.0.1
+%define		githash	c2284b1fc46454432969bfe1b1c205713f7a69e8
 %define		folly	d9c79af
 Summary:	Virtual Machine, Runtime, and JIT for PHP
 Name:		hhvm
-Version:	3.0.0
+Version:	3.0.1
 Release:	0.1
 License:	PHP 3.01
 Group:		Development/Languages
 Source0:	https://github.com/facebook/hhvm/archive/HHVM-%{version}.tar.gz
-# Source0-md5:	7762f2a8a6fe402c68728ffb282caae7
+# Source0-md5:	55cbeb7fdb365972e3cb72ba59558453
 # need fb.changes.patch, which is available for 1.4 only
 Source2:	https://github.com/facebook/folly/archive/%{folly}/folly-0.1-%{folly}.tar.gz
 # Source2-md5:	e14ff4b87c986dbe095547bdf0761dd1
@@ -27,7 +26,7 @@ Patch5:		system-folly.patch
 Patch8:		hphpize.patch
 Patch9:		notest.patch
 Patch10:	no-debug.patch
-URL:		http://wiki.github.com/facebook/hiphop-php/
+URL:		https://github.com/facebook/hhvm/wiki
 BuildRequires:	a52dec-libs-devel
 BuildRequires:	apr-devel
 BuildRequires:	autoconf
