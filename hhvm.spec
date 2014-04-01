@@ -28,6 +28,8 @@ Patch8:		hphpize.patch
 Patch9:		notest.patch
 Patch10:	no-debug.patch
 URL:		http://wiki.github.com/facebook/hiphop-php/
+# AUTO: -- CMake Error at CMake/HPHPFindLibs.cmake:91 (find_package):
+BuildRequires:	a52dec-libs-devel
 BuildRequires:	apr-devel
 BuildRequires:	autoconf
 BuildRequires:	binutils-devel
@@ -50,7 +52,11 @@ BuildRequires:	libmemcached-devel >= 1.0.4
 BuildRequires:	libstdc++-devel >= 6:4.3
 BuildRequires:	libunwind-devel
 BuildRequires:	libxml2-devel
+# AUTO: --   /usr/share/cmake/Modules/FindLibXslt.cmake:67 (FIND_PACKAGE_HANDLE_STANDARD_ARGS)
+BuildRequires:	libxslt-devel
 BuildRequires:	mysql-devel
+BuildRequires: ocaml-findlib
+BuildRequires: ImageMagick-devel
 BuildRequires:	oniguruma-devel
 BuildRequires:	openssl-devel
 BuildRequires:	pcre-devel
@@ -205,7 +211,6 @@ mv folly-*/* hphp/submodules/folly
 rm CMake/FindBISON.cmake
 rm CMake/FindFLEX.cmake
 rm CMake/FindFreetype.cmake
-rm CMake/FindLibEvent.cmake
 
 %if 0
 %patch0 -p1
