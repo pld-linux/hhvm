@@ -28,7 +28,6 @@ Patch8:		hphpize.patch
 Patch9:		notest.patch
 Patch10:	no-debug.patch
 URL:		http://wiki.github.com/facebook/hiphop-php/
-# AUTO: -- CMake Error at CMake/HPHPFindLibs.cmake:91 (find_package):
 BuildRequires:	a52dec-libs-devel
 BuildRequires:	apr-devel
 BuildRequires:	autoconf
@@ -44,7 +43,7 @@ BuildRequires:	glog-devel >= 0.3.2
 BuildRequires:	imap-devel >= 1:2007
 #BuildRequires:	jemalloc-devel >= 3.0.0
 BuildRequires:	libcap-devel
-BuildRequires:	libdwarf-devel <= 20120410
+BuildRequires:	libdwarf-devel >= 20130729
 BuildRequires:	libicu-devel >= 4.2
 #BuildRequires:	libmbfl-devel
 BuildRequires:	libmcrypt-devel
@@ -52,11 +51,10 @@ BuildRequires:	libmemcached-devel >= 1.0.4
 BuildRequires:	libstdc++-devel >= 6:4.3
 BuildRequires:	libunwind-devel
 BuildRequires:	libxml2-devel
-# AUTO: --   /usr/share/cmake/Modules/FindLibXslt.cmake:67 (FIND_PACKAGE_HANDLE_STANDARD_ARGS)
+BuildRequires:	ImageMagick-devel
 BuildRequires:	libxslt-devel
 BuildRequires:	mysql-devel
-BuildRequires: ocaml-findlib
-BuildRequires: ImageMagick-devel
+BuildRequires:	ocaml-findlib
 BuildRequires:	oniguruma-devel
 BuildRequires:	openssl-devel
 BuildRequires:	pcre-devel
