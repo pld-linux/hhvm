@@ -1,30 +1,26 @@
 # NOTES:
 # - hphp/runtime/base/runtime-option.cpp evalJitDefault enables jit if /.hhvm-jit exists (yes, in filesystem root)
 # TODO
-# - system libevent2: https://github.com/facebook/hiphop-php/pull/421
 # - system libmbfl, system xhp, sqlite3
 # - libdwarf>20120410 issue: https://github.com/facebook/hhvm/issues/1337
-# git show HHVM-2.4.1
-%define		githash	072ec429a4c42b481aabaa8bca0210b288a8d55e
-%define		folly	18bedc2
+# git show HHVM-3.0.0
+%define		githash	59a8db46e4ebf5cfd205fadc12e27a9903fb7aae
+%define		folly	d9c79af
 Summary:	Virtual Machine, Runtime, and JIT for PHP
 Name:		hhvm
-Version:	2.4.1
+Version:	3.0.0
 Release:	0.1
 License:	PHP 3.01
 Group:		Development/Languages
 Source0:	https://github.com/facebook/hhvm/archive/HHVM-%{version}.tar.gz
-# Source0-md5:	a18dde8a30f8293963e6641ee8cb04c8
+# Source0-md5:	7762f2a8a6fe402c68728ffb282caae7
 # need fb.changes.patch, which is available for 1.4 only
-Source1:	http://www.monkey.org/~provos/libevent-1.4.14b-stable.tar.gz
-# Source1-md5:	a00e037e4d3f9e4fe9893e8a2d27918c
 Source2:	https://github.com/facebook/folly/archive/%{folly}/folly-0.1-%{folly}.tar.gz
-# Source2-md5:	5de02fa81641c66a93c2f57094c7aa72
+# Source2-md5:	e14ff4b87c986dbe095547bdf0761dd1
 Source3:	%{name}-fcgi.init
 Source4:	%{name}-fcgi.sysconfig
 Source100:	get-source.sh
 Patch0:		cmake-missing-library.patch
-Patch1:		libevent14.patch
 Patch3:		system-xhp.patch
 Patch4:		system-libafdt.patch
 Patch5:		system-folly.patch
@@ -47,7 +43,6 @@ BuildRequires:	imap-devel >= 1:2007
 #BuildRequires:	jemalloc-devel >= 3.0.0
 BuildRequires:	libcap-devel
 BuildRequires:	libdwarf-devel <= 20120410
-#BuildRequires:	libevent-devel >= 1.4.14
 BuildRequires:	libicu-devel >= 4.2
 #BuildRequires:	libmbfl-devel
 BuildRequires:	libmcrypt-devel
@@ -69,32 +64,42 @@ BuildRequires:	zlib-devel
 #BuildRequires:	flex >= 2.5.35
 #BuildRequires:	libafdt-devel >= 0.1.0
 #BuildRequires:	re2c >= 0.13.0
+# foreach (get_loaded_extensions() as $ext) printf("Provides:\tphp(%s)\n", strtolower($ext));
+Provides:	php(apache)
 Provides:	php(apc)
 Provides:	php(bcmath)
 Provides:	php(bz2)
 Provides:	php(ctype)
 Provides:	php(curl)
 Provides:	php(date)
+Provides:	php(debugger)
 Provides:	php(dom)
 Provides:	php(exif)
 Provides:	php(fb)
 Provides:	php(fileinfo)
 Provides:	php(filter)
+Provides:	php(function)
 Provides:	php(gd)
 Provides:	php(hash)
+Provides:	php(hh)
+Provides:	php(hhvm.debugger)
+Provides:	php(hhvm.ini)
 Provides:	php(hotprofiler)
 Provides:	php(iconv)
-Provides:	php(icu_ucsdet)
-Provides:	php(icu_uspoof)
 Provides:	php(idn)
+Provides:	php(imagick)
 Provides:	php(imap)
+Provides:	php(intl)
 Provides:	php(json)
 Provides:	php(ldap)
+Provides:	php(libxml)
 Provides:	php(mbstring)
 Provides:	php(mcrypt)
 Provides:	php(memcache)
 Provides:	php(memcached)
+Provides:	php(misc)
 Provides:	php(mysql)
+Provides:	php(mysqli)
 Provides:	php(openssl)
 Provides:	php(pcntl)
 Provides:	php(pcre)
@@ -103,6 +108,7 @@ Provides:	php(pdo_mysql)
 Provides:	php(pdo_sqlite)
 Provides:	php(phar)
 Provides:	php(posix)
+Provides:	php(redis)
 Provides:	php(reflection)
 Provides:	php(server)
 Provides:	php(session)
@@ -111,16 +117,19 @@ Provides:	php(soap)
 Provides:	php(sockets)
 Provides:	php(spl)
 Provides:	php(sqlite3)
+Provides:	php(stream)
 Provides:	php(sysvmsg)
 Provides:	php(sysvsem)
 Provides:	php(sysvshm)
 Provides:	php(thread)
 Provides:	php(thrift_protocol)
 Provides:	php(tokenizer)
+Provides:	php(url)
 Provides:	php(xhprof)
 Provides:	php(xml)
 Provides:	php(xmlreader)
 Provides:	php(xmlwriter)
+Provides:	php(xsl)
 Provides:	php(zip)
 Provides:	php(zlib)
 Obsoletes:	hiphop-php < 2.3.2-0.2
@@ -183,7 +192,7 @@ runtime either by way of pure PHP code, or a combination of PHP and
 C++.
 
 %prep
-%setup -q -a1 -a2 -n %{name}-HHVM-%{version}
+%setup -q -a2 -n %{name}-HHVM-%{version}
 
 mv folly-*/* hphp/submodules/folly
 
@@ -194,12 +203,9 @@ mv folly-*/* hphp/submodules/folly
 
 # prefer ones from system
 rm CMake/FindBISON.cmake
-rm CMake/FindBoost.cmake
 rm CMake/FindFLEX.cmake
 rm CMake/FindFreetype.cmake
-
-ln -s libevent-1.4.*-stable libevent
-%{__patch} -d libevent -p1 < hphp/third_party/libevent-1.4.14.fb-changes.diff
+rm CMake/FindLibEvent.cmake
 
 %if 0
 %patch0 -p1
@@ -215,19 +221,6 @@ rm -rf src/third_party/libafdt
 %endif
 
 %build
-# build libevent 1.4 with fb patches
-if [ ! -d libevent/.libs ]; then
-	cd libevent
-	# TODO: should use static linking, but then it fails to detect libraries due missing -lrt
-	%configure \
-		%{?0:--enable-static} \
-		%{?0:--disable-shared}
-	%{__make}
-	ln -s .libs lib
-	ln -s . include
-	cd ..
-fi
-
 export HPHP_HOME=$(pwd)
 export HPHP_LIB=$HPHP_HOME/bin
 install -d $HPHP_LIB
@@ -249,8 +242,6 @@ cd build
 %endif
 
 %cmake \
-	-DLIBEVENT_LIB=$HPHP_HOME/libevent/lib/libevent.so \
-	-DLIBEVENT_INCLUDE_DIR=$HPHP_HOME/libevent \
 	-DCMAKE_PREFIX_PATH=%{_prefix} \
 	-DUSE_JEMALLOC=OFF \
 	-DUSE_TCMALLOC=OFF \
@@ -271,6 +262,12 @@ install -d $RPM_BUILD_ROOT%{_sysconfdir}/%{name}
 	HPHP_HOME=$(pwd) \
 	DESTDIR=$RPM_BUILD_ROOT
 
+# not packaged here
+rm $RPM_BUILD_ROOT%{_includedir}/zip.h
+rm $RPM_BUILD_ROOT%{_includedir}/zipconf.h
+rm $RPM_BUILD_ROOT%{_prefix}/lib/libzip.a
+rm $RPM_BUILD_ROOT%{_prefix}/lib/libzip.so
+
 ln -s hhvm $RPM_BUILD_ROOT%{_bindir}/php
 ln -s hhvm $RPM_BUILD_ROOT%{_bindir}/hphp
 
@@ -282,14 +279,9 @@ install -d $RPM_BUILD_ROOT/etc/{sysconfig,rc.d/init.d}
 cp -p %{SOURCE3} $RPM_BUILD_ROOT/etc/rc.d/init.d/%{name}-fcgi
 cp -p %{SOURCE4} $RPM_BUILD_ROOT/etc/sysconfig/%{name}-fcgi
 
-# install our libevent for now
-install -d $RPM_BUILD_ROOT%{_libdir}
-libtool --mode=install install -p libevent/libevent.la $RPM_BUILD_ROOT%{_libdir}
-%{__rm} $RPM_BUILD_ROOT%{_libdir}/libevent.{a,la,so}
-
 # setup -devel
 install -d $RPM_BUILD_ROOT%{_datadir}/cmake/Modules
-cp -a CMake/* $RPM_BUILD_ROOT%{_datadir}/cmake/Modules
+cp -p CMake/*.cmake $RPM_BUILD_ROOT%{_datadir}/cmake/Modules
 
 HPHP_HOME=$(pwd)
 sed -e "
@@ -345,8 +337,6 @@ fi
 %dir %{_sysconfdir}/%{name}
 %attr(755,root,root) %{_bindir}/hhvm
 %attr(755,root,root) %{_bindir}/hphp
-%attr(755,root,root) %{_libdir}/libevent-1.4.so.*.*.*
-%ghost %{_libdir}/libevent-1.4.so.2
 
 %dir %{_datadir}/%{name}
 %dir %{_datadir}/%{name}/hdf
@@ -376,13 +366,11 @@ fi
 %{_datadir}/cmake/Modules/FindLibDL.cmake
 %{_datadir}/cmake/Modules/FindLibDwarf.cmake
 %{_datadir}/cmake/Modules/FindLibElf.cmake
-%{_datadir}/cmake/Modules/FindLibEvent.cmake
-%{_datadir}/cmake/Modules/FindLibEvent.cmake.bak
 %{_datadir}/cmake/Modules/FindLibJpeg.cmake
+%{_datadir}/cmake/Modules/FindLibMagickWand.cmake
 %{_datadir}/cmake/Modules/FindLibNuma.cmake
 %{_datadir}/cmake/Modules/FindLibPng.cmake
 %{_datadir}/cmake/Modules/FindLibUODBC.cmake
-%{_datadir}/cmake/Modules/FindLibVpx.cmake
 %{_datadir}/cmake/Modules/FindLibXed.cmake
 %{_datadir}/cmake/Modules/FindLibYaml.cmake
 %{_datadir}/cmake/Modules/FindLibiconv.cmake
@@ -392,6 +380,7 @@ fi
 %{_datadir}/cmake/Modules/FindMcrypt.cmake
 %{_datadir}/cmake/Modules/FindMySQL.cmake
 %{_datadir}/cmake/Modules/FindNcurses.cmake
+%{_datadir}/cmake/Modules/FindOCaml.cmake
 %{_datadir}/cmake/Modules/FindONIGURUMA.cmake
 %{_datadir}/cmake/Modules/FindPCRE.cmake
 %{_datadir}/cmake/Modules/FindPThread.cmake
