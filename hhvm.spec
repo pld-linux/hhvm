@@ -27,6 +27,7 @@ Patch8:		hphpize.patch
 Patch9:		notest.patch
 Patch10:	no-debug.patch
 URL:		https://github.com/facebook/hhvm/wiki
+BuildRequires:	ImageMagick-devel
 BuildRequires:	a52dec-libs-devel
 BuildRequires:	apr-devel
 BuildRequires:	autoconf
@@ -50,7 +51,6 @@ BuildRequires:	libmemcached-devel >= 1.0.4
 BuildRequires:	libstdc++-devel >= 6:4.3
 BuildRequires:	libunwind-devel
 BuildRequires:	libxml2-devel
-BuildRequires:	ImageMagick-devel
 BuildRequires:	libxslt-devel
 BuildRequires:	mysql-devel
 BuildRequires:	ocaml-findlib
@@ -368,6 +368,7 @@ fi
 %{_datadir}/cmake/Modules/FindLibDL.cmake
 %{_datadir}/cmake/Modules/FindLibDwarf.cmake
 %{_datadir}/cmake/Modules/FindLibElf.cmake
+%{_datadir}/cmake/Modules/FindLibEvent.cmake
 %{_datadir}/cmake/Modules/FindLibJpeg.cmake
 %{_datadir}/cmake/Modules/FindLibMagickWand.cmake
 %{_datadir}/cmake/Modules/FindLibNuma.cmake
