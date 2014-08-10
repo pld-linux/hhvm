@@ -67,6 +67,7 @@ BuildRequires:	zlib-devel
 #BuildRequires:	flex >= 2.5.35
 #BuildRequires:	libafdt-devel >= 0.1.0
 #BuildRequires:	re2c >= 0.13.0
+Provides:	%{name}(api) = %{hhvm_api_version}
 # foreach (get_loaded_extensions() as $ext) printf("Provides:\tphp(%s)\n", strtolower($ext));
 Provides:	php(apache)
 Provides:	php(apc)
@@ -147,6 +148,9 @@ Provides:	php(zlib)
 Obsoletes:	hiphop-php < 2.3.2-0.2
 ExclusiveArch:	%{x8664}
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
+
+# must be in sync with source. extra check ensuring that it is so is done in %%build
+%define		hhvm_api_version		20140702
 
 %description
 HHVM (aka the HipHop Virtual Machine) is a new open-source virtual
@@ -234,6 +238,14 @@ rm -rf src/third_party/libafdt
 %endif
 
 %build
+# also in: hphp/tools/hphpize/hphpize.cmake
+API=$(awk '/#define HHVM_API_VERSION/{v=$3; sub(/L$/, "", v); print v}' hphp/runtime/ext/extension.h)
+
+if [ $API != %{hhvm_api_version} ]; then
+	echo "Set %%define hhvm_api_version to $API and re-run."
+	exit 1
+fi
+
 export HPHP_HOME=$(pwd)
 export HPHP_LIB=$HPHP_HOME/bin
 install -d $HPHP_LIB
