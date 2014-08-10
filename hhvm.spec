@@ -2,29 +2,29 @@
 # - hphp/runtime/base/runtime-option.cpp evalJitDefault enables jit if /.hhvm-jit exists (yes, in filesystem root)
 # TODO
 # - system libmbfl, system xhp, sqlite3
-# git show HHVM-3.0.1
-%define		githash	c2284b1fc46454432969bfe1b1c205713f7a69e8
-%define		folly	d9c79af
+# git show HHVM-3.2.0
+%define		githash	01228273b8cf709aacbd3df1c51b1e690ecebac8
+%define		folly		09a81a9
+%define		thirdparty	2234d64
 Summary:	Virtual Machine, Runtime, and JIT for PHP
 Name:		hhvm
-Version:	3.0.1
+Version:	3.2.0
 Release:	1
 License:	PHP 3.01
 Group:		Development/Languages
 Source0:	https://github.com/facebook/hhvm/archive/HHVM-%{version}.tar.gz
-# Source0-md5:	55cbeb7fdb365972e3cb72ba59558453
-# need fb.changes.patch, which is available for 1.4 only
+# Source0-md5:	791ca8c56d155a71f948387de8859f98
 Source2:	https://github.com/facebook/folly/archive/%{folly}/folly-0.1-%{folly}.tar.gz
-# Source2-md5:	e14ff4b87c986dbe095547bdf0761dd1
-Source3:	%{name}-fcgi.init
-Source4:	%{name}-fcgi.sysconfig
+# Source2-md5:	17bc7ee76939cd6a26755588d80313c9
+Source3:	https://github.com/hhvm/hhvm-third-party/archive/%{thirdparty}/third_party-%{thirdparty}.tar.gz
+# Source3-md5:	9d40c3fbf1394bb1f03648d7046f8b9c
+Source4:	%{name}-fcgi.init
+Source5:	%{name}-fcgi.sysconfig
 Source100:	get-source.sh
 Patch0:		cmake-missing-library.patch
 Patch3:		system-xhp.patch
 Patch4:		system-libafdt.patch
 Patch5:		system-folly.patch
-Patch8:		hphpize.patch
-Patch9:		notest.patch
 Patch10:	no-debug.patch
 URL:		https://github.com/facebook/hhvm/wiki
 BuildRequires:	ImageMagick-devel
@@ -33,7 +33,7 @@ BuildRequires:	apr-devel
 BuildRequires:	autoconf
 BuildRequires:	binutils-devel
 BuildRequires:	boost-devel >= 1.50
-BuildRequires:	cmake >= 2.8.7
+BuildRequires:	cmake >= 2.8.5
 BuildRequires:	curl-devel >= 7.29.0
 BuildRequires:	elfutils-devel
 BuildRequires:	expat-devel
@@ -72,6 +72,7 @@ Provides:	php(apache)
 Provides:	php(apc)
 Provides:	php(bcmath)
 Provides:	php(bz2)
+Provides:	php(calendar)
 Provides:	php(ctype)
 Provides:	php(curl)
 Provides:	php(date)
@@ -81,8 +82,9 @@ Provides:	php(exif)
 Provides:	php(fb)
 Provides:	php(fileinfo)
 Provides:	php(filter)
-Provides:	php(function)
+Provides:	php(ftp)
 Provides:	php(gd)
+Provides:	php(gettext)
 Provides:	php(hash)
 Provides:	php(hh)
 Provides:	php(hhvm.debugger)
@@ -103,9 +105,11 @@ Provides:	php(memcached)
 Provides:	php(misc)
 Provides:	php(mysql)
 Provides:	php(mysqli)
+Provides:	php(oauth)
 Provides:	php(openssl)
 Provides:	php(pcntl)
 Provides:	php(pcre)
+Provides:	php(pcre_zend_compat)
 Provides:	php(pdo)
 Provides:	php(pdo_mysql)
 Provides:	php(pdo_sqlite)
@@ -120,6 +124,8 @@ Provides:	php(soap)
 Provides:	php(sockets)
 Provides:	php(spl)
 Provides:	php(sqlite3)
+Provides:	php(standard)
+Provides:	php(standard_zend_compat)
 Provides:	php(stream)
 Provides:	php(sysvmsg)
 Provides:	php(sysvsem)
@@ -128,11 +134,14 @@ Provides:	php(thread)
 Provides:	php(thrift_protocol)
 Provides:	php(tokenizer)
 Provides:	php(url)
+Provides:	php(wddx)
+Provides:	php(xenon)
 Provides:	php(xhprof)
 Provides:	php(xml)
 Provides:	php(xmlreader)
 Provides:	php(xmlwriter)
 Provides:	php(xsl)
+Provides:	php(yaml)
 Provides:	php(zip)
 Provides:	php(zlib)
 Obsoletes:	hiphop-php < 2.3.2-0.2
@@ -195,12 +204,14 @@ runtime either by way of pure PHP code, or a combination of PHP and
 C++.
 
 %prep
-%setup -q -a2 -n %{name}-HHVM-%{version}
+%setup -q -n %{name}-HHVM-%{version} -a2 -a3
 
-mv folly-*/* hphp/submodules/folly
+# handle git submodules
+rmdir third-party
+mv hhvm-third-party-* third-party
+rmdir third-party/folly/src
+mv folly-* third-party/folly/src
 
-%patch8 -p1
-%patch9 -p1
 %patch10 -p1
 #%patch5 -p1
 
@@ -227,6 +238,8 @@ export HPHP_HOME=$(pwd)
 export HPHP_LIB=$HPHP_HOME/bin
 install -d $HPHP_LIB
 
+%undefine	with_ccache
+
 # asm linking breaks on $CC containing spaces
 if [[ "%{__cc}" = *ccache* ]]; then
 	cat <<-'EOF' > $HPHP_LIB/gcc
@@ -235,6 +248,15 @@ if [[ "%{__cc}" = *ccache* ]]; then
 	EOF
 	chmod +x $HPHP_LIB/gcc
 	CC=$HPHP_LIB/gcc
+fi
+
+if [[ "%{__cxx}" = *ccache* ]]; then
+	cat <<-'EOF' > $HPHP_LIB/g++
+	#!/bin/sh
+	exec %{__cxx} "$@"
+	EOF
+	chmod +x $HPHP_LIB/g++
+	CXX=$HPHP_LIB/g++
 fi
 
 %if 0
@@ -258,17 +280,23 @@ export HHVM_REPO_SCHEMA=$(date +%N_%s)
 %{__make}
 
 %install
-rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT%{_sysconfdir}/%{name}
-%{__make} install \
-	HPHP_HOME=$(pwd) \
-	DESTDIR=$RPM_BUILD_ROOT
+# make install relinks all outputs which is very slow,
+# so to speedup rebuild, use timestamps to record states
+#test %{_specdir}/%{name}.spec -nt makeinstall.stamp && %{__rm} -f makeinstall.stamp
+if [ ! -f makeinstall.stamp -o ! -d $RPM_BUILD_ROOT ]; then
+	rm -rf makeinstall.stamp installed.stamp $RPM_BUILD_ROOT
 
-# not packaged here
-rm $RPM_BUILD_ROOT%{_includedir}/zip.h
-rm $RPM_BUILD_ROOT%{_includedir}/zipconf.h
-rm $RPM_BUILD_ROOT%{_prefix}/lib/libzip.a
-rm $RPM_BUILD_ROOT%{_prefix}/lib/libzip.so
+	%{__make} install \
+		HPHP_HOME__=$(pwd) \
+		DESTDIR=$RPM_BUILD_ROOT
+
+	touch makeinstall.stamp
+fi
+
+rm -rf $RPM_BUILD_ROOT%{_docdir}
+if [ ! -f installed.stamp ]; then
+install -d $RPM_BUILD_ROOT%{_sysconfdir}/%{name}
+# begin install block
 
 ln -s hhvm $RPM_BUILD_ROOT%{_bindir}/php
 ln -s hhvm $RPM_BUILD_ROOT%{_bindir}/hphp
@@ -278,9 +306,10 @@ cp -p hphp/doc/mime.hdf $RPM_BUILD_ROOT%{_datadir}/%{name}/hdf/static.mime-types
 
 # install fastcgi initscript
 install -d $RPM_BUILD_ROOT/etc/{sysconfig,rc.d/init.d}
-cp -p %{SOURCE3} $RPM_BUILD_ROOT/etc/rc.d/init.d/%{name}-fcgi
-cp -p %{SOURCE4} $RPM_BUILD_ROOT/etc/sysconfig/%{name}-fcgi
+cp -p %{SOURCE4} $RPM_BUILD_ROOT/etc/rc.d/init.d/%{name}-fcgi
+cp -p %{SOURCE5} $RPM_BUILD_ROOT/etc/sysconfig/%{name}-fcgi
 
+%if 0
 # setup -devel
 install -d $RPM_BUILD_ROOT%{_datadir}/cmake/Modules
 cp -p CMake/*.cmake $RPM_BUILD_ROOT%{_datadir}/cmake/Modules
@@ -316,6 +345,10 @@ for dir in "$@" \
 	done
 done
 set -x
+%endif
+
+# end of install block
+touch installed.stamp; fi
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -357,42 +390,6 @@ fi
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_bindir}/hphpize
 %{_includedir}/hphp
-%{_datadir}/cmake/Modules/ExtZendCompat.cmake
-%{_datadir}/cmake/Modules/FindCClient.cmake
-%{_datadir}/cmake/Modules/FindEditline.cmake
-%{_datadir}/cmake/Modules/FindGlog.cmake
-%{_datadir}/cmake/Modules/FindICU.cmake
-%{_datadir}/cmake/Modules/FindLdap.cmake
-%{_datadir}/cmake/Modules/FindLibAfdt.cmake
-%{_datadir}/cmake/Modules/FindLibCh.cmake
-%{_datadir}/cmake/Modules/FindLibDL.cmake
-%{_datadir}/cmake/Modules/FindLibDwarf.cmake
-%{_datadir}/cmake/Modules/FindLibElf.cmake
-%{_datadir}/cmake/Modules/FindLibEvent.cmake
-%{_datadir}/cmake/Modules/FindLibJpeg.cmake
-%{_datadir}/cmake/Modules/FindLibMagickWand.cmake
-%{_datadir}/cmake/Modules/FindLibNuma.cmake
-%{_datadir}/cmake/Modules/FindLibPng.cmake
-%{_datadir}/cmake/Modules/FindLibUODBC.cmake
-%{_datadir}/cmake/Modules/FindLibXed.cmake
-%{_datadir}/cmake/Modules/FindLibYaml.cmake
-%{_datadir}/cmake/Modules/FindLibiconv.cmake
-%{_datadir}/cmake/Modules/FindLibinotify.cmake
-%{_datadir}/cmake/Modules/FindLibmemcached.cmake
-%{_datadir}/cmake/Modules/FindLibpam.cmake
-%{_datadir}/cmake/Modules/FindMcrypt.cmake
-%{_datadir}/cmake/Modules/FindMySQL.cmake
-%{_datadir}/cmake/Modules/FindNcurses.cmake
-%{_datadir}/cmake/Modules/FindOCaml.cmake
-%{_datadir}/cmake/Modules/FindONIGURUMA.cmake
-%{_datadir}/cmake/Modules/FindPCRE.cmake
-%{_datadir}/cmake/Modules/FindPThread.cmake
-%{_datadir}/cmake/Modules/FindReadline.cmake
-%{_datadir}/cmake/Modules/FindTBB.cmake
-%{_datadir}/cmake/Modules/FollySetup.cmake
-%{_datadir}/cmake/Modules/HPHPCompiler.cmake
-%{_datadir}/cmake/Modules/HPHPFindLibs.cmake
-%{_datadir}/cmake/Modules/HPHPFunctions.cmake
-%{_datadir}/cmake/Modules/HPHPSetup.cmake
-%{_datadir}/cmake/Modules/Options.cmake
-%{_datadir}/cmake/Modules/hphpize.cmake
+%dir %{_prefix}/lib/hphp
+%{_prefix}/lib/hphp/CMake
+%{_prefix}/lib/hphp/hphpize
