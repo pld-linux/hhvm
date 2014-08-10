@@ -67,13 +67,14 @@ BuildRequires:	zlib-devel
 #BuildRequires:	flex >= 2.5.35
 #BuildRequires:	libafdt-devel >= 0.1.0
 #BuildRequires:	re2c >= 0.13.0
-Provides:	%{name}(api) = %{hhvm_api_version}
 # foreach (get_loaded_extensions() as $ext) printf("Provides:\tphp(%s)\n", strtolower($ext));
+Provides:	%{name}(api) = %{hhvm_api_version}
 Provides:	php(apache)
 Provides:	php(apc)
 Provides:	php(bcmath)
 Provides:	php(bz2)
 Provides:	php(calendar)
+Provides:	php(core) = %{php_version}
 Provides:	php(ctype)
 Provides:	php(curl)
 Provides:	php(date)
@@ -150,7 +151,9 @@ ExclusiveArch:	%{x8664}
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 # must be in sync with source. extra check ensuring that it is so is done in %%build
-%define		hhvm_api_version		20140702
+%define		hhvm_api_version	20140702
+# hphp/system/idl/constants.idl.json defines it as 5.6.99-hhvm, but use some saner value
+%define		php_version			5.6.0
 
 %description
 HHVM (aka the HipHop Virtual Machine) is a new open-source virtual
