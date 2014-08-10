@@ -48,7 +48,7 @@ BuildRequires:	libicu-devel >= 4.2
 #BuildRequires:	libmbfl-devel
 BuildRequires:	libmcrypt-devel
 BuildRequires:	libmemcached-devel >= 1.0.4
-BuildRequires:	libstdc++-devel >= 6:4.3
+BuildRequires:	libstdc++-devel >= 6:4.8
 BuildRequires:	libunwind-devel
 BuildRequires:	libxml2-devel
 BuildRequires:	libxslt-devel
