@@ -21,11 +21,8 @@ Source3:	https://github.com/hhvm/hhvm-third-party/archive/%{thirdparty}/third_pa
 Source4:	%{name}-fcgi.init
 Source5:	%{name}-fcgi.sysconfig
 Source100:	get-source.sh
-Patch0:		cmake-missing-library.patch
-Patch3:		system-xhp.patch
-Patch4:		system-libafdt.patch
-Patch5:		system-folly.patch
-Patch10:	no-debug.patch
+Patch0:		ccache.patch
+Patch1:		no-debug.patch
 URL:		https://github.com/facebook/hhvm/wiki
 BuildRequires:	ImageMagick-devel
 BuildRequires:	a52dec-libs-devel
@@ -219,26 +216,13 @@ mv hhvm-third-party-* third-party
 rmdir third-party/folly/src
 mv folly-* third-party/folly/src
 
-%patch10 -p1
-#%patch5 -p1
+%patch0 -p1
+%patch1 -p1
 
 # prefer ones from system
 rm CMake/FindBISON.cmake
 rm CMake/FindFLEX.cmake
 rm CMake/FindFreetype.cmake
-
-%if 0
-%patch0 -p1
-%patch1 -p1
-#%patch3 -p1
-%patch4 -p1
-
-#rm -rf src/third_party/libmbfl
-#sed -i -e '/add_subdirectory(third_party\/libmbfl)/d' src/CMakeLists.txt
-
-rm -rf src/third_party/xhp
-rm -rf src/third_party/libafdt
-%endif
 
 %build
 # also in: hphp/tools/hphpize/hphpize.cmake
@@ -249,43 +233,30 @@ if [ $API != %{hhvm_api_version} ]; then
 	exit 1
 fi
 
-export HPHP_HOME=$(pwd)
-export HPHP_LIB=$HPHP_HOME/bin
-install -d $HPHP_LIB
-
-%undefine	with_ccache
-
-# asm linking breaks on $CC containing spaces
-if [[ "%{__cc}" = *ccache* ]]; then
-	cat <<-'EOF' > $HPHP_LIB/gcc
-	#!/bin/sh
-	exec %{__cc} "$@"
-	EOF
-	chmod +x $HPHP_LIB/gcc
-	CC=$HPHP_LIB/gcc
-fi
-
-if [[ "%{__cxx}" = *ccache* ]]; then
-	cat <<-'EOF' > $HPHP_LIB/g++
-	#!/bin/sh
-	exec %{__cxx} "$@"
-	EOF
-	chmod +x $HPHP_LIB/g++
-	CXX=$HPHP_LIB/g++
-fi
-
-%if 0
 # out of dir build broken (can't find it's tools)
 install -d build
 cd build
-%endif
+
+# handle cmake & ccache
+# http://stackoverflow.com/questions/1815688/how-to-use-ccache-with-cmakec
+# ASM fix: http://lists.busybox.net/pipermail/buildroot/2013-March/069436.html
+if [[ "%{__cc}" = *ccache* ]]; then
+	cc="%{__cc}"
+	cxx="%{__cxx}"
+	ccache="
+	-DCMAKE_C_COMPILER="ccache" -DCMAKE_C_COMPILER_ARG1="${cc#ccache }" \
+	-DCMAKE_CXX_COMPILER="ccache" -DCMAKE_CXX_COMPILER_ARG1="${cxx#ccache }" \
+	-DCMAKE_ASM_COMPILER="${cc#ccache }" \
+	"
+fi
 
 %cmake \
+	$ccache \
 	-DCMAKE_PREFIX_PATH=%{_prefix} \
 	-DUSE_JEMALLOC=OFF \
 	-DUSE_TCMALLOC=OFF \
 	-DHPHP_NOTEST=ON \
-	./
+	../
 
 # setup COMPILER_ID/HHVM_REPO_SCHEMA so it doesn't look it up from our package git repo
 # see hphp/util/generate-buildinfo.sh
@@ -301,7 +272,7 @@ export HHVM_REPO_SCHEMA=$(date +%N_%s)
 if [ ! -f makeinstall.stamp -o ! -d $RPM_BUILD_ROOT ]; then
 	rm -rf makeinstall.stamp installed.stamp $RPM_BUILD_ROOT
 
-	%{__make} install \
+	%{__make} install -C build \
 		HPHP_HOME__=$(pwd) \
 		DESTDIR=$RPM_BUILD_ROOT
 
