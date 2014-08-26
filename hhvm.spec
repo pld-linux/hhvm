@@ -20,6 +20,7 @@ Source3:	https://github.com/hhvm/hhvm-third-party/archive/%{thirdparty}/third_pa
 # Source3-md5:	9d40c3fbf1394bb1f03648d7046f8b9c
 Source4:	%{name}-fcgi.init
 Source5:	%{name}-fcgi.sysconfig
+Source6:	php.ini
 Source100:	get-source.sh
 Patch0:		ccache.patch
 Patch1:		no-debug.patch
@@ -281,8 +282,10 @@ fi
 
 rm -rf $RPM_BUILD_ROOT%{_docdir}
 if [ ! -f installed.stamp ]; then
-install -d $RPM_BUILD_ROOT%{_sysconfdir}/%{name}
 # begin install block
+
+install -d $RPM_BUILD_ROOT%{_sysconfdir}/%{name}
+cp -p %{SOURCE6} $RPM_BUILD_ROOT%{_sysconfdir}/%{name}
 
 ln -s hhvm $RPM_BUILD_ROOT%{_bindir}/php
 ln -s hhvm $RPM_BUILD_ROOT%{_bindir}/hphp
@@ -356,6 +359,7 @@ fi
 %defattr(644,root,root,755)
 %doc README.md hphp/NEWS
 %dir %{_sysconfdir}/%{name}
+%config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/%{name}/php.ini
 %attr(755,root,root) %{_bindir}/hhvm
 %attr(755,root,root) %{_bindir}/hphp
 
