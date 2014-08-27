@@ -259,9 +259,10 @@ fi
 	-DHPHP_NOTEST=ON \
 	../
 
+
 # setup COMPILER_ID/HHVM_REPO_SCHEMA so it doesn't look it up from our package git repo
 # see hphp/util/generate-buildinfo.sh
-export COMPILER_ID=HHVM-%{version}-%{release}-%{githash}
+export COMPILER_ID=HHVM-%{version}-%{release}-g%{githash}
 export HHVM_REPO_SCHEMA=$(date +%N_%s)
 
 %{__make}
@@ -297,6 +298,8 @@ cp -p hphp/doc/mime.hdf $RPM_BUILD_ROOT%{_datadir}/%{name}/hdf/static.mime-types
 install -d $RPM_BUILD_ROOT/etc/{sysconfig,rc.d/init.d}
 cp -p %{SOURCE4} $RPM_BUILD_ROOT/etc/rc.d/init.d/%{name}-fcgi
 cp -p %{SOURCE5} $RPM_BUILD_ROOT/etc/sysconfig/%{name}-fcgi
+
+install -p hphp/hack/bin/hh_{server,client} $RPM_BUILD_ROOT%{_bindir}
 
 %if 0
 # setup -devel
@@ -362,6 +365,8 @@ fi
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/%{name}/php.ini
 %attr(755,root,root) %{_bindir}/hhvm
 %attr(755,root,root) %{_bindir}/hphp
+%attr(755,root,root) %{_bindir}/hh_client
+%attr(755,root,root) %{_bindir}/hh_server
 
 %dir %{_datadir}/%{name}
 %dir %{_datadir}/%{name}/hdf
