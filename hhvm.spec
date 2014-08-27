@@ -1,5 +1,6 @@
 # NOTES:
 # - hphp/runtime/base/runtime-option.cpp evalJitDefault enables jit if /.hhvm-jit exists (yes, in filesystem root)
+# - patch /usr/lib/hphp/CMake/HPHPIZEFunctions.cmake for %{_libdir}/hhvm as extension dir
 # TODO
 # - system libmbfl, system xhp, sqlite3
 # git show HHVM-3.2.0
@@ -286,7 +287,7 @@ rm -rf $RPM_BUILD_ROOT%{_docdir}
 if [ ! -f installed.stamp ]; then
 # begin install block
 
-install -d $RPM_BUILD_ROOT%{_sysconfdir}/%{name}
+install -d $RPM_BUILD_ROOT{%{_sysconfdir}/%{name},%{_libdir}/%{name}}
 cp -p %{SOURCE6} $RPM_BUILD_ROOT%{_sysconfdir}/%{name}
 
 ln -s hhvm $RPM_BUILD_ROOT%{_bindir}/php
@@ -372,6 +373,9 @@ fi
 %dir %{_datadir}/%{name}
 %dir %{_datadir}/%{name}/hdf
 %{_datadir}/%{name}/hdf/static.mime-types.hdf
+
+# dir for extensions
+%dir %{_libdir}/%{name}
 
 %files fcgi
 %defattr(644,root,root,755)
