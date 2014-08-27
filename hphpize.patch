@@ -1,0 +1,15 @@
+--- hhvm-HHVM-3.2.0/CMake/HPHPIZEFunctions.cmake	2014-07-18 03:12:10.000000000 +0300
++++ hhvm-HHVM-3.2.0/CMake/HPHPIZEFunctions.cmake	2014-08-27 17:07:59.461056148 +0300
+@@ -17,7 +17,11 @@
+   add_library(${EXTNAME} SHARED ${ARGN})
+   set_target_properties(${EXTNAME} PROPERTIES PREFIX "")
+   set_target_properties(${EXTNAME} PROPERTIES SUFFIX ".so")
+-  install(TARGETS ${EXTNAME} DESTINATION "lib/hphp/extensions/${HHVM_API_VERSION}")
++  if(HHVM_EXTENSION_DIR)
++	  install(TARGETS ${EXTNAME} DESTINATION ${HHVM_EXTENSION_DIR})
++  else()
++	  install(TARGETS ${EXTNAME} DESTINATION "lib/hphp/extensions/${HHVM_API_VERSION}")
++  endif()
+ endfunction()
+ 
+ # Add an extension that uses the Zend compatibility layer.

@@ -25,6 +25,7 @@ Source6:	php.ini
 Source100:	get-source.sh
 Patch0:		ccache.patch
 Patch1:		no-debug.patch
+Patch2:		hphpize.patch
 URL:		https://github.com/facebook/hhvm/wiki
 BuildRequires:	ImageMagick-devel
 BuildRequires:	a52dec-libs-devel
@@ -220,6 +221,7 @@ mv folly-* third-party/folly/src
 
 %patch0 -p1
 %patch1 -p1
+%patch2 -p1
 
 # prefer ones from system
 rm CMake/FindBISON.cmake
