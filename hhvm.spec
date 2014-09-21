@@ -3,27 +3,30 @@
 # - patch /usr/lib/hphp/CMake/HPHPIZEFunctions.cmake for %{_libdir}/hhvm as extension dir
 # TODO
 # - system libmbfl, system xhp, sqlite3
-# git show HHVM-3.2.0
-%define		githash	01228273b8cf709aacbd3df1c51b1e690ecebac8
-%define		folly		09a81a9
-%define		thirdparty	2234d64
+# git show HHVM-3.3.0
+%define		githash	0a3cfb87b8a353fc7e1d15374f4adc413e37aba9
+# these hashes are git submodules
+%define		folly		4ecd8cd
+%define		thrift		378e954
+%define		thirdparty	12acbba
 Summary:	Virtual Machine, Runtime, and JIT for PHP
 Name:		hhvm
-Version:	3.2.0
-Release:	1
-License:	PHP 3.01
+Version:	3.3.0
+Release:	0.1
+License:	PHP 3.01 and BSD
 Group:		Development/Languages
 Source0:	https://github.com/facebook/hhvm/archive/HHVM-%{version}.tar.gz
-# Source0-md5:	791ca8c56d155a71f948387de8859f98
+# Source0-md5:	ca42861748d0ddace763ed20bafe7116
 Source2:	https://github.com/facebook/folly/archive/%{folly}/folly-0.1-%{folly}.tar.gz
-# Source2-md5:	17bc7ee76939cd6a26755588d80313c9
+# Source2-md5:	b9d32bbccffc260cfc6752152ddf06a9
 Source3:	https://github.com/hhvm/hhvm-third-party/archive/%{thirdparty}/third_party-%{thirdparty}.tar.gz
-# Source3-md5:	9d40c3fbf1394bb1f03648d7046f8b9c
-Source4:	%{name}-fcgi.init
-Source5:	%{name}-fcgi.sysconfig
-Source6:	php.ini
+# Source3-md5:	b2c28724e4ec5e4d2ea7e87f29690da2
+Source4:	https://github.com/facebook/fbthrift/archive/%{thrift}/thrift-%{thrift}.tar.gz
+# Source4-md5:	872f84f6ec0cc3d4f6c8471d99fcc7df
+Source5:	%{name}-fcgi.init
+Source6:	%{name}-fcgi.sysconfig
+Source7:	php.ini
 Source100:	get-source.sh
-Patch0:		ccache.patch
 Patch1:		no-debug.patch
 Patch2:		hphpize.patch
 URL:		https://github.com/facebook/hhvm/wiki
@@ -32,6 +35,8 @@ BuildRequires:	a52dec-libs-devel
 BuildRequires:	apr-devel
 BuildRequires:	autoconf
 BuildRequires:	binutils-devel
+# CMake/HPHPFindLibs.cmake:364 - FIND_LIBRARY (BFD_LIB libbfd.a)
+BuildRequires:	binutils-static
 BuildRequires:	boost-devel >= 1.50
 BuildRequires:	cmake >= 2.8.5
 BuildRequires:	curl-devel >= 7.29.0
@@ -151,9 +156,11 @@ ExclusiveArch:	%{x8664}
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 # must be in sync with source. extra check ensuring that it is so is done in %%build
-%define		hhvm_api_version	20140702
+%define		hhvm_api_version	20140829
 # hphp/system/idl/constants.idl.json defines it as 5.6.99-hhvm, but use some saner value
 %define		php_version			5.6.0
+
+%define		hhvm_extensiondir	%{_libdir}/hhvm
 
 %description
 HHVM (aka the HipHop Virtual Machine) is a new open-source virtual
@@ -211,15 +218,16 @@ runtime either by way of pure PHP code, or a combination of PHP and
 C++.
 
 %prep
-%setup -q -n %{name}-HHVM-%{version} -a2 -a3
+%setup -q -n %{name}-HHVM-%{version} -a2 -a3 -a4
 
 # handle git submodules
 rmdir third-party
 mv hhvm-third-party-* third-party
 rmdir third-party/folly/src
 mv folly-* third-party/folly/src
+rmdir third-party/thrift/src
+mv fbthrift-* third-party/thrift/src
 
-%patch0 -p1
 %patch1 -p1
 %patch2 -p1
 
@@ -257,6 +265,7 @@ fi
 %cmake \
 	$ccache \
 	-DCMAKE_PREFIX_PATH=%{_prefix} \
+	-DHHVM_DYNAMIC_EXTENSION_DIR=%{hhvm_extensiondir} \
 	-DUSE_JEMALLOC=OFF \
 	-DUSE_TCMALLOC=OFF \
 	-DHPHP_NOTEST=ON \
@@ -290,7 +299,7 @@ if [ ! -f installed.stamp ]; then
 # begin install block
 
 install -d $RPM_BUILD_ROOT{%{_sysconfdir}/%{name},%{_libdir}/%{name}}
-cp -p %{SOURCE6} $RPM_BUILD_ROOT%{_sysconfdir}/%{name}
+cp -p %{SOURCE7} $RPM_BUILD_ROOT%{_sysconfdir}/%{name}
 
 ln -s hhvm $RPM_BUILD_ROOT%{_bindir}/php
 ln -s hhvm $RPM_BUILD_ROOT%{_bindir}/hphp
@@ -300,8 +309,8 @@ cp -p hphp/doc/mime.hdf $RPM_BUILD_ROOT%{_datadir}/%{name}/hdf/static.mime-types
 
 # install fastcgi initscript
 install -d $RPM_BUILD_ROOT/etc/{sysconfig,rc.d/init.d}
-cp -p %{SOURCE4} $RPM_BUILD_ROOT/etc/rc.d/init.d/%{name}-fcgi
-cp -p %{SOURCE5} $RPM_BUILD_ROOT/etc/sysconfig/%{name}-fcgi
+cp -p %{SOURCE5} $RPM_BUILD_ROOT/etc/rc.d/init.d/%{name}-fcgi
+cp -p %{SOURCE6} $RPM_BUILD_ROOT/etc/sysconfig/%{name}-fcgi
 
 install -p hphp/hack/bin/hh_{server,client} $RPM_BUILD_ROOT%{_bindir}
 
