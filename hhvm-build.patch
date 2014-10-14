@@ -1,0 +1,25 @@
+--- hhvm-HHVM-3.2.0/hphp/util/embedded-vfs.cpp~	2014-10-13 22:44:04.000000000 +0200
++++ hhvm-HHVM-3.2.0/hphp/util/embedded-vfs.cpp	2014-10-13 22:48:32.091727651 +0200
+@@ -35,6 +35,8 @@
+ #endif
+ #include <sqlite3ext.h>
+ 
++SQLITE_EXTENSION_INIT3
++
+ namespace HPHP {
+ 
+ /*
+--- hhvm-HHVM-3.2.0/hphp/compiler/analysis/emitter.cpp.org	2014-10-14 07:26:28.359842680 +0200
++++ hhvm-HHVM-3.2.0/hphp/compiler/analysis/emitter.cpp	2014-10-14 07:27:57.752869165 +0200
+@@ -796,7 +796,11 @@
+   return out.str();
+ }
+ 
++#ifndef MAX
++#define MAX(a, b)      ((a)>(b)?(a):(b))
++#endif
++
+ void SymbolicStack::push(char sym) {
+   if (sym != StackSym::W && sym != StackSym::K && sym != StackSym::L &&
+       sym != StackSym::T && sym != StackSym::I && sym != StackSym::H) {
+     m_actualStack.push_back(m_symStack.size());
