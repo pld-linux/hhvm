@@ -23,8 +23,21 @@
    if (sym != StackSym::W && sym != StackSym::K && sym != StackSym::L &&
        sym != StackSym::T && sym != StackSym::I && sym != StackSym::H) {
      m_actualStack.push_back(m_symStack.size());
---- hhvm-HHVM-3.2.0/hphp/runtime/ext/ext_misc.cpp~	2014-07-18 02:12:10.000000000 +0200
-+++ hhvm-HHVM-3.2.0/hphp/runtime/ext/ext_misc.cpp	2014-10-18 21:47:56.381988051 +0200
+--- hhvm-HHVM-3.2.0/hphp/runtime/base/zend-pack.cpp~	2014-07-18 03:12:10.000000000 +0300
++++ hhvm-HHVM-3.2.0/hphp/runtime/base/zend-pack.cpp	2014-10-16 10:55:01.949440443 +0300
+@@ -21,6 +21,10 @@
+ #include "hphp/runtime/base/type-conversions.h"
+ #include "hphp/runtime/base/builtin-functions.h"
+ 
++#ifndef MAX
++#define MAX(a, b)      ((a)>(b)?(a):(b))
++#endif
++
+ namespace HPHP {
+ 
+ #define INC_OUTPUTPOS(a,b)                                              \
+--- hhvm-HHVM-3.2.0/hphp/runtime/ext/ext_misc.cpp~	2014-07-18 03:12:10.000000000 +0300
++++ hhvm-HHVM-3.2.0/hphp/runtime/ext/ext_misc.cpp	2014-10-17 23:32:19.855207368 +0300
 @@ -17,6 +17,7 @@
  
  #include "hphp/runtime/ext/ext_misc.h"
