@@ -23,3 +23,13 @@
    if (sym != StackSym::W && sym != StackSym::K && sym != StackSym::L &&
        sym != StackSym::T && sym != StackSym::I && sym != StackSym::H) {
      m_actualStack.push_back(m_symStack.size());
+--- hhvm-HHVM-3.2.0/hphp/runtime/ext/ext_misc.cpp~	2014-07-18 02:12:10.000000000 +0200
++++ hhvm-HHVM-3.2.0/hphp/runtime/ext/ext_misc.cpp	2014-10-18 21:47:56.381988051 +0200
+@@ -17,6 +17,7 @@
+ 
+ #include "hphp/runtime/ext/ext_misc.h"
+ #include <limits>
++#include <sys/param.h>
+ 
+ #include "hphp/runtime/server/server-stats.h"
+ #include "hphp/runtime/base/exceptions.h"
