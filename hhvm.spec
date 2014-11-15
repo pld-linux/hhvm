@@ -3,26 +3,23 @@
 # - patch /usr/lib/hphp/CMake/HPHPIZEFunctions.cmake for %{_libdir}/hhvm as extension dir
 # TODO
 # - system libmbfl, system xhp, sqlite3
-# git show HHVM-3.3.0
-%define		githash	0a3cfb87b8a353fc7e1d15374f4adc413e37aba9
+# git show HHVM-3.3.1
+%define		githash	e0c98e21167b425dddf1fc9efe78c9f7a36db268
 # these hashes are git submodules
-%define		folly		4ecd8cd
-%define		thrift		378e954
-%define		thirdparty	12acbba
+%define		folly		6e46d46
+%define		thirdparty	fdef620
 Summary:	Virtual Machine, Runtime, and JIT for PHP
 Name:		hhvm
-Version:	3.3.0
+Version:	3.3.1
 Release:	0.1
 License:	PHP 3.01 and BSD
 Group:		Development/Languages
 Source0:	https://github.com/facebook/hhvm/archive/HHVM-%{version}.tar.gz
-# Source0-md5:	ca42861748d0ddace763ed20bafe7116
-Source2:	https://github.com/facebook/folly/archive/%{folly}/folly-0.1-%{folly}.tar.gz
-# Source2-md5:	b9d32bbccffc260cfc6752152ddf06a9
+# Source0-md5:	bab9490837ff4f54f295bbcf428d7a1c
+Source2:	https://github.com/facebook/folly/archive/%{folly}/folly-3.2-%{folly}.tar.gz
+# Source2-md5:	c4bdbea4c0ffe0650d12d9ff370b8255
 Source3:	https://github.com/hhvm/hhvm-third-party/archive/%{thirdparty}/third_party-%{thirdparty}.tar.gz
-# Source3-md5:	b2c28724e4ec5e4d2ea7e87f29690da2
-Source4:	https://github.com/facebook/fbthrift/archive/%{thrift}/thrift-%{thrift}.tar.gz
-# Source4-md5:	872f84f6ec0cc3d4f6c8471d99fcc7df
+# Source3-md5:	63858096c50c172d6c45ddb3d9b6d721
 Source5:	%{name}-fcgi.init
 Source6:	%{name}-fcgi.sysconfig
 Source7:	php.ini
@@ -218,15 +215,13 @@ runtime either by way of pure PHP code, or a combination of PHP and
 C++.
 
 %prep
-%setup -q -n %{name}-HHVM-%{version} -a2 -a3 -a4
+%setup -q -n %{name}-HHVM-%{version} -a2 -a3
 
 # handle git submodules
 rmdir third-party
 mv hhvm-third-party-* third-party
 rmdir third-party/folly/src
 mv folly-* third-party/folly/src
-rmdir third-party/thrift/src
-mv fbthrift-* third-party/thrift/src
 
 %patch1 -p1
 %patch2 -p1
@@ -245,9 +240,9 @@ if [ $API != %{hhvm_api_version} ]; then
 	exit 1
 fi
 
-# out of dir build broken (can't find it's tools)
-install -d build
-cd build
+# out of dir build broken (can't find it's tools, or headers)
+#install -d build
+#cd build
 
 # handle cmake & ccache
 # http://stackoverflow.com/questions/1815688/how-to-use-ccache-with-cmakec
@@ -270,8 +265,7 @@ fi
 	-DUSE_TCMALLOC=OFF \
 	-DHPHP_NOTEST=ON \
 	-DENABLE_COTIRE=ON \
-	../
-
+	.
 
 # setup COMPILER_ID/HHVM_REPO_SCHEMA so it doesn't look it up from our package git repo
 # see hphp/util/generate-buildinfo.sh
