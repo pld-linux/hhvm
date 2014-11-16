@@ -273,7 +273,7 @@ fi
 export COMPILER_ID=HHVM-%{version}-%{release}-g%{githash}
 export HHVM_REPO_SCHEMA=$(date +%N_%s)
 
-%{__make}
+%{__make} -j1
 
 %install
 # make install relinks all outputs which is very slow,
