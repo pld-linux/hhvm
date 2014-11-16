@@ -5,7 +5,7 @@
  # even sure it would work with -thread ...
  OCAMLDTYPES?=-dtypes
 -OCAMLCFLAGS?=-g $(OCAMLDTYPES) $(OCAMLCFLAGS_EXTRA) -w -21 -warn-error +a
-+OCAMLCFLAGS?=-g $(OCAMLDTYPES) $(OCAMLCFLAGS_EXTRA) -w -21 +a
++OCAMLCFLAGS?=-g $(OCAMLDTYPES) $(OCAMLCFLAGS_EXTRA) -w -21
  
  # This flag is also used in subdirectories so don't change its name here.
  OPTFLAGS?= $(OCAMLCFLAGS)
