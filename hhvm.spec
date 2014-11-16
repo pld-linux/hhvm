@@ -10,7 +10,7 @@
 Summary:	Virtual Machine, Runtime, and JIT for PHP
 Name:		hhvm
 Version:	3.2.0
-Release:	7
+Release:	8
 License:	PHP 3.01
 Group:		Development/Languages
 Source0:	https://github.com/facebook/hhvm/archive/HHVM-%{version}.tar.gz
@@ -27,6 +27,7 @@ Patch0:		ccache.patch
 Patch1:		no-debug.patch
 Patch2:		hphpize.patch
 Patch3:		%{name}-build.patch
+Patch4:		no-warn-err.patch
 URL:		https://github.com/facebook/hhvm/wiki
 BuildRequires:	ImageMagick-devel
 BuildRequires:	a52dec-libs-devel
@@ -224,6 +225,7 @@ mv folly-* third-party/folly/src
 %patch1 -p1
 %patch2 -p1
 %patch3 -p1
+%patch4 -p1
 
 # prefer ones from system
 rm CMake/FindBISON.cmake

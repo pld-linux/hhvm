@@ -1,0 +1,11 @@
+--- hhvm-HHVM-3.2.0/hphp/hack/src/Makefile.common~	2014-07-18 02:12:10.000000000 +0200
++++ hhvm-HHVM-3.2.0/hphp/hack/src/Makefile.common	2014-11-16 19:02:23.653327730 +0100
+@@ -29,7 +29,7 @@
+ # don't want to add an extra layer of complexity. In fact, we are not
+ # even sure it would work with -thread ...
+ OCAMLDTYPES?=-dtypes
+-OCAMLCFLAGS?=-g $(OCAMLDTYPES) $(OCAMLCFLAGS_EXTRA) -w -21 -warn-error +a
++OCAMLCFLAGS?=-g $(OCAMLDTYPES) $(OCAMLCFLAGS_EXTRA) -w -21 +a
+ 
+ # This flag is also used in subdirectories so don't change its name here.
+ OPTFLAGS?= $(OCAMLCFLAGS)
