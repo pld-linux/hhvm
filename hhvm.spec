@@ -247,7 +247,7 @@ fi
 #cd build
 
 # handle cmake & ccache
-# http://stackoverflow.com/questions/1815688/how-to-use-ccache-with-cmakec
+# http://stackoverflow.com/questions/1815688/how-to-use-ccache-with-cmake
 # ASM fix: http://lists.busybox.net/pipermail/buildroot/2013-March/069436.html
 if [[ "%{__cc}" = *ccache* ]]; then
 	cc="%{__cc}"
@@ -283,8 +283,7 @@ export HHVM_REPO_SCHEMA=$(date +%N_%s)
 if [ ! -f makeinstall.stamp -o ! -d $RPM_BUILD_ROOT ]; then
 	rm -rf makeinstall.stamp installed.stamp $RPM_BUILD_ROOT
 
-	%{__make} install -C build \
-		HPHP_HOME__=$(pwd) \
+	%{__make} install \
 		DESTDIR=$RPM_BUILD_ROOT
 
 	touch makeinstall.stamp
