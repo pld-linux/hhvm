@@ -72,19 +72,19 @@ BuildRequires:	zlib-devel
 #BuildRequires:	flex >= 2.5.35
 #BuildRequires:	libafdt-devel >= 0.1.0
 #BuildRequires:	re2c >= 0.13.0
-# foreach (get_loaded_extensions() as $ext) printf("Provides:\tphp(%s)\n", strtolower($ext));
 Provides:	%{name}(api) = %{hhvm_api_version}
-Provides:	php(apache)
+Provides:	php(core) = %{php_version}
+# foreach (get_loaded_extensions() as $ext) printf("Provides:\tphp(%s)\n", strtolower($ext));
 Provides:	php(apc)
 Provides:	php(bcmath)
 Provides:	php(bz2)
 Provides:	php(calendar)
-Provides:	php(core) = %{php_version}
 Provides:	php(ctype)
 Provides:	php(curl)
 Provides:	php(date)
 Provides:	php(debugger)
 Provides:	php(dom)
+Provides:	php(enum)
 Provides:	php(exif)
 Provides:	php(fb)
 Provides:	php(fileinfo)
@@ -92,6 +92,7 @@ Provides:	php(filter)
 Provides:	php(ftp)
 Provides:	php(gd)
 Provides:	php(gettext)
+Provides:	php(gmp)
 Provides:	php(hash)
 Provides:	php(hh)
 Provides:	php(hhvm.debugger)
@@ -105,11 +106,12 @@ Provides:	php(intl)
 Provides:	php(json)
 Provides:	php(ldap)
 Provides:	php(libxml)
+Provides:	php(mail)
+Provides:	php(mailparse)
 Provides:	php(mbstring)
 Provides:	php(mcrypt)
 Provides:	php(memcache)
 Provides:	php(memcached)
-Provides:	php(misc)
 Provides:	php(mysql)
 Provides:	php(mysqli)
 Provides:	php(oauth)
