@@ -3,6 +3,7 @@
 # - patch /usr/lib/hphp/CMake/HPHPIZEFunctions.cmake for %{_libdir}/hhvm as extension dir
 # TODO
 # - system libmbfl, system xhp, sqlite3
+# - use system pcre
 # git show HHVM-3.3.1
 %define		githash	e0c98e21167b425dddf1fc9efe78c9f7a36db268
 # these hashes are git submodules
@@ -396,6 +397,6 @@ fi
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_bindir}/hphpize
 %{_includedir}/hphp
-%dir %{_prefix}/lib/hphp
-%{_prefix}/lib/hphp/CMake
-%{_prefix}/lib/hphp/hphpize
+%dir %{_libdir}/hhvm
+%{_libdir}/hhvm/CMake
+%{_libdir}/hhvm/hphpize
