@@ -28,6 +28,7 @@ Source100:	get-source.sh
 Patch1:		no-debug.patch
 Patch2:		hphpize.patch
 Patch3:		MAX.patch
+Patch4:		system-thirdparty.patch
 URL:		https://github.com/facebook/hhvm/wiki
 BuildRequires:	ImageMagick-devel
 BuildRequires:	a52dec-libs-devel
@@ -228,6 +229,7 @@ mv folly-* third-party/folly/src
 %patch1 -p1
 %patch2 -p1
 %patch3 -p1
+%patch4 -p1
 
 # prefer ones from system
 rm CMake/FindBISON.cmake
@@ -267,6 +269,7 @@ fi
 	-DUSE_JEMALLOC=OFF \
 	-DUSE_TCMALLOC=OFF \
 	-DHPHP_NOTEST=ON \
+	-DSYSTEM_PCRE=ON \
 	-DENABLE_COTIRE=ON \
 	.
 

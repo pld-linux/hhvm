@@ -1,0 +1,22 @@
+--- hhvm-HHVM-3.3.1/./third-party/CMakeLists.txt~	2014-09-19 00:27:19.000000000 +0300
++++ hhvm-HHVM-3.3.1/./third-party/CMakeLists.txt	2014-11-17 16:47:31.381478001 +0200
+@@ -24,7 +24,6 @@
+ set(THIRD_PARTY_HEADERS)
+ 
+ list(APPEND THIRD_PARTY_MODULES
+-  pcre
+   fastlz
+   libafdt
+   libmbfl
+@@ -34,6 +33,11 @@
+   double-conversion
+   folly
+   libzip)
++
++if(NOT SYSTEM_PCRE)
++  list(APPEND THIRD_PARTY_MODULES pcre)
++endif()
++
+ if(ENABLE_FASTCGI)
+   list(APPEND THIRD_PARTY_MODULES proxygen)
+   list(APPEND THIRD_PARTY_MODULES thrift)
