@@ -1,6 +1,6 @@
 --- hhvm-HHVM-3.3.1/./third-party/CMakeLists.txt~	2014-09-19 00:27:19.000000000 +0300
-+++ hhvm-HHVM-3.3.1/./third-party/CMakeLists.txt	2014-11-17 16:47:31.381478001 +0200
-@@ -24,7 +24,6 @@
++++ hhvm-HHVM-3.3.1/./third-party/CMakeLists.txt	2014-11-17 22:39:00.515744741 +0200
+@@ -24,16 +24,33 @@
  set(THIRD_PARTY_HEADERS)
  
  list(APPEND THIRD_PARTY_MODULES
@@ -8,13 +8,32 @@
    fastlz
    libafdt
    libmbfl
-@@ -34,6 +33,11 @@
-   double-conversion
+-  libsqlite3
+   timelib
+-  lz4
+-  double-conversion
    folly
-   libzip)
+-  libzip)
++)
 +
 +if(NOT SYSTEM_PCRE)
 +  list(APPEND THIRD_PARTY_MODULES pcre)
++endif()
++
++if(NOT SYSTEM_SQLITE3)
++  list(APPEND THIRD_PARTY_MODULES libsqlite3)
++endif()
++
++if(NOT SYSTEM_LZ4)
++  list(APPEND THIRD_PARTY_MODULES lz4)
++endif()
++
++if(NOT SYSTEM_DOUBLE_CONVERSION)
++  list(APPEND THIRD_PARTY_MODULES double-conversion)
++endif()
++
++if(NOT SYSTEM_LIBZIP)
++  list(APPEND THIRD_PARTY_MODULES libzip)
 +endif()
 +
  if(ENABLE_FASTCGI)

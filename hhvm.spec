@@ -1,9 +1,14 @@
+#
+# Conditional build:
+%bcond_without	system_dconv	# system double-conversion
+%bcond_without	system_sqlite	# system sqlite3
+%bcond_without	system_lz4		# system lz4
+
 # NOTES:
 # - hphp/runtime/base/runtime-option.cpp evalJitDefault enables jit if /.hhvm-jit exists (yes, in filesystem root)
 # - patch /usr/lib/hphp/CMake/HPHPIZEFunctions.cmake for %{_libdir}/hhvm as extension dir
 # TODO
-# - system libmbfl, system xhp, sqlite3
-# - use system pcre
+# - system libmbfl, system xhp
 # git show HHVM-3.3.1
 %define		githash	e0c98e21167b425dddf1fc9efe78c9f7a36db268
 # these hashes are git submodules
@@ -12,7 +17,7 @@
 Summary:	Virtual Machine, Runtime, and JIT for PHP
 Name:		hhvm
 Version:	3.3.1
-Release:	0.1
+Release:	0.4
 License:	PHP 3.01 and BSD
 Group:		Development/Languages
 Source0:	https://github.com/facebook/hhvm/archive/HHVM-%{version}.tar.gz
@@ -40,6 +45,7 @@ BuildRequires:	binutils-static
 BuildRequires:	boost-devel >= 1.50
 BuildRequires:	cmake >= 2.8.5
 BuildRequires:	curl-devel >= 7.29.0
+%{?with_system_dconv:BuildRequires:	double-conversion-devel >= 1.1.1}
 BuildRequires:	elfutils-devel
 BuildRequires:	expat-devel
 BuildRequires:	gcc >= 6:4.6.0
@@ -57,14 +63,16 @@ BuildRequires:	libstdc++-devel >= 6:4.8
 BuildRequires:	libunwind-devel
 BuildRequires:	libxml2-devel
 BuildRequires:	libxslt-devel
+%{?with_system_lz4:BuildRequires:	lz4-devel >= 0.0-1.r119}
 BuildRequires:	mysql-devel
 BuildRequires:	ocaml-findlib
 BuildRequires:	oniguruma-devel
 BuildRequires:	openssl-devel
-BuildRequires:	pcre-devel
+BuildRequires:	pcre-devel >= 8.32
 #BuildRequires:	php-xhp-devel >= 1.3.9-6
 BuildRequires:	readline-devel
 BuildRequires:	rpmbuild(macros) >= 1.675
+%{?with_system_sqlite:BuildRequires:	sqlite3-devel >= 3.7.15.2}
 BuildRequires:	tbb-devel >= 4.0.6000
 BuildRequires:	zlib-devel
 # check later, seem unused
@@ -272,6 +280,9 @@ fi
 	-DUSE_TCMALLOC=OFF \
 	-DHPHP_NOTEST=ON \
 	-DSYSTEM_PCRE=ON \
+	%{?with_system_sqlite:-DSYSTEM_SQLITE3=ON} \
+	%{?with_system_lz4:-DSYSTEM_LZ4=ON} \
+	%{?with_system_dconv:-DSYSTEM_DOUBLE_CONVERSION=ON} \
 	-DENABLE_COTIRE=ON \
 	.
 
