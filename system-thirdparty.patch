@@ -1,12 +1,12 @@
---- hhvm-HHVM-3.3.1/./third-party/CMakeLists.txt~	2014-09-19 00:27:19.000000000 +0300
-+++ hhvm-HHVM-3.3.1/./third-party/CMakeLists.txt	2014-11-17 22:39:00.515744741 +0200
-@@ -24,16 +24,33 @@
+--- hhvm-HHVM-3.3.1/third-party/CMakeLists.txt	2014-11-17 22:39:00.515744741 +0200
++++ hhvm-HHVM-3.3.1/third-party/CMakeLists.txt	2014-11-18 19:55:23.702812657 +0200
+@@ -24,16 +24,39 @@
  set(THIRD_PARTY_HEADERS)
  
  list(APPEND THIRD_PARTY_MODULES
 -  pcre
-   fastlz
-   libafdt
+-  fastlz
+-  libafdt
    libmbfl
 -  libsqlite3
    timelib
@@ -24,6 +24,14 @@
 +  list(APPEND THIRD_PARTY_MODULES libsqlite3)
 +endif()
 +
++if(NOT SYSTEM_FASTLZ)
++  list(APPEND THIRD_PARTY_MODULES fastlz)
++endif()
++
++if(NOT SYSTEM_LIBAFDT)
++  list(APPEND THIRD_PARTY_MODULES libafdt)
++endif()
++  
 +if(NOT SYSTEM_LZ4)
 +  list(APPEND THIRD_PARTY_MODULES lz4)
 +endif()

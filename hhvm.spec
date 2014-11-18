@@ -3,6 +3,8 @@
 %bcond_without	system_dconv	# system double-conversion
 %bcond_without	system_sqlite	# system sqlite3
 %bcond_without	system_lz4		# system lz4
+%bcond_without	system_fastlz	# system fastlz
+%bcond_without	system_libafdt	# system libafdt
 
 # NOTES:
 # - hphp/runtime/base/runtime-option.cpp evalJitDefault enables jit if /.hhvm-jit exists (yes, in filesystem root)
@@ -17,7 +19,7 @@
 Summary:	Virtual Machine, Runtime, and JIT for PHP
 Name:		hhvm
 Version:	3.3.1
-Release:	0.4
+Release:	0.5
 License:	PHP 3.01 and BSD
 Group:		Development/Languages
 Source0:	https://github.com/facebook/hhvm/archive/HHVM-%{version}.tar.gz
@@ -48,11 +50,13 @@ BuildRequires:	curl-devel >= 7.29.0
 %{?with_system_dconv:BuildRequires:	double-conversion-devel >= 1.1.1}
 BuildRequires:	elfutils-devel
 BuildRequires:	expat-devel
+%{?with_system_fastlz:BuildRequires:	fastlz-devel >= 0.1.0-0.r12}
 BuildRequires:	gcc >= 6:4.6.0
 BuildRequires:	gd-devel
 BuildRequires:	glog-devel >= 0.3.2
 BuildRequires:	imap-devel >= 1:2007
 #BuildRequires:	jemalloc-devel >= 3.0.0
+%{?with_system_libafdt:BuildRequires:	libafdt-devel >= 0.1.0}
 BuildRequires:	libcap-devel
 BuildRequires:	libdwarf-devel >= 20130729
 BuildRequires:	libicu-devel >= 4.2
@@ -283,6 +287,8 @@ fi
 	%{?with_system_sqlite:-DSYSTEM_SQLITE3=ON} \
 	%{?with_system_lz4:-DSYSTEM_LZ4=ON} \
 	%{?with_system_dconv:-DSYSTEM_DOUBLE_CONVERSION=ON} \
+	%{?with_system_fastlz:-DSYSTEM_FASTLZ=ON} \
+	%{?with_system_libafdt:-DSYSTEM_LIBAFDT=ON} \
 	-DENABLE_COTIRE=ON \
 	.
 
