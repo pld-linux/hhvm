@@ -254,9 +254,10 @@ rm CMake/FindFLEX.cmake
 rm CMake/FindFreetype.cmake
 
 # ensure system libs get used
+# NOTE: keep sqlite dir, build breaks with 3.8.5.0
+
 cd third-party
 rm -r pcre \
-	%{?with_system_sqlite:libsqlite3} \
 	%{?with_system_lz4:lz4} \
 	%{?with_system_dconv:double-conversion} \
 	%{?with_system_fastlz:fastlz} \
