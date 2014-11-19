@@ -6,20 +6,23 @@
 %bcond_without	system_fastlz	# system fastlz
 %bcond_without	system_libafdt	# system libafdt
 
+# TODO
+# - system xhp
+# - system proxygen
+# - system thrift
+
 # NOTES:
 # - hphp/runtime/base/runtime-option.cpp evalJitDefault enables jit if /.hhvm-jit exists (yes, in filesystem root)
-# - patch /usr/lib/hphp/CMake/HPHPIZEFunctions.cmake for %{_libdir}/hhvm as extension dir
-# TODO
-# - system libmbfl, system xhp
+
 # git show HHVM-3.3.1
 %define		githash	e0c98e21167b425dddf1fc9efe78c9f7a36db268
-# these hashes are git submodules
-%define		folly		6e46d46
+# these hashes are git submodules (be sure to check them on proper branch)
 %define		thirdparty	fdef620
+%define		folly		6e46d46
 Summary:	Virtual Machine, Runtime, and JIT for PHP
 Name:		hhvm
 Version:	3.3.1
-Release:	0.5
+Release:	0.6
 License:	PHP 3.01 and BSD
 Group:		Development/Languages
 Source0:	https://github.com/facebook/hhvm/archive/HHVM-%{version}.tar.gz
