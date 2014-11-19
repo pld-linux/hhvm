@@ -17,6 +17,9 @@
 
 # must be in sync with source. extra check ensuring that it is so is done in %%build
 %define		hhvm_api_version	20140829
+# hphp/system/idl/constants.idl.json defines it as 5.6.99-hhvm, but use some saner value
+%define		php_version			5.6.0
+
 # git show HHVM-3.3.1
 %define		githash	e0c98e21167b425dddf1fc9efe78c9f7a36db268
 # these hashes are git submodules (be sure to check them on proper branch)
@@ -176,8 +179,6 @@ Obsoletes:	hiphop-php < 2.3.2-0.2
 ExclusiveArch:	%{x8664}
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
-# hphp/system/idl/constants.idl.json defines it as 5.6.99-hhvm, but use some saner value
-%define		php_version			5.6.0
 
 %define		hhvm_extensiondir	%{_libdir}/hhvm
 
