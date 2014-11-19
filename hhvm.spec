@@ -5,6 +5,7 @@
 %bcond_without	system_lz4		# system lz4
 %bcond_without	system_fastlz	# system fastlz
 %bcond_without	system_libafdt	# system libafdt
+%bcond_without	system_libzip	# system libzip
 
 # TODO
 # - system xhp
@@ -60,6 +61,7 @@ BuildRequires:	glog-devel >= 0.3.2
 BuildRequires:	imap-devel >= 1:2007
 #BuildRequires:	jemalloc-devel >= 3.0.0
 %{?with_system_libafdt:BuildRequires:	libafdt-devel >= 0.1.0}
+%{?with_system_libzip:BuildRequires:	libzip-devel >= 0.11.2}
 BuildRequires:	libcap-devel
 BuildRequires:	libdwarf-devel >= 20130729
 BuildRequires:	libicu-devel >= 4.2
@@ -262,6 +264,7 @@ rm -r pcre \
 	%{?with_system_dconv:double-conversion} \
 	%{?with_system_fastlz:fastlz} \
 	%{?with_system_libafdt:libafdt} \
+	%{?with_system_libzip:libzip} \
 	%{nil}
 
 %build
@@ -303,6 +306,7 @@ fi
 	%{?with_system_dconv:-DSYSTEM_DOUBLE_CONVERSION=ON} \
 	%{?with_system_fastlz:-DSYSTEM_FASTLZ=ON} \
 	%{?with_system_libafdt:-DSYSTEM_LIBAFDT=ON} \
+	%{?with_system_libzip:-DSYSTEM_LIBZIP=ON} \
 	-DENABLE_COTIRE=ON \
 	.
 
