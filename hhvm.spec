@@ -15,6 +15,8 @@
 # NOTES:
 # - hphp/runtime/base/runtime-option.cpp evalJitDefault enables jit if /.hhvm-jit exists (yes, in filesystem root)
 
+# must be in sync with source. extra check ensuring that it is so is done in %%build
+%define		hhvm_api_version	20140829
 # git show HHVM-3.3.1
 %define		githash	e0c98e21167b425dddf1fc9efe78c9f7a36db268
 # these hashes are git submodules (be sure to check them on proper branch)
@@ -23,7 +25,7 @@
 Summary:	Virtual Machine, Runtime, and JIT for PHP
 Name:		hhvm
 Version:	3.3.1
-Release:	1
+Release:	2
 License:	PHP 3.01 and BSD
 Group:		Development/Languages
 Source0:	https://github.com/facebook/hhvm/archive/HHVM-%{version}.tar.gz
@@ -174,8 +176,6 @@ Obsoletes:	hiphop-php < 2.3.2-0.2
 ExclusiveArch:	%{x8664}
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
-# must be in sync with source. extra check ensuring that it is so is done in %%build
-%define		hhvm_api_version	20140829
 # hphp/system/idl/constants.idl.json defines it as 5.6.99-hhvm, but use some saner value
 %define		php_version			5.6.0
 
