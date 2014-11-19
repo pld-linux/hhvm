@@ -27,6 +27,8 @@
 %define		folly		6e46d46
 Summary:	Virtual Machine, Runtime, and JIT for PHP
 Name:		hhvm
+# we prefer LTS versions
+# see http://hhvm.com/blog/6083/hhvm-long-term-support
 Version:	3.3.1
 Release:	2
 License:	PHP 3.01 and BSD
