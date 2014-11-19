@@ -250,6 +250,16 @@ rm CMake/FindBISON.cmake
 rm CMake/FindFLEX.cmake
 rm CMake/FindFreetype.cmake
 
+# ensure system libs get used
+cd third-party
+rm -r pcre \
+	%{?with_system_sqlite:libsqlite3} \
+	%{?with_system_lz4:lz4} \
+	%{?with_system_dconv:double-conversion} \
+	%{?with_system_fastlz:fastlz} \
+	%{?with_system_libafdt:libafdt} \
+	%{nil}
+
 %build
 # also in: hphp/tools/hphpize/hphpize.cmake
 API=$(awk '/#define HHVM_API_VERSION/{v=$3; sub(/L$/, "", v); print v}' hphp/runtime/ext/extension.h)
