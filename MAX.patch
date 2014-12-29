@@ -56,3 +56,14 @@ index 723f6c8..43f1bc8 100644
  #endif
  
  //////////////////////////////////////////////////////////////////////
+--- hhvm-HHVM-3.3.2/hphp/runtime/base/zend-pack.cpp~	2014-12-20 02:39:46.000000000 +0200
++++ hhvm-HHVM-3.3.2/hphp/runtime/base/zend-pack.cpp	2014-12-29 13:01:04.142356895 +0200
+@@ -294,7 +294,7 @@
+     case 'a':
+     case 'A':
+     case 'Z': {
+-      int arg_cp = (code != 'Z') ? arg : MAX(0, arg - 1);
++      int arg_cp = (code != 'Z') ? arg : std::max(0, arg - 1);
+       memset(&output[outputpos], (code != 'A') ? '\0' : ' ', arg);
+       val = argv[currentarg++].toString();
+       s = val.c_str();
