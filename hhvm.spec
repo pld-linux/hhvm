@@ -6,6 +6,7 @@
 %bcond_without	system_fastlz	# system fastlz
 %bcond_without	system_libafdt	# system libafdt
 %bcond_without	system_libzip	# system libzip
+%bcond_without	cotire			# cotire (compile time reducer): Speed up the build by precompiling headers
 
 # TODO
 # - system xhp
@@ -310,7 +311,7 @@ fi
 	%{?with_system_fastlz:-DSYSTEM_FASTLZ=ON} \
 	%{?with_system_libafdt:-DSYSTEM_LIBAFDT=ON} \
 	%{?with_system_libzip:-DSYSTEM_LIBZIP=ON} \
-	-DENABLE_COTIRE=ON \
+	-DENABLE_COTIRE=%{!?with_cotire:OFF}%{?with_cotire:ON} \
 	.
 
 # setup COMPILER_ID/HHVM_REPO_SCHEMA so it doesn't look it up from our package git repo
