@@ -6,7 +6,8 @@
 %bcond_without	system_fastlz	# system fastlz
 %bcond_without	system_libafdt	# system libafdt
 %bcond_without	system_libzip	# system libzip
-%bcond_without	cotire			# cotire (compile time reducer): Speed up the build by precompiling headers
+# cotire breaks sqlite3 on builders: https://github.com/facebook/hhvm/issues/4524
+%bcond_with	cotire			# cotire (compile time reducer): Speed up the build by precompiling headers
 
 # TODO
 # - system xhp
