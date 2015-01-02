@@ -341,6 +341,13 @@ rm -rf $RPM_BUILD_ROOT%{_docdir}
 if [ ! -f installed.stamp ]; then
 # begin install block
 
+# fix broken cmake rules
+# TODO: fix cmake rules
+if [ -d $RPM_BUILD_ROOT%{_prefix}/usr ]; then
+	cp -a $RPM_BUILD_ROOT%{_prefix}/usr/* $RPM_BUILD_ROOT%{_prefix}
+	rm -rf $RPM_BUILD_ROOT%{_prefix}/usr
+fi
+
 install -d $RPM_BUILD_ROOT{%{_sysconfdir}/%{name},%{_libdir}/%{name}}
 cp -p %{SOURCE7} $RPM_BUILD_ROOT%{_sysconfdir}/%{name}
 
