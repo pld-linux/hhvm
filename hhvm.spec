@@ -364,44 +364,6 @@ cp -p %{SOURCE6} $RPM_BUILD_ROOT/etc/sysconfig/%{name}-fcgi
 
 install -p hphp/hack/bin/hh_{server,client} $RPM_BUILD_ROOT%{_bindir}
 
-%if 0
-# setup -devel
-install -d $RPM_BUILD_ROOT%{_datadir}/cmake/Modules
-cp -p CMake/*.cmake $RPM_BUILD_ROOT%{_datadir}/cmake/Modules
-
-HPHP_HOME=$(pwd)
-sed -e "
-	/HHVM_INCLUDE_DIRS/ s,$HPHP_HOME,%{_includedir},g
-" hphp/tools/hphpize/hphpize.cmake > $RPM_BUILD_ROOT%{_datadir}/cmake/Modules/hphpize.cmake
-
-oIFS=$IFS
-IFS=";"
-set -- $(sed -ne 's/set(HHVM_INCLUDE_DIRS "\(.*\)")/\1/p' hphp/tools/hphpize/hphpize.cmake)
-IFS=$oIFS
-set -- $(
-	for dir in "$@"; do
-		[[ "$dir" = $HPHP_HOME/hphp/* ]] && echo $dir
-	done
-)
-
-set +x
-for dir in "$@" \
-	$HPHP_HOME/hphp/runtime \
-	$HPHP_HOME/hphp/util \
-	$HPHP_HOME/hphp/neo \
-	$HPHP_HOME/hphp/system \
-	$HPHP_HOME/hphp/parser \
-; do
-	echo "D %{_includedir}${dir#$HPHP_HOME}"
-	find $dir -name '*.h' | while read path; do
-		file=%{_includedir}${path#$HPHP_HOME}
-		echo "F $file"
-		install -Dp $path $RPM_BUILD_ROOT$file
-	done
-done
-set -x
-%endif
-
 # end of install block
 touch installed.stamp; fi
 
