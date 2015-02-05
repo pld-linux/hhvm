@@ -13,6 +13,7 @@
 # - system xhp
 # - system proxygen
 # - system thrift
+# - system LIBAFDT_LIBRARY
 
 # NOTES:
 # - hphp/runtime/base/runtime-option.cpp evalJitDefault enables jit if /.hhvm-jit exists (yes, in filesystem root)
@@ -310,13 +311,13 @@ fi
 	-DUSE_JEMALLOC=OFF \
 	-DUSE_TCMALLOC=OFF \
 	-DTEST_BIN=OFF \
-	-DSYSTEM_PCRE=ON \
-	%{?with_system_sqlite:-DSYSTEM_SQLITE3=ON} \
-	%{?with_system_lz4:-DSYSTEM_LZ4=ON} \
-	%{?with_system_dconv:-DSYSTEM_DOUBLE_CONVERSION=ON} \
-	%{?with_system_fastlz:-DSYSTEM_FASTLZ=ON} \
+	-DPCRE_LIBRARY=OFF \
+	%{?with_system_sqlite:-DLIBSQLITE3_LIBRARY=OFF} \
+	%{?with_system_lz4:-DLZ4_LIBRARY=OFF} \
+	%{?with_system_dconv:-DDOUBLE_CONVERSION_LIBRARY=OFF} \
+	%{?with_system_fastlz:-DFASTLZ_LIBRARY=OFF} \
 	%{?with_system_libafdt:-DSYSTEM_LIBAFDT=ON} \
-	%{?with_system_libzip:-DSYSTEM_LIBZIP=ON} \
+	%{?with_system_libzip:-DLIBZIP_LIBRARY=OFF} \
 	-DENABLE_COTIRE=%{!?with_cotire:OFF}%{?with_cotire:ON} \
 	.
 
