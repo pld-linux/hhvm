@@ -13,7 +13,6 @@
 # - system xhp
 # - system proxygen
 # - system thrift
-# - system LIBAFDT_LIBRARY
 
 # NOTES:
 # - hphp/runtime/base/runtime-option.cpp evalJitDefault enables jit if /.hhvm-jit exists (yes, in filesystem root)
@@ -75,7 +74,6 @@ BuildRequires:	glog-devel >= 0.3.2
 BuildRequires:	imap-devel >= 1:2007
 #BuildRequires:	jemalloc-devel >= 3.0.0
 %{?with_system_libafdt:BuildRequires:	libafdt-devel >= 0.1.0}
-%{?with_system_libzip:BuildRequires:	libzip-devel >= 0.11.2}
 BuildRequires:	libcap-devel
 BuildRequires:	libdwarf-devel >= 20130729
 BuildRequires:	libicu-devel >= 4.2
@@ -86,6 +84,7 @@ BuildRequires:	libstdc++-devel >= 6:4.8
 BuildRequires:	libunwind-devel
 BuildRequires:	libxml2-devel
 BuildRequires:	libxslt-devel
+%{?with_system_libzip:BuildRequires:	libzip-devel >= 0.11.2}
 %{?with_system_lz4:BuildRequires:	lz4-devel >= 0.0-1.r119}
 BuildRequires:	mysql-devel
 BuildRequires:	ocaml-findlib
@@ -101,7 +100,7 @@ BuildRequires:	zlib-devel
 # check later, seem unused
 #BuildRequires:	bison >= 2.3
 #BuildRequires:	flex >= 2.5.35
-#BuildRequires:	libafdt-devel >= 0.1.0
+BuildRequires:	libafdt-devel >= 0.1.0
 #BuildRequires:	re2c >= 0.13.0
 Provides:	%{name}(api) = %{hhvm_api_version}
 Provides:	php(core) = %{php_version}
@@ -316,7 +315,7 @@ fi
 	%{?with_system_lz4:-DLZ4_LIBRARY=OFF} \
 	%{?with_system_dconv:-DDOUBLE_CONVERSION_LIBRARY=OFF} \
 	%{?with_system_fastlz:-DFASTLZ_LIBRARY=OFF} \
-	%{?with_system_libafdt:-DSYSTEM_LIBAFDT=ON} \
+	%{?with_system_libafdt:-DLIBAFDT_LIBRARY=OFF} \
 	%{?with_system_libzip:-DLIBZIP_LIBRARY=OFF} \
 	-DENABLE_COTIRE=%{!?with_cotire:OFF}%{?with_cotire:ON} \
 	.
