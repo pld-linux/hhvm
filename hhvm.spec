@@ -306,7 +306,7 @@ fi
 	-DHHVM_DYNAMIC_EXTENSION_DIR=%{hhvm_extensiondir} \
 	-DUSE_JEMALLOC=OFF \
 	-DUSE_TCMALLOC=OFF \
-	-DHPHP_NOTEST=ON \
+	-DTEST_BIN=OFF \
 	-DSYSTEM_PCRE=ON \
 	%{?with_system_sqlite:-DSYSTEM_SQLITE3=ON} \
 	%{?with_system_lz4:-DSYSTEM_LZ4=ON} \
