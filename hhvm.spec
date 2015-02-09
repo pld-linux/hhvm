@@ -259,7 +259,7 @@ mv folly-* third-party/folly/src
 %patch2 -p1
 %patch3 -p1
 %patch4 -p1
-%patch5 -p1 -R
+#%patch5 -p1
 %patch6 -p1
 
 # prefer ones from system
