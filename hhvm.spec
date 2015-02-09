@@ -53,6 +53,7 @@ Patch2:		hphpize.patch
 Patch3:		MAX.patch
 Patch4:		system-thirdparty.patch
 Patch5:		cmake.patch
+Patch6:		system-fastlz.patch
 URL:		https://github.com/facebook/hhvm/wiki
 BuildRequires:	ImageMagick-devel
 BuildRequires:	a52dec-libs-devel
@@ -259,6 +260,7 @@ mv folly-* third-party/folly/src
 %patch3 -p1
 %patch4 -p1
 %patch5 -p1 -R
+%patch6 -p1
 
 # prefer ones from system
 rm CMake/FindBISON.cmake
