@@ -311,13 +311,6 @@ fi
 	-DUSE_JEMALLOC=OFF \
 	-DUSE_TCMALLOC=OFF \
 	-DTEST_BIN=OFF \
-	-DPCRE_LIBRARY=OFF \
-	%{?with_system_sqlite:-DLIBSQLITE3_LIBRARY=OFF} \
-	%{?with_system_lz4:-DLZ4_LIBRARY=OFF} \
-	%{?with_system_dconv:-DDOUBLE_CONVERSION_LIBRARY=OFF} \
-	%{?with_system_fastlz:-DFASTLZ_LIBRARY=OFF} \
-	%{?with_system_libafdt:-DLIBAFDT_LIBRARY=OFF} \
-	%{?with_system_libzip:-DLIBZIP_LIBRARY=OFF} \
 	-DENABLE_COTIRE=%{!?with_cotire:OFF}%{?with_cotire:ON} \
 	.
 
