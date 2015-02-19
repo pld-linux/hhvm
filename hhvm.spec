@@ -4,7 +4,7 @@
 %bcond_without	system_sqlite	# system sqlite3
 %bcond_without	system_lz4		# system lz4
 %bcond_without	system_fastlz	# system fastlz
-%bcond_without	system_libafdt	# system libafdt
+%bcond_with	system_libafdt	# system libafdt
 %bcond_without	system_libzip	# system libzip
 # cotire breaks sqlite3 on builders: https://github.com/facebook/hhvm/issues/4524
 %bcond_with	cotire			# cotire (compile time reducer): Speed up the build by precompiling headers
@@ -22,25 +22,28 @@
 # hphp/system/idl/constants.idl.json defines it as 5.6.99-hhvm, but use some saner value
 %define		php_version			5.6.0
 
-# git show HHVM-3.3.2
-%define		githash	9046034b8d82b06e9feb75b72e2b0106a2707c2c
+# git show HHVM-3.3.3
+%define		githash	54b5f51c3670fe55852b6dab17a47c67b2271116
 # these hashes are git submodules (be sure to check them on proper branch)
-%define		thirdparty	fdef620
+# GIT_DIR=third-party/.git git log -1
+%define		thirdparty	bf581f8
+# 6e46d468cf2876dd59c7a4dddcb4e37abf070b7a
+# GIT_DIR=third-party/folly/src/.git git log -1
 %define		folly		6e46d46
 Summary:	Virtual Machine, Runtime, and JIT for PHP
 Name:		hhvm
 # we prefer LTS versions
 # see http://hhvm.com/blog/6083/hhvm-long-term-support
-Version:	3.3.2
-Release:	2
+Version:	3.3.3
+Release:	1
 License:	PHP 3.01 and BSD
 Group:		Development/Languages
 Source0:	https://github.com/facebook/hhvm/archive/HHVM-%{version}.tar.gz
-# Source0-md5:	f515560490ece6cbad5d433502c14943
+# Source0-md5:	89c620e2df253530a4f6f1a185ec913a
 Source2:	https://github.com/facebook/folly/archive/%{folly}/folly-3.2-%{folly}.tar.gz
 # Source2-md5:	c4bdbea4c0ffe0650d12d9ff370b8255
 Source3:	https://github.com/hhvm/hhvm-third-party/archive/%{thirdparty}/third_party-%{thirdparty}.tar.gz
-# Source3-md5:	63858096c50c172d6c45ddb3d9b6d721
+# Source3-md5:	17210db0b2211c63d911076e02aab487
 Source5:	%{name}-fcgi.init
 Source6:	%{name}-fcgi.sysconfig
 Source7:	php.ini
@@ -50,6 +53,7 @@ Patch2:		hphpize.patch
 Patch3:		MAX.patch
 Patch4:		system-thirdparty.patch
 Patch5:		cmake.patch
+Patch6:		system-fastlz.patch
 URL:		https://github.com/facebook/hhvm/wiki
 BuildRequires:	ImageMagick-devel
 BuildRequires:	a52dec-libs-devel
@@ -71,7 +75,6 @@ BuildRequires:	glog-devel >= 0.3.2
 BuildRequires:	imap-devel >= 1:2007
 #BuildRequires:	jemalloc-devel >= 3.0.0
 %{?with_system_libafdt:BuildRequires:	libafdt-devel >= 0.1.0}
-%{?with_system_libzip:BuildRequires:	libzip-devel >= 0.11.2}
 BuildRequires:	libcap-devel
 BuildRequires:	libdwarf-devel >= 20130729
 BuildRequires:	libicu-devel >= 4.2
@@ -82,6 +85,7 @@ BuildRequires:	libstdc++-devel >= 6:4.8
 BuildRequires:	libunwind-devel
 BuildRequires:	libxml2-devel
 BuildRequires:	libxslt-devel
+%{?with_system_libzip:BuildRequires:	libzip-devel >= 0.11.2}
 %{?with_system_lz4:BuildRequires:	lz4-devel >= 0.0-1.r119}
 BuildRequires:	mysql-devel
 BuildRequires:	ocaml-findlib
@@ -97,7 +101,7 @@ BuildRequires:	zlib-devel
 # check later, seem unused
 #BuildRequires:	bison >= 2.3
 #BuildRequires:	flex >= 2.5.35
-#BuildRequires:	libafdt-devel >= 0.1.0
+BuildRequires:	libafdt-devel >= 0.1.0
 #BuildRequires:	re2c >= 0.13.0
 Provides:	%{name}(api) = %{hhvm_api_version}
 Provides:	php(core) = %{php_version}
@@ -255,7 +259,8 @@ mv folly-* third-party/folly/src
 %patch2 -p1
 %patch3 -p1
 %patch4 -p1
-%patch5 -p1
+#%patch5 -p1
+%patch6 -p1
 
 # prefer ones from system
 rm CMake/FindBISON.cmake
@@ -263,10 +268,9 @@ rm CMake/FindFLEX.cmake
 rm CMake/FindFreetype.cmake
 
 # ensure system libs get used
-# NOTE: keep sqlite dir, build breaks with 3.8.5.0
-
 cd third-party
 rm -r pcre \
+	%{?with_system_sqlite:libsqlite3} \
 	%{?with_system_lz4:lz4} \
 	%{?with_system_dconv:double-conversion} \
 	%{?with_system_fastlz:fastlz} \
@@ -307,13 +311,6 @@ fi
 	-DUSE_JEMALLOC=OFF \
 	-DUSE_TCMALLOC=OFF \
 	-DTEST_BIN=OFF \
-	-DSYSTEM_PCRE=ON \
-	%{?with_system_sqlite:-DSYSTEM_SQLITE3=ON} \
-	%{?with_system_lz4:-DSYSTEM_LZ4=ON} \
-	%{?with_system_dconv:-DSYSTEM_DOUBLE_CONVERSION=ON} \
-	%{?with_system_fastlz:-DSYSTEM_FASTLZ=ON} \
-	%{?with_system_libafdt:-DSYSTEM_LIBAFDT=ON} \
-	%{?with_system_libzip:-DSYSTEM_LIBZIP=ON} \
 	-DENABLE_COTIRE=%{!?with_cotire:OFF}%{?with_cotire:ON} \
 	.
 
