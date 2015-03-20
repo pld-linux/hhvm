@@ -22,8 +22,8 @@
 # hphp/system/idl/constants.idl.json defines it as 5.6.99-hhvm, but use some saner value
 %define		php_version			5.6.0
 
-# git show HHVM-3.3.3
-%define		githash	54b5f51c3670fe55852b6dab17a47c67b2271116
+# git show HHVM-3.3.5
+%define		githash	b2856c601e317b6d66fd1861c4cc889ae91d9f6f
 # these hashes are git submodules (be sure to check them on proper branch)
 # GIT_DIR=third-party/.git git log -1
 %define		thirdparty	bf581f8
@@ -34,12 +34,12 @@ Summary:	Virtual Machine, Runtime, and JIT for PHP
 Name:		hhvm
 # we prefer LTS versions
 # see http://hhvm.com/blog/6083/hhvm-long-term-support
-Version:	3.3.3
-Release:	2
+Version:	3.3.5
+Release:	1
 License:	PHP 3.01 and BSD
 Group:		Development/Languages
 Source0:	https://github.com/facebook/hhvm/archive/HHVM-%{version}.tar.gz
-# Source0-md5:	89c620e2df253530a4f6f1a185ec913a
+# Source0-md5:	57af76be5b4a10e35cb6eb705e0ff663
 Source2:	https://github.com/facebook/folly/archive/%{folly}/folly-3.2-%{folly}.tar.gz
 # Source2-md5:	c4bdbea4c0ffe0650d12d9ff370b8255
 Source3:	https://github.com/hhvm/hhvm-third-party/archive/%{thirdparty}/third_party-%{thirdparty}.tar.gz
@@ -53,7 +53,6 @@ Patch2:		hphpize.patch
 Patch3:		MAX.patch
 Patch4:		system-thirdparty.patch
 Patch5:		cmake.patch
-Patch6:		system-fastlz.patch
 URL:		https://github.com/facebook/hhvm/wiki
 BuildRequires:	ImageMagick-devel
 BuildRequires:	a52dec-libs-devel
@@ -260,7 +259,6 @@ mv folly-* third-party/folly/src
 %patch3 -p1
 %patch4 -p1
 #%patch5 -p1
-%patch6 -p1
 
 # prefer ones from system
 rm CMake/FindBISON.cmake
