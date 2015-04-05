@@ -30,6 +30,10 @@
 # 6e46d468cf2876dd59c7a4dddcb4e37abf070b7a
 # GIT_DIR=third-party/folly/src/.git git log -1
 %define		folly		0.26.0
+%define		fbthrift	d30280a
+%define		webscalesql	004b6b3
+%define		squangle	269cd2e
+%define		proxygen	d17b4e7
 Summary:	Virtual Machine, Runtime, and JIT for PHP
 Name:		hhvm
 # we prefer LTS versions, see
@@ -45,9 +49,17 @@ Source2:	https://github.com/facebook/folly/archive/v%{folly}/folly-%{folly}.tar.
 # Source2-md5:	c76a3fd2e86215d523a9fe18ba9087a1
 Source3:	https://github.com/hhvm/hhvm-third-party/archive/%{thirdparty}/third_party-%{thirdparty}.tar.gz
 # Source3-md5:	494d37347bb6448ed514fd3dfacf7c88
-Source5:	%{name}-fcgi.init
-Source6:	%{name}-fcgi.sysconfig
-Source7:	php.ini
+Source4:	https://github.com/facebook/fbthrift/archive/%{fbthrift}/fbthrift-%{fbthrift}.tar.gz
+# Source4-md5:	a049ddb82e4a94f1ff7a63e9a94008ac
+Source5:	https://github.com/webscalesql/webscalesql-5.6/archive/%{webscalesql}/webscalesql-5.6-%{webscalesql}.tar.gz
+# Source5-md5:	5ee76824913ff96ba70b68d8aeb50e49
+Source6:	https://github.com/facebook/squangle/archive/%{squangle}/squangle-%{squangle}.tar.gz
+# Source6-md5:	c379594b56398f1f886391360b9577a8
+Source7:	https://github.com/facebook/proxygen/archive/%{proxygen}/proxygen-%{proxygen}.tar.gz
+# Source7-md5:	0cc887c0055172f52aa18cba9d66159a
+Source10:	%{name}-fcgi.init
+Source11:	%{name}-fcgi.sysconfig
+Source12:	php.ini
 Source100:	get-source.sh
 Patch1:		no-debug.patch
 Patch2:		hphpize.patch
@@ -247,13 +259,21 @@ runtime either by way of pure PHP code, or a combination of PHP and
 C++.
 
 %prep
-%setup -q -n %{name}-HHVM-%{version} -a2 -a3
+%setup -q -n %{name}-HHVM-%{version} -a2 -a3 -a4 -a5 -a6 -a7
 
 # handle git submodules
 rmdir third-party
 mv hhvm-third-party-* third-party
 rmdir third-party/folly/src
 mv folly-* third-party/folly/src
+rmdir third-party/thrift/src
+mv fbthrift-* third-party/thrift/src
+rmdir third-party/webscalesqlclient/webscalesql-5.6
+mv webscalesql-* third-party/webscalesqlclient/webscalesql-5.6
+rmdir third-party/squangle/squangle
+mv squangle-* third-party/squangle/squangle
+rmdir third-party/proxygen/src
+mv proxygen-* third-party/proxygen/src
 
 %patch1 -p1
 %patch2 -p1
@@ -345,7 +365,7 @@ if [ -d $RPM_BUILD_ROOT%{_prefix}/usr ]; then
 fi
 
 install -d $RPM_BUILD_ROOT{%{_sysconfdir}/%{name},%{_libdir}/%{name}}
-cp -p %{SOURCE7} $RPM_BUILD_ROOT%{_sysconfdir}/%{name}
+cp -p %{SOURCE12} $RPM_BUILD_ROOT%{_sysconfdir}/%{name}
 
 ln -s hhvm $RPM_BUILD_ROOT%{_bindir}/php
 ln -s hhvm $RPM_BUILD_ROOT%{_bindir}/hphp
@@ -355,8 +375,8 @@ cp -p hphp/doc/mime.hdf $RPM_BUILD_ROOT%{_datadir}/%{name}/hdf/static.mime-types
 
 # install fastcgi initscript
 install -d $RPM_BUILD_ROOT/etc/{sysconfig,rc.d/init.d}
-cp -p %{SOURCE5} $RPM_BUILD_ROOT/etc/rc.d/init.d/%{name}-fcgi
-cp -p %{SOURCE6} $RPM_BUILD_ROOT/etc/sysconfig/%{name}-fcgi
+cp -p %{SOURCE10} $RPM_BUILD_ROOT/etc/rc.d/init.d/%{name}-fcgi
+cp -p %{SOURCE11} $RPM_BUILD_ROOT/etc/sysconfig/%{name}-fcgi
 
 install -p hphp/hack/bin/hh_{server,client} $RPM_BUILD_ROOT%{_bindir}
 
