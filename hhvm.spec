@@ -18,7 +18,7 @@
 # - hphp/runtime/base/runtime-option.cpp evalJitDefault enables jit if /.hhvm-jit exists (yes, in filesystem root)
 
 # must be in sync with source. extra check ensuring that it is so is done in %%build
-%define		hhvm_api_version	20140829
+%define		hhvm_api_version	20150212
 # hphp/system/idl/constants.idl.json defines it as 5.6.99-hhvm, but use some saner value
 %define		php_version			5.6.0
 
@@ -327,6 +327,7 @@ fi
 	$ccache \
 	-DCMAKE_PREFIX_PATH=%{_prefix} \
 	-DHHVM_DYNAMIC_EXTENSION_DIR=%{hhvm_extensiondir} \
+	-DMYSQL_UNIX_SOCK_ADDR=/var/lib/mysql/mysql.sock \
 	-DUSE_JEMALLOC=OFF \
 	-DUSE_TCMALLOC=OFF \
 	-DTEST_BIN=OFF \
