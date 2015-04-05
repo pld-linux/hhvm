@@ -61,10 +61,7 @@ Source10:	%{name}-fcgi.init
 Source11:	%{name}-fcgi.sysconfig
 Source12:	php.ini
 Source100:	get-source.sh
-Patch1:		no-debug.patch
 Patch2:		hphpize.patch
-Patch3:		MAX.patch
-Patch4:		system-thirdparty.patch
 Patch5:		cmake.patch
 URL:		https://github.com/facebook/hhvm/wiki
 BuildRequires:	ImageMagick-devel
@@ -275,10 +272,7 @@ mv squangle-* third-party/squangle/squangle
 rmdir third-party/proxygen/src
 mv proxygen-* third-party/proxygen/src
 
-%patch1 -p1
 %patch2 -p1
-%patch3 -p1
-%patch4 -p1
 #%patch5 -p1
 
 # prefer ones from system
