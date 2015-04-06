@@ -69,6 +69,7 @@ Source100:	get-source.sh
 Patch2:		hphpize.patch
 Patch5:		cmake.patch
 Patch6:		webscalesql-5.6-build.patch
+Patch7:		disable-fastcgi.patch
 URL:		https://github.com/facebook/hhvm/wiki
 BuildRequires:	ImageMagick-devel
 BuildRequires:	a52dec-libs-devel
@@ -282,6 +283,7 @@ mv mcrouter-* third-party/mcrouter/src
 %patch2 -p1
 #%patch5 -p1
 %patch6 -p1 -d third-party/webscalesqlclient/webscalesql-5.6
+%patch7 -p1
 
 # prefer ones from system
 rm CMake/FindBISON.cmake

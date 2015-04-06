@@ -1,0 +1,36 @@
+it's not possible to to build with -DENABLE_FASTCGI=1
+
+this commit adds it unconditionally ON for Linux:
+https://github.com/facebook/hhvm/commit/773a4cd620820d8424756f6f8def466d179e5f8e
+
+--- hhvm-HHVM-3.6.1/CMake/HPHPSetup.cmake~	2015-03-24 02:00:12.000000000 +0200
++++ hhvm-HHVM-3.6.1/CMake/HPHPSetup.cmake	2015-04-06 09:50:54.551300775 +0300
+@@ -19,7 +19,9 @@
+ endif()
+ 
+ if (APPLE)
+-  set(ENABLE_FASTCGI 1)
++  if(NOT DEFINED ENABLE_FASTCGI)
++    set(ENABLE_FASTCGI 1)
++  endif()
+   set(HHVM_ANCHOR_SYMS
+     -Wl,-u,_register_fastcgi_server
+     -Wl,-segaddr,__text,0
+@@ -28,11 +30,15 @@
+   set(HHVM_ANCHOR_SYMS
+     -Wl,--whole-archive ${HHVM_WHOLE_ARCHIVE_LIBRARIES} -Wl,--no-whole-archive)
+ elseif(CYGWIN)
+-  set(ENABLE_FASTCGI 0)
++  if(NOT DEFINED ENABLE_FASTCGI)
++    set(ENABLE_FASTCGI 0)
++  endif()
+   set(HHVM_ANCHOR_SYMS
+   -Wl,--whole-archive ${HHVM_WHOLE_ARCHIVE_LIBRARIES} -Wl,--no-whole-archive)
+ else()
+-  set(ENABLE_FASTCGI 1)
++  if(NOT DEFINED ENABLE_FASTCGI)
++    set(ENABLE_FASTCGI 1)
++  endif()
+   set(HHVM_ANCHOR_SYMS
+     -Wl,-uregister_libevent_server,-uregister_fastcgi_server
+     -Wl,--whole-archive ${HHVM_WHOLE_ARCHIVE_LIBRARIES} -Wl,--no-whole-archive)
