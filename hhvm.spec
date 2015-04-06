@@ -350,6 +350,8 @@ if [[ "%{__cc}" = *ccache* ]]; then
 	"
 fi
 
+./configure --help || :
+
 %cmake \
 	$ccache \
 	-DCMAKE_PREFIX_PATH=%{_prefix} \
