@@ -7,6 +7,7 @@
 %bcond_with	system_libafdt	# system libafdt
 %bcond_without	system_libzip	# system libzip
 %bcond_with	fastcgi		# enable FastCGI protocol
+%bcond_without	async_mysql		# enable async MySQL
 # cotire breaks sqlite3 on builders: https://github.com/facebook/hhvm/issues/4524
 %bcond_with	cotire			# cotire (compile time reducer): Speed up the build by precompiling headers
 
@@ -329,6 +330,7 @@ fi
 	-DUSE_TCMALLOC=OFF \
 	-DTEST_BIN=OFF \
 	-DENABLE_FASTCGI=%{!?with_fastcgi:OFF}%{?with_fastcgi:ON} \
+	-DENABLE_ASYNC_MYSQL=%{!?with_async_mysql:OFF}%{?with_async_mysql:ON} \
 	-DENABLE_COTIRE=%{!?with_cotire:OFF}%{?with_cotire:ON} \
 	.
 
