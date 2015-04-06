@@ -432,7 +432,7 @@ fi
 
 %files
 %defattr(644,root,root,755)
-%doc README.md NEWS
+%doc README.md NEWS LICENSE.PHP LICENSE.ZEND
 %dir %{_sysconfdir}/%{name}
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/%{name}/php.ini
 %attr(755,root,root) %{_bindir}/hhvm
@@ -457,6 +457,7 @@ fi
 %attr(755,root,root) %{_bindir}/php
 
 %files devel
+%doc CONTRIBUTING.md
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_bindir}/hphpize
 %{_includedir}/hphp
