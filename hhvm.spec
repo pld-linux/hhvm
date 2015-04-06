@@ -264,6 +264,14 @@ HHVM provides a set of APIs for adding built-in functionality to the
 runtime either by way of pure PHP code, or a combination of PHP and
 C++.
 
+%package gdb
+Summary:	HHVM GDB Python bindings
+Group:		Development/Debuggers
+Requires:	gdb
+
+%description gdb
+HHVM GDB Python bindings.
+
 %prep
 %setup -q -n %{name}-HHVM-%{version} -a2 -a3 -a4 -a5 -a6 -a7 -a8
 
@@ -374,6 +382,7 @@ if [ ! -f installed.stamp ]; then
 if [ -d $RPM_BUILD_ROOT%{_prefix}/usr ]; then
 	cp -a $RPM_BUILD_ROOT%{_prefix}/usr/* $RPM_BUILD_ROOT%{_prefix}
 	rm -rf $RPM_BUILD_ROOT%{_prefix}/usr
+	sed -i -e '/HHVM_INSTALL_LIBDIR/ s,%{_libdir},%{_lib},' $RPM_BUILD_ROOT%{_bindir}/hhvm-gdb
 fi
 
 install -d $RPM_BUILD_ROOT{%{_sysconfdir}/%{name},%{_libdir}/%{name}}
@@ -444,3 +453,20 @@ fi
 %dir %{_libdir}/hhvm
 %{_libdir}/hhvm/CMake
 %{_libdir}/hhvm/hphpize
+
+%files gdb
+%defattr(644,root,root,755)
+%{_bindir}/hhvm-gdb
+%dir %{_libdir}/hhvm/gdb
+%{_libdir}/hhvm/gdb/gdbutils.py
+%{_libdir}/hhvm/gdb/hashes.py
+%{_libdir}/hhvm/gdb/hhbc.py
+%{_libdir}/hhvm/gdb/hhvm.py
+%{_libdir}/hhvm/gdb/idx.py
+%{_libdir}/hhvm/gdb/lookup.py
+%{_libdir}/hhvm/gdb/nameof.py
+%{_libdir}/hhvm/gdb/pretty.py
+%{_libdir}/hhvm/gdb/sizeof.py
+%{_libdir}/hhvm/gdb/stack.py
+%{_libdir}/hhvm/gdb/unit.py
+%{_libdir}/hhvm/gdb/util.py
