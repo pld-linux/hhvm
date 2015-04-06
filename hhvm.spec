@@ -14,8 +14,8 @@
 
 # TODO
 # - system xhp
-# - system proxygen
-# - system thrift
+# - system proxygen & fbthrift (for fastcgi)
+# - gdb package
 
 # NOTES:
 # - hphp/runtime/base/runtime-option.cpp evalJitDefault enables jit if /.hhvm-jit exists (yes, in filesystem root)
@@ -413,7 +413,7 @@ fi
 
 %files
 %defattr(644,root,root,755)
-%doc README.md hphp/NEWS
+%doc README.md NEWS
 %dir %{_sysconfdir}/%{name}
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/%{name}/php.ini
 %attr(755,root,root) %{_bindir}/hhvm
