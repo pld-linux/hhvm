@@ -72,6 +72,7 @@ Patch5:		cmake.patch
 Patch6:		webscalesql-5.6-build.patch
 Patch7:		disable-fastcgi.patch
 Patch8:		folly-malloc_usable_size.patch
+Patch9:		mcrouter-chrono.patch
 URL:		https://github.com/facebook/hhvm/wiki
 BuildRequires:	ImageMagick-devel
 BuildRequires:	a52dec-libs-devel
@@ -287,6 +288,7 @@ mv mcrouter-* third-party/mcrouter/src
 %patch6 -p1 -d third-party/webscalesqlclient/webscalesql-5.6
 %patch7 -p1
 %patch8 -p1 -d third-party
+%patch9 -p1
 
 # prefer ones from system
 rm CMake/FindBISON.cmake
