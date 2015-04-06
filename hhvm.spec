@@ -8,6 +8,7 @@
 %bcond_without	system_libzip	# system libzip
 %bcond_with	fastcgi		# enable FastCGI protocol
 %bcond_without	async_mysql		# enable async MySQL
+%bcond_with	jemalloc		# enable jemalloc
 # cotire breaks sqlite3 on builders: https://github.com/facebook/hhvm/issues/4524
 %bcond_with	cotire			# cotire (compile time reducer): Speed up the build by precompiling headers
 
@@ -89,7 +90,7 @@ BuildRequires:	gcc >= 6:4.6.0
 BuildRequires:	gd-devel
 BuildRequires:	glog-devel >= 0.3.2
 BuildRequires:	imap-devel >= 1:2007
-#BuildRequires:	jemalloc-devel >= 3.0.0
+%{?with_jemalloc:BuildRequires:	jemalloc-devel >= 3.0.0}
 %{?with_system_libafdt:BuildRequires:	libafdt-devel >= 0.1.0}
 BuildRequires:	libcap-devel
 BuildRequires:	libdwarf-devel >= 20130729
@@ -332,7 +333,7 @@ fi
 	-DCMAKE_PREFIX_PATH=%{_prefix} \
 	-DHHVM_DYNAMIC_EXTENSION_DIR=%{hhvm_extensiondir} \
 	-DMYSQL_UNIX_SOCK_ADDR=/var/lib/mysql/mysql.sock \
-	-DUSE_JEMALLOC=OFF \
+	-DUSE_JEMALLOC=%{!?with_jemalloc:OFF}%{?with_jemalloc:ON} \
 	-DUSE_TCMALLOC=OFF \
 	-DTEST_BIN=OFF \
 	-DENABLE_FASTCGI=%{!?with_fastcgi:OFF}%{?with_fastcgi:ON} \
