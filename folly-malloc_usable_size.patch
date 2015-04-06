@@ -1,0 +1,34 @@
+https://github.com/facebook/hhvm/issues/4908
+https://github.com/hhvm/hhvm-third-party/commit/1b6b1a5e311df5e2b57f580657666be7778def54
+
+From 1b6b1a5e311df5e2b57f580657666be7778def54 Mon Sep 17 00:00:00 2001
+From: Sara Golemon <sgolemon@fb.com>
+Date: Thu, 26 Feb 2015 13:07:50 -0800
+Subject: [PATCH] Chang FOLLY_MALLOC test to focus on whether or not we have
+ malloc.h, since that's what it is defining
+
+---
+ folly/CMakeLists.txt | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
+
+diff --git a/folly/CMakeLists.txt b/folly/CMakeLists.txt
+index cba4694..5005f8a 100644
+--- a/folly/CMakeLists.txt
++++ b/folly/CMakeLists.txt
+@@ -4,12 +4,14 @@ set(FOLLY_DIR "${CMAKE_CURRENT_SOURCE_DIR}/folly")
+ # like malloc_usable_size() from either malloc.h
+ # or stdlib.h. Default is stdlib.h
+ INCLUDE(CheckCXXSourceCompiles)
+-CHECK_CXX_SOURCE_COMPILES("#include <folly/Malloc.h>
++CHECK_CXX_SOURCE_COMPILES("#include <malloc.h>
+ int main() {
+   return 0;
+ }" FOLLY_MALLOC)
+-if (NOT FOLLY_MALLOC)
++if (FOLLY_MALLOC)
+   add_definitions("-DFOLLY_HAVE_MALLOC_H=1")
++else()
++  add_definitions("-DFOLLY_HAVE_MALLOC_H=0")
+ endif()
+ 
+ if (NOT EXISTS "${FOLLY_DIR}/Portability.h")
