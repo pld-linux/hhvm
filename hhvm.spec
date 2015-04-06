@@ -36,6 +36,7 @@
 %define		webscalesql	004b6b3
 %define		squangle	269cd2e
 %define		proxygen	d17b4e7
+%define		mcrouter	addcc91
 Summary:	Virtual Machine, Runtime, and JIT for PHP
 Name:		hhvm
 # we prefer LTS versions, see
@@ -59,6 +60,8 @@ Source6:	https://github.com/facebook/squangle/archive/%{squangle}/squangle-%{squ
 # Source6-md5:	c379594b56398f1f886391360b9577a8
 Source7:	https://github.com/facebook/proxygen/archive/%{proxygen}/proxygen-%{proxygen}.tar.gz
 # Source7-md5:	0cc887c0055172f52aa18cba9d66159a
+Source8:	https://github.com/facebook/mcrouter/archive/%{mcrouter}/mcrouter-%{mcrouter}.tar.gz
+# Source8-md5:	7817451ce6bd6e4d74c6bb8b222a2ebb
 Source10:	%{name}-fcgi.init
 Source11:	%{name}-fcgi.sysconfig
 Source12:	php.ini
@@ -200,7 +203,6 @@ Obsoletes:	hiphop-php < 2.3.2-0.2
 ExclusiveArch:	%{x8664}
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
-
 %define		hhvm_extensiondir	%{_libdir}/hhvm
 
 %description
@@ -259,7 +261,7 @@ runtime either by way of pure PHP code, or a combination of PHP and
 C++.
 
 %prep
-%setup -q -n %{name}-HHVM-%{version} -a2 -a3 -a4 -a5 -a6 -a7
+%setup -q -n %{name}-HHVM-%{version} -a2 -a3 -a4 -a5 -a6 -a7 -a8
 
 # handle git submodules
 rmdir third-party
@@ -274,6 +276,8 @@ rmdir third-party/squangle/squangle
 mv squangle-* third-party/squangle/squangle
 rmdir third-party/proxygen/src
 mv proxygen-* third-party/proxygen/src
+rmdir third-party/mcrouter/src/
+mv mcrouter-* third-party/mcrouter/src
 
 %patch2 -p1
 #%patch5 -p1
