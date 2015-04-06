@@ -64,6 +64,7 @@ Source12:	php.ini
 Source100:	get-source.sh
 Patch2:		hphpize.patch
 Patch5:		cmake.patch
+Patch6:		webscalesql-5.6-build.patch
 URL:		https://github.com/facebook/hhvm/wiki
 BuildRequires:	ImageMagick-devel
 BuildRequires:	a52dec-libs-devel
@@ -275,6 +276,7 @@ mv proxygen-* third-party/proxygen/src
 
 %patch2 -p1
 #%patch5 -p1
+%patch6 -p1 -d third-party/webscalesqlclient/webscalesql-5.6
 
 # prefer ones from system
 rm CMake/FindBISON.cmake
