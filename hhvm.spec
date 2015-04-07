@@ -8,6 +8,8 @@
 %bcond_without	system_libzip	# system libzip
 %bcond_with	fastcgi		# enable FastCGI protocol
 %bcond_without	async_mysql		# enable async MySQL
+%bcond_without	mcrouter		# Build the mcrouter library and extension
+
 %bcond_with	jemalloc		# enable jemalloc
 # cotire breaks sqlite3 on builders: https://github.com/facebook/hhvm/issues/4524
 %bcond_with	cotire			# cotire (compile time reducer): Speed up the build by precompiling headers
@@ -362,6 +364,7 @@ fi
 	-DTEST_BIN=OFF \
 	-DENABLE_FASTCGI=%{!?with_fastcgi:OFF}%{?with_fastcgi:ON} \
 	-DENABLE_ASYNC_MYSQL=%{!?with_async_mysql:OFF}%{?with_async_mysql:ON} \
+	-DENABLE_MCROUTER=%{!?with_mcrouter:OFF}%{?with_mcrouter:ON} \
 	-DENABLE_COTIRE=%{!?with_cotire:OFF}%{?with_cotire:ON} \
 	.
 
