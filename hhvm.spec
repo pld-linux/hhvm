@@ -17,7 +17,8 @@
 # TODO
 # - system xhp
 # - system proxygen & fbthrift (for fastcgi)
-# - gdb package
+# - build hphp/hack/tools/{hackificator,remove_soft_types} (needs ocaml packages: str,bigarray,num,unix,pfff-commons,pfff-h_program-lang,pfff-matcher,pfff-lang_php)
+#   $ ocamlfind ocamlopt -thread -g -w y -package str,bigarray,num,unix,pfff-commons,pfff-h_program-lang,pfff-matcher,pfff-lang_php
 
 # NOTES:
 # - hphp/runtime/base/runtime-option.cpp evalJitDefault enables jit if /.hhvm-jit exists (yes, in filesystem root)
@@ -408,7 +409,7 @@ install -d $RPM_BUILD_ROOT/etc/{sysconfig,rc.d/init.d}
 cp -p %{SOURCE10} $RPM_BUILD_ROOT/etc/rc.d/init.d/%{name}-fcgi
 cp -p %{SOURCE11} $RPM_BUILD_ROOT/etc/sysconfig/%{name}-fcgi
 
-install -p hphp/hack/bin/hh_{server,client} $RPM_BUILD_ROOT%{_bindir}
+install -p hphp/hack/bin/{hh_{server,client},h2tp} $RPM_BUILD_ROOT%{_bindir}
 
 # end of install block
 touch installed.stamp; fi
@@ -434,10 +435,11 @@ fi
 %doc README.md NEWS LICENSE.PHP LICENSE.ZEND
 %dir %{_sysconfdir}/%{name}
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/%{name}/php.ini
-%attr(755,root,root) %{_bindir}/hhvm
-%attr(755,root,root) %{_bindir}/hphp
+%attr(755,root,root) %{_bindir}/h2tp
 %attr(755,root,root) %{_bindir}/hh_client
 %attr(755,root,root) %{_bindir}/hh_server
+%attr(755,root,root) %{_bindir}/hhvm
+%attr(755,root,root) %{_bindir}/hphp
 
 %dir %{_datadir}/%{name}
 %dir %{_datadir}/%{name}/hdf
