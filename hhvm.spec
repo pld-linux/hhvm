@@ -356,7 +356,9 @@ fi
 
 %cmake \
 	$ccache \
-	-DCMAKE_PREFIX_PATH=%{_prefix} \
+	-DCMAKE_INSTALL_BINDIR=bin \
+	-DCMAKE_INSTALL_INCLUDEDIR=include \
+	-DCMAKE_INSTALL_LIBDIR=%{_lib} \
 	-DHHVM_DYNAMIC_EXTENSION_DIR=%{hhvm_extensiondir} \
 	-DMYSQL_UNIX_SOCK_ADDR=/var/lib/mysql/mysql.sock \
 	-DUSE_JEMALLOC=%{!?with_jemalloc:OFF}%{?with_jemalloc:ON} \
@@ -391,14 +393,6 @@ fi
 rm -rf $RPM_BUILD_ROOT%{_docdir}
 if [ ! -f installed.stamp ]; then
 # begin install block
-
-# fix broken cmake rules
-# TODO: fix cmake rules
-if [ -d $RPM_BUILD_ROOT%{_prefix}/usr ]; then
-	cp -a $RPM_BUILD_ROOT%{_prefix}/usr/* $RPM_BUILD_ROOT%{_prefix}
-	rm -rf $RPM_BUILD_ROOT%{_prefix}/usr
-	sed -i -e '/HHVM_INSTALL_LIBDIR/ s,%{_libdir},%{_lib},' $RPM_BUILD_ROOT%{_bindir}/hhvm-gdb
-fi
 
 install -d $RPM_BUILD_ROOT{%{_sysconfdir}/%{name},%{_libdir}/%{name}}
 cp -p %{SOURCE12} $RPM_BUILD_ROOT%{_sysconfdir}/%{name}
