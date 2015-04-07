@@ -458,6 +458,7 @@ fi
 %attr(755,root,root) %{_bindir}/php
 
 %files devel
+%defattr(644,root,root,755)
 %doc CONTRIBUTING.md
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_bindir}/hphpize
@@ -468,7 +469,7 @@ fi
 
 %files gdb
 %defattr(644,root,root,755)
-%{_bindir}/hhvm-gdb
+%attr(755,root,root) %{_bindir}/hhvm-gdb
 %dir %{_libdir}/hhvm/gdb
 %{_libdir}/hhvm/gdb/gdbutils.py
 %{_libdir}/hhvm/gdb/hashes.py
