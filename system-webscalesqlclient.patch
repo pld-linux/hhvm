@@ -1,0 +1,14 @@
+--- hhvm-HHVM-3.6.1/third-party/CMakeLists.txt~	2015-02-18 00:42:17.000000000 +0200
++++ hhvm-HHVM-3.6.1/third-party/CMakeLists.txt	2015-04-07 22:25:45.305012976 +0300
+@@ -49,7 +49,10 @@
+     list(APPEND THIRD_PARTY_MODULES re2)
+   endif()
+   list(APPEND THIRD_PARTY_MODULES squangle)
+-  list(APPEND THIRD_PARTY_MODULES webscalesqlclient)
++  # Add bundled webscalesqlclient if the system one will not be used
++  if(NOT WEBSCALESQLCLIENT_LIBRARY)
++    list(APPEND THIRD_PARTY_MODULES webscalesqlclient)
++  endif()
+ endif()
+ 
+ if (ENABLE_MCROUTER)
