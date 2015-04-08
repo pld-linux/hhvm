@@ -91,14 +91,17 @@ BuildRequires:	curl-devel >= 7.29.0
 BuildRequires:	elfutils-devel
 BuildRequires:	expat-devel
 %{?with_system_fastlz:BuildRequires:	fastlz-devel >= 0.1.0-0.r12}
+BuildRequires:	fribidi-devel >= 0.19.6
 BuildRequires:	gcc >= 6:4.6.0
 BuildRequires:	gd-devel
 BuildRequires:	glog-devel >= 0.3.2
+BuildRequires:	gmp-devel
 BuildRequires:	imap-devel >= 1:2007
 %{?with_jemalloc:BuildRequires:	jemalloc-devel >= 3.0.0}
 %{?with_system_libafdt:BuildRequires:	libafdt-devel >= 0.1.0}
 BuildRequires:	libcap-devel
 BuildRequires:	libdwarf-devel >= 20130729
+BuildRequires:	libedit-devel
 BuildRequires:	libicu-devel >= 4.2
 #BuildRequires:	libmbfl-devel
 BuildRequires:	libmcrypt-devel
@@ -115,10 +118,13 @@ BuildRequires:	oniguruma-devel
 BuildRequires:	openssl-devel
 BuildRequires:	pcre-devel >= 8.32
 #BuildRequires:	php-xhp-devel >= 1.3.9-6
+BuildRequires:	pkgconfig
+%{?with_async_mysql:BuildRequires:	re2-devel}
 BuildRequires:	readline-devel
 BuildRequires:	rpmbuild(macros) >= 1.675
 %{?with_system_sqlite:BuildRequires:	sqlite3-devel >= 3.7.15.2}
 BuildRequires:	tbb-devel >= 4.0.6000
+BuildRequires:	yaml-devel
 BuildRequires:	zlib-devel
 # check later, seem unused
 #BuildRequires:	bison >= 2.3
