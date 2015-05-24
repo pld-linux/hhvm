@@ -35,7 +35,7 @@ Name:		hhvm
 # we prefer LTS versions
 # see http://hhvm.com/blog/6083/hhvm-long-term-support
 Version:	3.3.5
-Release:	1
+Release:	2
 License:	PHP 3.01 and BSD
 Group:		Development/Languages
 Source0:	https://github.com/facebook/hhvm/archive/HHVM-%{version}.tar.gz
@@ -53,6 +53,7 @@ Patch2:		hphpize.patch
 Patch3:		MAX.patch
 Patch4:		system-thirdparty.patch
 Patch5:		cmake.patch
+Patch6:		libvpx2.patch
 URL:		https://github.com/facebook/hhvm/wiki
 BuildRequires:	ImageMagick-devel
 BuildRequires:	a52dec-libs-devel
@@ -259,6 +260,7 @@ mv folly-* third-party/folly/src
 %patch3 -p1
 %patch4 -p1
 #%patch5 -p1
+%patch6 -p1
 
 # prefer ones from system
 rm CMake/FindBISON.cmake
