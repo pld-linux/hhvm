@@ -22,24 +22,23 @@
 # hphp/system/idl/constants.idl.json defines it as 5.6.99-hhvm, but use some saner value
 %define		php_version			5.6.0
 
-# git show HHVM-3.3.5
-%define		githash	b2856c601e317b6d66fd1861c4cc889ae91d9f6f
+# git show HHVM-3.3.7
+%define		githash	e0344cb6ab126e50e611332f03f447f586cc763a
 # these hashes are git submodules (be sure to check them on proper branch)
 # GIT_DIR=third-party/.git git log -1
 %define		thirdparty	bf581f8
-# 6e46d468cf2876dd59c7a4dddcb4e37abf070b7a
 # GIT_DIR=third-party/folly/src/.git git log -1
 %define		folly		6e46d46
 Summary:	Virtual Machine, Runtime, and JIT for PHP
 Name:		hhvm
 # we prefer LTS versions
 # see http://hhvm.com/blog/6083/hhvm-long-term-support
-Version:	3.3.5
-Release:	3
+Version:	3.3.7
+Release:	1
 License:	PHP 3.01 and BSD
 Group:		Development/Languages
 Source0:	https://github.com/facebook/hhvm/archive/HHVM-%{version}.tar.gz
-# Source0-md5:	57af76be5b4a10e35cb6eb705e0ff663
+# Source0-md5:	8df12eef8702515498d6a6caab6e4b7d
 Source2:	https://github.com/facebook/folly/archive/%{folly}/folly-3.2-%{folly}.tar.gz
 # Source2-md5:	c4bdbea4c0ffe0650d12d9ff370b8255
 Source3:	https://github.com/hhvm/hhvm-third-party/archive/%{thirdparty}/third_party-%{thirdparty}.tar.gz
