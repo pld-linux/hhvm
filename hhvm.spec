@@ -114,7 +114,6 @@ BuildRequires:	libxslt-devel
 %{?with_system_libzip:BuildRequires:	libzip-devel >= 0.11.2}
 %{?with_system_lz4:BuildRequires:	lz4-devel >= 0.0-1.r119}
 #BuildRequires:	mysql-devel
-BuildRequires:	webscalesql-devel
 BuildRequires:	ocaml-findlib
 BuildRequires:	oniguruma-devel
 BuildRequires:	openssl-devel
@@ -126,6 +125,7 @@ BuildRequires:	readline-devel
 BuildRequires:	rpmbuild(macros) >= 1.675
 %{?with_system_sqlite:BuildRequires:	sqlite3-devel >= 3.7.15.2}
 BuildRequires:	tbb-devel >= 4.0.6000
+BuildRequires:	webscalesql-devel
 BuildRequires:	yaml-devel
 BuildRequires:	zlib-devel
 # check later, seem unused
@@ -176,7 +176,7 @@ Provides:	php(libxml)
 Provides:	php(mail)
 Provides:	php(mailparse)
 Provides:	php(mbstring)
-Provides:	php(mcrouter)
+%{?with_mcrouter:Provides:	php(mcrouter)}
 Provides:	php(mcrypt)
 Provides:	php(memcache)
 Provides:	php(memcached)
