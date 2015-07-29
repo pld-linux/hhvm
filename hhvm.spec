@@ -28,12 +28,12 @@
 # hphp/system/idl/constants.idl.json defines it as 5.6.99-hhvm, but use some saner value
 %define		php_version			5.6.0
 
-# git show HHVM-3.6.1
-%define		githash	c051feff88ba8050f33f10f7b1fb07f8d3415f9e
+# git show HHVM-3.6.5
+%define		githash	20a30678cd67fad96602ffd93e69780d001ce57f
 # these hashes are git submodules (be sure to check them on proper branch)
 # GIT_DIR=third-party/.git git log -1
+# note update to '054a1e7' includes only timezonedb update
 %define		thirdparty	3bf14f9
-# 6e46d468cf2876dd59c7a4dddcb4e37abf070b7a
 # GIT_DIR=third-party/folly/src/.git git log -1
 %define		folly		0.26.0
 %define		fbthrift	d30280a
@@ -44,14 +44,14 @@
 Summary:	Virtual Machine, Runtime, and JIT for PHP
 Name:		hhvm
 # we prefer LTS versions, see
-# http://hhvm.com/blog/6083/hhvm-long-term-support
+# https://github.com/facebook/hhvm/wiki/Long-term-support-(LTS)
 # http://hhvm.com/blog/8849/hhvm-3-6-0
-Version:	3.6.1
+Version:	3.6.5
 Release:	0.1
 License:	PHP 3.01 and BSD
 Group:		Development/Languages
 Source0:	https://github.com/facebook/hhvm/archive/HHVM-%{version}.tar.gz
-# Source0-md5:	42dd1d75b4dd0785d3284e7809600c9e
+# Source0-md5:	8d3a94cbfe879127ed5c16f72a940560
 Source2:	https://github.com/facebook/folly/archive/v%{folly}/folly-%{folly}.tar.gz
 # Source2-md5:	c76a3fd2e86215d523a9fe18ba9087a1
 Source3:	https://github.com/hhvm/hhvm-third-party/archive/%{thirdparty}/third_party-%{thirdparty}.tar.gz
@@ -75,8 +75,8 @@ Patch5:		cmake.patch
 Patch6:		webscalesql-5.6-build.patch
 Patch7:		disable-fastcgi.patch
 Patch8:		folly-malloc_usable_size.patch
-Patch9:		mcrouter-chrono.patch
 Patch10:	system-webscalesqlclient.patch
+Patch11:	libvpx-1.4.0.patch
 URL:		https://github.com/facebook/hhvm/wiki
 BuildRequires:	ImageMagick-devel
 BuildRequires:	a52dec-libs-devel
@@ -317,8 +317,8 @@ mv mcrouter-* third-party/mcrouter/src
 %patch6 -p1 -d third-party/webscalesqlclient/webscalesql-5.6
 %patch7 -p1
 %patch8 -p1 -d third-party
-%patch9 -p1
 %patch10 -p1
+%patch11 -p1
 
 # prefer ones from system
 rm CMake/FindBISON.cmake

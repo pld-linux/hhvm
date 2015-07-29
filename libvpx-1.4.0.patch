@@ -1,0 +1,50 @@
+https://github.com/facebook/hhvm/pull/5191
+
+From a8cc58ea31e753663a59796ee973de0decbcd4b2 Mon Sep 17 00:00:00 2001
+From: Massimiliano Torromeo <massimiliano.torromeo@gmail.com>
+Date: Mon, 4 May 2015 10:02:32 -0700
+Subject: [PATCH] Fix building gd extension with libvpx 1.4.0
+
+Summary: In libvpx 1.4.0 the compatibility layer for some of the older constants have been removed [1].
+The use of this constants was deprecated since 2010 in favor of the newer VPX_ prefixed names.
+The same issue as been reported in the php bugtracker [2].
+
+Thanks!
+
+[1] https://gerrit.chromium.org/gerrit/#/c/70164/3/vpx/vpx_image.h,unified
+[2] https://bugs.php.net/patch-display.php?bug_id=69479&patch=php-gd-newvpx.diff&revision=latest
+Closes https://github.com/facebook/hhvm/pull/5191
+
+Reviewed By: @fredemmott
+
+Differential Revision: D2005702
+---
+ hphp/runtime/ext/gd/libgd/webpimg.cpp | 14 +++++++-------
+ 1 file changed, 7 insertions(+), 7 deletions(-)
+
+diff --git a/hphp/runtime/ext/gd/libgd/webpimg.cpp b/hphp/runtime/ext/gd/libgd/webpimg.cpp
+index 29dd633..0c1c3ba 100644
+--- a/hphp/runtime/ext/gd/libgd/webpimg.cpp
++++ b/hphp/runtime/ext/gd/libgd/webpimg.cpp
+@@ -705,14 +705,14 @@ static WebPResult VPXEncode(const uint8* Y,
+     codec_ctl(&enc, VP8E_SET_STATIC_THRESHOLD, 0);
+     codec_ctl(&enc, VP8E_SET_TOKEN_PARTITIONS, 2);
+ 
+-    vpx_img_wrap(&img, IMG_FMT_I420,
++    vpx_img_wrap(&img, VPX_IMG_FMT_I420,
+                  y_width, y_height, 16, (uint8*)(Y));
+-    img.planes[PLANE_Y] = (uint8*)(Y);
+-    img.planes[PLANE_U] = (uint8*)(U);
+-    img.planes[PLANE_V] = (uint8*)(V);
+-    img.stride[PLANE_Y] = y_stride;
+-    img.stride[PLANE_U] = uv_stride;
+-    img.stride[PLANE_V] = uv_stride;
++    img.planes[VPX_PLANE_Y] = (uint8*)(Y);
++    img.planes[VPX_PLANE_U] = (uint8*)(U);
++    img.planes[VPX_PLANE_V] = (uint8*)(V);
++    img.stride[VPX_PLANE_Y] = y_stride;
++    img.stride[VPX_PLANE_U] = uv_stride;
++    img.stride[VPX_PLANE_V] = uv_stride;
+ 
+     res = vpx_codec_encode(&enc, &img, 0, 1, 0, VPX_DL_BEST_QUALITY);
+ 
