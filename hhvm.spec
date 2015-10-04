@@ -28,13 +28,12 @@
 # hphp/system/idl/constants.idl.json defines it as 5.6.99-hhvm, but use some saner value
 %define		php_version			5.6.0
 
-# git show HHVM-3.6.5
-%define		githash	20a30678cd67fad96602ffd93e69780d001ce57f
+# git show HHVM-3.6.6
+%define		githash	ead6875c956d4bd5e906ebea899c71c3b8a7182d
 # these hashes are git submodules (be sure to check them on proper branch)
 # GIT_DIR=third-party/.git git log -1
 # note update to '054a1e7' includes only timezonedb update
 %define		thirdparty	3bf14f9
-# GIT_DIR=third-party/folly/src/.git git log -1
 %define		folly		0.26.0
 %define		fbthrift	d30280a
 %define		webscalesql	004b6b3
@@ -46,12 +45,12 @@ Name:		hhvm
 # we prefer LTS versions, see
 # https://github.com/facebook/hhvm/wiki/Long-term-support-(LTS)
 # http://hhvm.com/blog/8849/hhvm-3-6-0
-Version:	3.6.5
+Version:	3.6.6
 Release:	0.1
 License:	PHP 3.01 and BSD
 Group:		Development/Languages
 Source0:	https://github.com/facebook/hhvm/archive/HHVM-%{version}.tar.gz
-# Source0-md5:	8d3a94cbfe879127ed5c16f72a940560
+# Source0-md5:	beb306c94a0a0a07f54b1edc312a773d
 Source2:	https://github.com/facebook/folly/archive/v%{folly}/folly-%{folly}.tar.gz
 # Source2-md5:	c76a3fd2e86215d523a9fe18ba9087a1
 Source3:	https://github.com/hhvm/hhvm-third-party/archive/%{thirdparty}/third_party-%{thirdparty}.tar.gz
