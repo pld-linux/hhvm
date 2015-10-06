@@ -28,33 +28,38 @@
 # hphp/system/idl/constants.idl.json defines it as 5.6.99-hhvm, but use some saner value
 %define		php_version			5.6.0
 
-# git show HHVM-3.6.6
-%define		githash	ead6875c956d4bd5e906ebea899c71c3b8a7182d
+# git show HHVM-3.9.1
+%define		githash	0f72cfc2f0a01fdfeb72fbcfeb247b72998a66db
 # these hashes are git submodules (be sure to check them on proper branch)
 # GIT_DIR=third-party/.git git log -1
 # note update to '054a1e7' includes only timezonedb update
-%define		thirdparty	3bf14f9
-%define		folly		0.26.0
+%define		thirdparty	5cfbd0e
+%define		folly		879db73
 %define		fbthrift	d30280a
+#define		fbthrift	b5635e3
 %define		webscalesql	004b6b3
+#define		webscalesql	04456ee
 %define		squangle	269cd2e
+#define		squangle	2661b7b
 %define		proxygen	d17b4e7
-%define		mcrouter	addcc91
+#define		proxygen	885e844
+%define		mcrouter	8303e73
+%define		wangle		6ce19ed
 Summary:	Virtual Machine, Runtime, and JIT for PHP
 Name:		hhvm
 # we prefer LTS versions, see
 # https://github.com/facebook/hhvm/wiki/Long-term-support-(LTS)
-# http://hhvm.com/blog/8849/hhvm-3-6-0
-Version:	3.6.6
+# http://hhvm.com/blog/9995/hhvm-3-9-0
+Version:	3.9.1
 Release:	0.1
 License:	PHP 3.01 and BSD
 Group:		Development/Languages
 Source0:	https://github.com/facebook/hhvm/archive/HHVM-%{version}.tar.gz
-# Source0-md5:	beb306c94a0a0a07f54b1edc312a773d
-Source2:	https://github.com/facebook/folly/archive/v%{folly}/folly-%{folly}.tar.gz
-# Source2-md5:	c76a3fd2e86215d523a9fe18ba9087a1
+# Source0-md5:	8eaa29a6493c3e4485cc8a6c6d2d6bf3
+Source2:	https://github.com/facebook/folly/archive/%{folly}/folly-%{folly}.tar.gz
+# Source2-md5:	26bca264b28c61e31936d5f9d5a090fe
 Source3:	https://github.com/hhvm/hhvm-third-party/archive/%{thirdparty}/third_party-%{thirdparty}.tar.gz
-# Source3-md5:	494d37347bb6448ed514fd3dfacf7c88
+# Source3-md5:	4140d28d451bf8311149050a799cf200
 Source4:	https://github.com/facebook/fbthrift/archive/%{fbthrift}/fbthrift-%{fbthrift}.tar.gz
 # Source4-md5:	a049ddb82e4a94f1ff7a63e9a94008ac
 Source5:	https://github.com/webscalesql/webscalesql-5.6/archive/%{webscalesql}/webscalesql-5.6-%{webscalesql}.tar.gz
@@ -64,7 +69,9 @@ Source6:	https://github.com/facebook/squangle/archive/%{squangle}/squangle-%{squ
 Source7:	https://github.com/facebook/proxygen/archive/%{proxygen}/proxygen-%{proxygen}.tar.gz
 # Source7-md5:	0cc887c0055172f52aa18cba9d66159a
 Source8:	https://github.com/facebook/mcrouter/archive/%{mcrouter}/mcrouter-%{mcrouter}.tar.gz
-# Source8-md5:	7817451ce6bd6e4d74c6bb8b222a2ebb
+# Source8-md5:	578c6d503b4c1ef0e6cde909d8bd2743
+Source9:	https://github.com/facebook/wangle/archive/%{wangle}/wangle-%{wangle}.tar.gz
+# Source9-md5:	1fdbe3341fd215643c28da5868dab0f4
 Source10:	%{name}-fcgi.init
 Source11:	%{name}-fcgi.sysconfig
 Source12:	php.ini
@@ -75,7 +82,6 @@ Patch6:		webscalesql-5.6-build.patch
 Patch7:		disable-fastcgi.patch
 Patch8:		folly-malloc_usable_size.patch
 Patch10:	system-webscalesqlclient.patch
-Patch11:	libvpx-1.4.0.patch
 URL:		https://github.com/facebook/hhvm/wiki
 BuildRequires:	ImageMagick-devel
 BuildRequires:	a52dec-libs-devel
@@ -293,7 +299,7 @@ Requires:	gdb
 HHVM GDB Python bindings.
 
 %prep
-%setup -q -n %{name}-HHVM-%{version} -a2 -a3 -a4 -a5 -a6 -a7 -a8
+%setup -q -n %{name}-HHVM-%{version} -a2 -a3 -a4 -a5 -a6 -a7 -a8 -a9
 
 # handle git submodules
 rmdir third-party
@@ -304,20 +310,19 @@ rmdir third-party/thrift/src
 mv fbthrift-* third-party/thrift/src
 rmdir third-party/webscalesqlclient/webscalesql-5.6
 mv webscalesql-* third-party/webscalesqlclient/webscalesql-5.6
-rmdir third-party/squangle/squangle
-mv squangle-* third-party/squangle/squangle
+mv squangle-* third-party/squangle/src/squangle
 rmdir third-party/proxygen/src
 mv proxygen-* third-party/proxygen/src
-rmdir third-party/mcrouter/src/
+rmdir third-party/mcrouter/src
 mv mcrouter-* third-party/mcrouter/src
+mv wangle-* third-party/wangle/src/wangle
 
 %patch2 -p1
 #%patch5 -p1
 %patch6 -p1 -d third-party/webscalesqlclient/webscalesql-5.6
 %patch7 -p1
-%patch8 -p1 -d third-party
+#%patch8 -p1 -d third-party
 %patch10 -p1
-%patch11 -p1
 
 # prefer ones from system
 rm CMake/FindBISON.cmake
