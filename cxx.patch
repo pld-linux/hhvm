@@ -1,0 +1,47 @@
+--- hhvm-HHVM-3.3.7/hphp/runtime/base/zend-printf.cpp~	2015-06-30 19:56:17.000000000 +0000
++++ hhvm-HHVM-3.3.7/hphp/runtime/base/zend-printf.cpp	2016-05-28 11:15:58.027477275 +0000
+@@ -40,11 +40,9 @@
+ #endif
+ #endif
+ 
+-#ifdef __CYGWIN__
+ #include <cmath>
+ #define isinf std::isinf
+ #define isnan std::isnan
+-#endif
+ 
+ namespace HPHP {
+ 
+--- hhvm-HHVM-3.3.7/hphp/runtime/ext/ext_math.cpp~	2015-06-30 19:56:17.000000000 +0000
++++ hhvm-HHVM-3.3.7/hphp/runtime/ext/ext_math.cpp	2016-05-28 11:27:25.647826412 +0000
+@@ -138,8 +138,8 @@
+ }
+ 
+ bool f_is_finite(double val) { return finite(val);}
+-bool f_is_infinite(double val) { return isinf(val);}
+-bool f_is_nan(double val) { return isnan(val);}
++bool f_is_infinite(double val) { return std::isinf(val);}
++bool f_is_nan(double val) { return std::isnan(val);}
+ 
+ Variant f_ceil(const Variant& number) {
+   int64_t ival;
+--- hhvm-HHVM-3.3.7/hphp/runtime/ext_zend_compat/php-src/main/php_config-linux.h~	2015-06-30 19:56:17.000000000 +0000
++++ hhvm-HHVM-3.3.7/hphp/runtime/ext_zend_compat/php-src/main/php_config-linux.h	2016-05-28 11:31:16.111870673 +0000
+@@ -2446,7 +2446,7 @@
+ 
+ #ifndef zend_isnan
+ #ifdef HAVE_ISNAN
+-#define zend_isnan(a) isnan(a)
++#define zend_isnan(a) std::isnan(a)
+ #elif defined(HAVE_FPCLASS)
+ #define zend_isnan(a) ((fpclass(a) == FP_SNAN) || (fpclass(a) == FP_QNAN))
+ #else
+@@ -2455,7 +2455,7 @@
+ #endif
+ 
+ #ifdef HAVE_ISINF
+-#define zend_isinf(a) isinf(a)
++#define zend_isinf(a) std::isinf(a)
+ #elif defined(INFINITY)
+ /* Might not work, but is required by ISO C99 */
+ #define zend_isinf(a) (((a)==INFINITY)?1:0)
