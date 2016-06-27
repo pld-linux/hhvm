@@ -28,59 +28,53 @@
 # hphp/system/idl/constants.idl.json defines it as 5.6.99-hhvm, but use some saner value
 %define		php_version			5.6.0
 
-# git show HHVM-3.9.1
-%define		githash	0f72cfc2f0a01fdfeb72fbcfeb247b72998a66db
+# git show HHVM-3.12.2
+%define		githash	cfb18092a7ad76b20b9c8dabcb03edd8b14c55cd
 # these hashes are git submodules (be sure to check them on proper branch)
-# GIT_DIR=third-party/.git git log -1
-# note update to '054a1e7' includes only timezonedb update
-%define		thirdparty	5cfbd0e
-%define		folly		879db73
-%define		fbthrift	d30280a
-#define		fbthrift	b5635e3
-%define		webscalesql	004b6b3
-#define		webscalesql	04456ee
-%define		squangle	269cd2e
-#define		squangle	2661b7b
-%define		proxygen	d17b4e7
-#define		proxygen	885e844
-%define		mcrouter	8303e73
-%define		wangle		6ce19ed
+%define		thirdparty	ae031dc
+%define		folly		0dbbe85
+%define		fbthrift	e4ef333
+%define		webscalesql	a9e580b
+%define		squangle	82e5451
+%define		proxygen	6c54f58
+%define		mcrouter	cb05bfa
+%define		wangle		05b7c1d
 Summary:	Virtual Machine, Runtime, and JIT for PHP
 Name:		hhvm
 # we prefer LTS versions, see
-# https://github.com/facebook/hhvm/wiki/Long-term-support-(LTS)
-# http://hhvm.com/blog/9995/hhvm-3-9-0
-Version:	3.9.1
+# https://docs.hhvm.com/hhvm/installation/introduction#lts-releases
+# 3.12 LTS ends on 30 December 2016
+Version:	3.12.2
 Release:	0.1
 License:	PHP 3.01 and BSD
 Group:		Development/Languages
 Source0:	https://github.com/facebook/hhvm/archive/HHVM-%{version}.tar.gz
-# Source0-md5:	8eaa29a6493c3e4485cc8a6c6d2d6bf3
+# Source0-md5:	a84ea2c66dbdec886ba7632d7785a0ce
 Source2:	https://github.com/facebook/folly/archive/%{folly}/folly-%{folly}.tar.gz
-# Source2-md5:	26bca264b28c61e31936d5f9d5a090fe
+# Source2-md5:	2dcd9ea80465d457ad54e04e582c78e0
 Source3:	https://github.com/hhvm/hhvm-third-party/archive/%{thirdparty}/third_party-%{thirdparty}.tar.gz
-# Source3-md5:	4140d28d451bf8311149050a799cf200
+# Source3-md5:	f2d9ce1daa00a5dd9e8cbb331bb6cbb9
 Source4:	https://github.com/facebook/fbthrift/archive/%{fbthrift}/fbthrift-%{fbthrift}.tar.gz
-# Source4-md5:	a049ddb82e4a94f1ff7a63e9a94008ac
-Source5:	https://github.com/webscalesql/webscalesql-5.6/archive/%{webscalesql}/webscalesql-5.6-%{webscalesql}.tar.gz
-# Source5-md5:	5ee76824913ff96ba70b68d8aeb50e49
+# Source4-md5:	788d894aeda5289560cff4c8dd6d0143
+Source5:	https://github.com/facebook/mysql-5.6/archive/%{webscalesql}/webscalesql-5.6-%{webscalesql}.tar.gz
+# Source5-md5:	40bb7dffa428e83ed688414135e75f07
 Source6:	https://github.com/facebook/squangle/archive/%{squangle}/squangle-%{squangle}.tar.gz
-# Source6-md5:	c379594b56398f1f886391360b9577a8
+# Source6-md5:	966b77f4817e44bd95a7ca18f7ddd058
 Source7:	https://github.com/facebook/proxygen/archive/%{proxygen}/proxygen-%{proxygen}.tar.gz
-# Source7-md5:	0cc887c0055172f52aa18cba9d66159a
+# Source7-md5:	1984871935ebc40a5e13098cf266ddac
 Source8:	https://github.com/facebook/mcrouter/archive/%{mcrouter}/mcrouter-%{mcrouter}.tar.gz
-# Source8-md5:	578c6d503b4c1ef0e6cde909d8bd2743
+# Source8-md5:	686193698807c68548246adbeabf0d3f
 Source9:	https://github.com/facebook/wangle/archive/%{wangle}/wangle-%{wangle}.tar.gz
-# Source9-md5:	1fdbe3341fd215643c28da5868dab0f4
+# Source9-md5:	9b12c7722005e2de9242553477ff48ce
 Source10:	%{name}-fcgi.init
 Source11:	%{name}-fcgi.sysconfig
 Source12:	php.ini
 Source100:	get-source.sh
 Patch2:		hphpize.patch
 Patch5:		cmake.patch
-Patch6:		webscalesql-5.6-build.patch
+#Patch6:		webscalesql-5.6-build.patch
 Patch7:		disable-fastcgi.patch
-Patch8:		folly-malloc_usable_size.patch
+#Patch8:		folly-malloc_usable_size.patch
 Patch10:	system-webscalesqlclient.patch
 URL:		https://github.com/facebook/hhvm/wiki
 BuildRequires:	ImageMagick-devel
@@ -130,7 +124,7 @@ BuildRequires:	readline-devel
 BuildRequires:	rpmbuild(macros) >= 1.675
 %{?with_system_sqlite:BuildRequires:	sqlite3-devel >= 3.7.15.2}
 BuildRequires:	tbb-devel >= 4.0.6000
-BuildRequires:	webscalesql-devel
+%{?with_async_mysql:BuildRequires:	webscalesql-devel}
 BuildRequires:	yaml-devel
 BuildRequires:	zlib-devel
 # check later, seem unused
@@ -308,8 +302,8 @@ rmdir third-party/folly/src
 mv folly-* third-party/folly/src
 rmdir third-party/thrift/src
 mv fbthrift-* third-party/thrift/src
-rmdir third-party/webscalesqlclient/webscalesql-5.6
-mv webscalesql-* third-party/webscalesqlclient/webscalesql-5.6
+rmdir third-party/webscalesqlclient/mysql-5.6
+mv mysql-* third-party/webscalesqlclient/mysql-5.6
 mv squangle-* third-party/squangle/src/squangle
 rmdir third-party/proxygen/src
 mv proxygen-* third-party/proxygen/src
@@ -319,7 +313,7 @@ mv wangle-* third-party/wangle/src/wangle
 
 %patch2 -p1
 #%patch5 -p1
-%patch6 -p1 -d third-party/webscalesqlclient/webscalesql-5.6
+#%patch6 -p1 -d third-party/webscalesqlclient/webscalesql-5.6
 %patch7 -p1
 #%patch8 -p1 -d third-party
 %patch10 -p1
@@ -379,7 +373,7 @@ fi
 	-DUSE_TCMALLOC=OFF \
 	-DTEST_BIN=OFF \
 	-DENABLE_FASTCGI=%{!?with_fastcgi:OFF}%{?with_fastcgi:ON} \
-	-DENABLE_ASYNC_MYSQL=%{!?with_async_mysql:OFF}%{?with_async_mysql:ON} \
+	%{?with_async_mysql:-DENABLE_ASYNC_MYSQL=%{!?with_async_mysql:OFF}%{?with_async_mysql:ON}} \
 	-DENABLE_MCROUTER=%{!?with_mcrouter:OFF}%{?with_mcrouter:ON} \
 	-DENABLE_COTIRE=%{!?with_cotire:OFF}%{?with_cotire:ON} \
 	.
