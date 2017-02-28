@@ -55,6 +55,7 @@ Patch5:		cmake.patch
 Patch6:		libvpx2.patch
 Patch7:		gcc5.patch
 Patch8:		cxx.patch
+Patch9:		gcc6.patch
 URL:		https://github.com/facebook/hhvm/wiki
 BuildRequires:	ImageMagick-devel
 BuildRequires:	a52dec-libs-devel
@@ -264,6 +265,7 @@ mv folly-* third-party/folly/src
 %patch6 -p1
 %patch7 -p1
 %patch8 -p1
+%patch9 -p1
 
 # prefer ones from system
 rm CMake/FindBISON.cmake

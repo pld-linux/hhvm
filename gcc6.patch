@@ -1,0 +1,52 @@
+From f8a75ca667a1d27be2a304502edd01d064cce20a Mon Sep 17 00:00:00 2001
+From: Jesse Schalken <me@jesseschalken.com>
+Date: Wed, 21 Sep 2016 07:43:46 -0700
+Subject: [PATCH] Fix "flexible array member in an otherwise empty struct"
+ error on GCC 6.2
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Summary:
+Fixes the following error on GCC 6.2:
+
+```
+In file included from /hphp/runtime/base/rds-header.h:24:0,
+                 from /hphp/runtime/base/request-injection-data.h:20,
+                 from /hphp/runtime/base/thread-info.h:24,
+                 from /hphp/runtime/base/array-init.h:26,
+                 from /hphp/system/systemlib.cpp:18:
+/hphp/runtime/vm/bytecode.h: At global scope:
+/hphp/runtime/vm/bytecode.h:128:26: error: flexible array member ‘HPHP::ExtraArgs::m_extraArgs’ in an otherwise empty ‘struct HPHP::ExtraArgs’
+   TypedValue m_extraArgs[];
+                          ^
+/hphp/runtime/vm/bytecode.h:80:8: note: in the definition of ‘struct HPHP::ExtraArgs’
+ struct ExtraArgs {
+        ^~~~~~~~~
+```
+
+Closes #6933
+Closes https://github.com/facebook/hhvm/pull/7374
+
+Differential Revision: D3899402
+
+Pulled By: aorenste
+
+fbshipit-source-id: 9d7c7de1ee9607e50db584ac8a58b8aaa8cdf5fc
+---
+ hphp/runtime/vm/bytecode.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/hphp/runtime/vm/bytecode.h b/hphp/runtime/vm/bytecode.h
+index 6897ff2..22a3c5e 100644
+--- a/hphp/runtime/vm/bytecode.h
++++ b/hphp/runtime/vm/bytecode.h
+@@ -125,7 +125,7 @@ struct ExtraArgs {
+   static void* allocMem(unsigned nargs);
+ 
+ private:
+-  TypedValue m_extraArgs[];
++  TypedValue m_extraArgs[0];
+ };
+ 
+ /*
