@@ -290,7 +290,7 @@ if [ $API != %{hhvm_api_version} ]; then
 	exit 1
 fi
 
-export CXXFLAGS="%{rpmcxxflags} -I/usr/include/lz4"
+export CXXFLAGS="%{rpmcxxflags} -fpermissive -I/usr/include/lz4"
 
 # out of dir build broken (can't find it's tools, or headers)
 #install -d build
