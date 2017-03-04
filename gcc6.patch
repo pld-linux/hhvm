@@ -50,3 +50,101 @@ index 6897ff2..22a3c5e 100644
  };
  
  /*
+diff -ur hhvm-HHVM-3.3.7/hphp/hhbbc/interp.cpp hhvm-HHVM-3.3.7-gcc6/hphp/hhbbc/interp.cpp
+--- hhvm-HHVM-3.3.7/hphp/hhbbc/interp.cpp	2015-06-30 21:56:17.000000000 +0200
++++ hhvm-HHVM-3.3.7-gcc6/hphp/hhbbc/interp.cpp	2017-03-04 02:27:06.013033366 +0100
+@@ -1998,26 +1998,53 @@
+   push(env, TInitCell);
+ }
+ 
+-template<class Op>
+-void floatFnImpl(ISS& env, Op op, Type nonConstType) {
++void in(ISS& env, const bc::Floor&) {
+   auto const t1 = popC(env);
+   auto const v1 = tv(t1);
+   if (v1) {
+     if (v1->m_type == KindOfDouble) {
+       constprop(env);
+-      return push(env, dval(op(v1->m_data.dbl)));
++      return push(env, dval(floor(v1->m_data.dbl)));
+     }
+     if (v1->m_type == KindOfInt64) {
+       constprop(env);
+-      return push(env, dval(op(static_cast<double>(v1->m_data.num))));
++      return push(env, dval(floor(static_cast<double>(v1->m_data.num))));
+     }
+   }
+-  push(env, nonConstType);
++  push(env, TDbl);
+ }
+ 
+-void in(ISS& env, const bc::Floor&) { floatFnImpl(env, floor, TDbl); }
+-void in(ISS& env, const bc::Ceil&)  { floatFnImpl(env, ceil, TDbl); }
+-void in(ISS& env, const bc::Sqrt&)  { floatFnImpl(env, sqrt, TInitUnc); }
++void in(ISS& env, const bc::Ceil&)  {
++  auto const t1 = popC(env);
++  auto const v1 = tv(t1);
++  if (v1) {
++    if (v1->m_type == KindOfDouble) {
++      constprop(env);
++      return push(env, dval(ceil(v1->m_data.dbl)));
++    }
++    if (v1->m_type == KindOfInt64) {
++      constprop(env);
++      return push(env, dval(ceil(static_cast<double>(v1->m_data.num))));
++    }
++  }
++  push(env, TDbl);
++}
++
++void in(ISS& env, const bc::Sqrt&)  {
++  auto const t1 = popC(env);
++  auto const v1 = tv(t1);
++  if (v1) {
++    if (v1->m_type == KindOfDouble) {
++      constprop(env);
++      return push(env, dval(sqrt(v1->m_data.dbl)));
++    }
++    if (v1->m_type == KindOfInt64) {
++      constprop(env);
++      return push(env, dval(sqrt(static_cast<double>(v1->m_data.num))));
++    }
++  }
++  push(env, TInitUnc);
++}
+ 
+ void in(ISS& env, const bc::CheckProp&) { push(env, TBool); }
+ void in(ISS& env, const bc::InitProp& op) {
+diff -ur hhvm-HHVM-3.3.7/hphp/runtime/vm/bytecode.cpp hhvm-HHVM-3.3.7-gcc6/hphp/runtime/vm/bytecode.cpp
+--- hhvm-HHVM-3.3.7/hphp/runtime/vm/bytecode.cpp	2015-06-30 21:56:17.000000000 +0200
++++ hhvm-HHVM-3.3.7-gcc6/hphp/runtime/vm/bytecode.cpp	2017-03-04 02:29:34.796789697 +0100
+@@ -7211,22 +7211,20 @@
+   }
+ }
+ 
+-template<class Op>
+-OPTBLD_INLINE void ExecutionContext::roundOpImpl(Op op) {
++OPTBLD_INLINE void ExecutionContext::iopFloor(IOP_ARGS) {
++  NEXT();
+   TypedValue* val = vmStack().topTV();
+ 
+   tvCastToDoubleInPlace(val);
+-  val->m_data.dbl = op(val->m_data.dbl);
+-}
+-
+-OPTBLD_INLINE void ExecutionContext::iopFloor(IOP_ARGS) {
+-  NEXT();
+-  roundOpImpl(floor);
++  val->m_data.dbl = floor(val->m_data.dbl);
+ }
+ 
+ OPTBLD_INLINE void ExecutionContext::iopCeil(IOP_ARGS) {
+   NEXT();
+-  roundOpImpl(ceil);
++  TypedValue* val = vmStack().topTV();
++
++  tvCastToDoubleInPlace(val);
++  val->m_data.dbl = ceil(val->m_data.dbl);
+ }
+ 
+ OPTBLD_INLINE void ExecutionContext::iopCheckProp(IOP_ARGS) {
