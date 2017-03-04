@@ -105,6 +105,7 @@ BuildRequires:	zlib-devel
 #BuildRequires:	flex >= 2.5.35
 BuildRequires:	libafdt-devel >= 0.1.0
 #BuildRequires:	re2c >= 0.13.0
+BuildConflicts:	ImageMagick6-devel
 Provides:	%{name}(api) = %{hhvm_api_version}
 Provides:	php(core) = %{php_version}
 # foreach (get_loaded_extensions() as $ext) printf("Provides:\tphp(%s)\n", strtolower($ext));
