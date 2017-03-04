@@ -148,3 +148,16 @@ diff -ur hhvm-HHVM-3.3.7/hphp/runtime/vm/bytecode.cpp hhvm-HHVM-3.3.7-gcc6/hphp/
  }
  
  OPTBLD_INLINE void ExecutionContext::iopCheckProp(IOP_ARGS) {
+diff -ur hhvm-HHVM-3.3.7/hphp/runtime/vm/jit/code-gen-x64.cpp hhvm-HHVM-3.3.7.gcc6/hphp/runtime/vm/jit/code-gen-x64.cpp
+--- hhvm-HHVM-3.3.7/hphp/runtime/vm/jit/code-gen-x64.cpp	2015-06-30 21:56:17.000000000 +0200
++++ hhvm-HHVM-3.3.7.gcc6/hphp/runtime/vm/jit/code-gen-x64.cpp	2017-03-04 10:55:38.602703009 +0100
+@@ -3785,7 +3785,8 @@
+                                             : calleeNumParams + 1;
+       v << kpcall{extra->knownPrologue, extra->callee, prologIndex};
+     } else {
+-      v << call{extra->knownPrologue};
++      RegSet argRegs;
++      v << call{extra->knownPrologue, argRegs};
+     }
+     return;
+   }
