@@ -1,0 +1,87 @@
+diff -ur hhvm-HHVM-3.3.7/third-party/folly/src/folly/io/async/EventHandler.cpp hhvm-HHVM-3.3.7-libevent/third-party/folly/src/folly/io/async/EventHandler.cpp
+--- hhvm-HHVM-3.3.7/third-party/folly/src/folly/io/async/EventHandler.cpp	2014-08-15 07:39:56.000000000 +0200
++++ hhvm-HHVM-3.3.7-libevent/third-party/folly/src/folly/io/async/EventHandler.cpp	2017-04-05 09:48:54.401495460 +0200
+@@ -48,7 +48,7 @@
+     // If the new events are the same are the same as the already registered
+     // flags, we don't have to do anything.  Just return.
+     if (events == event_.ev_events &&
+-        static_cast<bool>(event_.ev_flags & EVLIST_INTERNAL) == internal) {
++        static_cast<bool>(event_.ev_evcallback.evcb_flags & EVLIST_INTERNAL) == internal) {
+       return true;
+     }
+ 
+@@ -65,7 +65,7 @@
+ 
+   // Set EVLIST_INTERNAL if this is an internal event
+   if (internal) {
+-    event_.ev_flags |= EVLIST_INTERNAL;
++    event_.ev_evcallback.evcb_flags |= EVLIST_INTERNAL;
+   }
+ 
+   // Add the event.
+@@ -157,7 +157,7 @@
+ }
+ 
+ bool EventHandler::isPending() const {
+-  if (event_.ev_flags & EVLIST_ACTIVE) {
++  if (event_.ev_evcallback.evcb_flags & EVLIST_ACTIVE) {
+     if (event_.ev_res & EV_READ) {
+       return true;
+     }
+diff -ur hhvm-HHVM-3.3.7/third-party/folly/src/folly/io/async/EventUtil.h hhvm-HHVM-3.3.7-libevent/third-party/folly/src/folly/io/async/EventUtil.h
+--- hhvm-HHVM-3.3.7/third-party/folly/src/folly/io/async/EventUtil.h	2014-08-15 07:39:56.000000000 +0200
++++ hhvm-HHVM-3.3.7-libevent/third-party/folly/src/folly/io/async/EventUtil.h	2017-04-05 09:49:06.011644952 +0200
+@@ -33,7 +33,7 @@
+       EVLIST_REGISTERED = (EVLIST_INSERTED | EVLIST_ACTIVE |
+                            EVLIST_TIMEOUT | EVLIST_SIGNAL)
+     };
+-    return (ev->ev_flags & EVLIST_REGISTERED);
++    return (ev->ev_evcallback.evcb_flags & EVLIST_REGISTERED);
+   }
+ };
+ 
+diff -ur hhvm-HHVM-3.3.7/third-party/thrift/lib/cpp/async/TEventBase.cpp hhvm-HHVM-3.3.7-libevent/third-party/thrift/lib/cpp/async/TEventBase.cpp
+--- hhvm-HHVM-3.3.7/third-party/thrift/lib/cpp/async/TEventBase.cpp	2015-01-09 22:57:55.000000000 +0100
++++ hhvm-HHVM-3.3.7-libevent/third-party/thrift/lib/cpp/async/TEventBase.cpp	2017-04-05 09:51:18.936671156 +0200
+@@ -545,7 +545,7 @@
+   event_base_set(getLibeventBase(), ev);
+   if (internal == TAsyncTimeout::InternalEnum::INTERNAL) {
+     // Set the EVLIST_INTERNAL flag
+-    ev->ev_flags |= EVLIST_INTERNAL;
++    ev->ev_evcallback.evcb_flags |= EVLIST_INTERNAL;
+   }
+ }
+ 
+diff -ur hhvm-HHVM-3.3.7/third-party/thrift/lib/cpp/async/TEventHandler.cpp hhvm-HHVM-3.3.7-libevent/third-party/thrift/lib/cpp/async/TEventHandler.cpp
+--- hhvm-HHVM-3.3.7/third-party/thrift/lib/cpp/async/TEventHandler.cpp	2015-01-09 22:57:55.000000000 +0100
++++ hhvm-HHVM-3.3.7-libevent/third-party/thrift/lib/cpp/async/TEventHandler.cpp	2017-04-05 21:46:33.663690636 +0200
+@@ -49,7 +49,7 @@
+     // If the new events are the same are the same as the already registered
+     // flags, we don't have to do anything.  Just return.
+     if (events == event_.ev_events &&
+-        static_cast<bool>(event_.ev_flags & EVLIST_INTERNAL) == internal) {
++        static_cast<bool>(event_.ev_evcallback.evcb_flags & EVLIST_INTERNAL) == internal) {
+       return true;
+     }
+ 
+@@ -66,7 +66,7 @@
+ 
+   // Set EVLIST_INTERNAL if this is an internal event
+   if (internal) {
+-    event_.ev_flags |= EVLIST_INTERNAL;
++    event_.ev_evcallback.evcb_flags |= EVLIST_INTERNAL;
+   }
+ 
+   // Add the event.
+diff -ur hhvm-HHVM-3.3.7/third-party/thrift/lib/cpp/async/TEventUtil.h hhvm-HHVM-3.3.7-libevent/third-party/thrift/lib/cpp/async/TEventUtil.h
+--- hhvm-HHVM-3.3.7/third-party/thrift/lib/cpp/async/TEventUtil.h	2015-01-09 22:57:55.000000000 +0100
++++ hhvm-HHVM-3.3.7-libevent/third-party/thrift/lib/cpp/async/TEventUtil.h	2017-04-05 09:49:53.382252029 +0200
+@@ -34,7 +34,7 @@
+       EVLIST_REGISTERED = (EVLIST_INSERTED | EVLIST_ACTIVE |
+                            EVLIST_TIMEOUT | EVLIST_SIGNAL)
+     };
+-    return (ev->ev_flags & EVLIST_REGISTERED);
++    return (ev->ev_evcallback.evcb_flags & EVLIST_REGISTERED);
+   }
+ };
+ 
