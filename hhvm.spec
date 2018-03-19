@@ -58,6 +58,7 @@ Patch8:		cxx.patch
 Patch9:		gcc6.patch
 Patch10:	libevent-2.1.patch
 Patch11:	icu59.patch
+Patch12:	no-mysql_r.patch
 URL:		https://github.com/facebook/hhvm/wiki
 BuildRequires:	ImageMagick-devel
 BuildRequires:	a52dec-libs-devel
@@ -271,6 +272,7 @@ mv folly-* third-party/folly/src
 %patch9 -p1
 %patch10 -p1
 %patch11 -p1
+%patch12 -p1
 
 # prefer ones from system
 rm CMake/FindBISON.cmake

@@ -1,0 +1,23 @@
+--- hhvm-HHVM-3.3.7/CMake/FindMySQL.cmake~	2015-06-30 21:56:17.000000000 +0200
++++ hhvm-HHVM-3.3.7/CMake/FindMySQL.cmake	2018-03-19 10:28:11.799766518 +0100
+@@ -67,9 +67,9 @@
+     $ENV{ProgramFiles}/MySQL/*/lib/${libsuffixDist}
+     $ENV{SystemDrive}/MySQL/*/lib/${libsuffixDist})
+ ELSE (WIN32)
+-  FIND_LIBRARY(MYSQL_LIB NAMES mysqlclient_r
++  FIND_LIBRARY(MYSQL_LIB NAMES mysqlclient
+     PATHS
+-    $ENV{MYSQL_DIR}/libmysql_r/.libs
++    $ENV{MYSQL_DIR}/libmysql/.libs
+     $ENV{MYSQL_DIR}/lib
+     $ENV{MYSQL_DIR}/lib/mysql
+     /usr/lib/mysql
+@@ -95,7 +95,7 @@
+   FIND_LIBRARY(MYSQL_ZLIB zlib PATHS ${MYSQL_LIB_DIR})
+   FIND_LIBRARY(MYSQL_YASSL yassl PATHS ${MYSQL_LIB_DIR})
+   FIND_LIBRARY(MYSQL_TAOCRYPT taocrypt PATHS ${MYSQL_LIB_DIR})
+-  SET(MYSQL_CLIENT_LIBS mysqlclient_r)
++  SET(MYSQL_CLIENT_LIBS mysqlclient)
+   IF (MYSQL_ZLIB)
+     SET(MYSQL_CLIENT_LIBS ${MYSQL_CLIENT_LIBS} zlib)
+   ENDIF (MYSQL_ZLIB)
